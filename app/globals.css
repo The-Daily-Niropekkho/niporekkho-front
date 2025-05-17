@@ -156,7 +156,7 @@ html {
 }
 
 .scrollActive {
-  bottom: 30px;
+  bottom: 40px;
   transform: translateY(0%);
 }
 

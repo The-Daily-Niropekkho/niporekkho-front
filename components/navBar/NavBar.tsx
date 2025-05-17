@@ -16,6 +16,9 @@ import SideBar from "../sideBar/SideBar";
 import bdtask from "../../public/images/Bdtask-Logo-blk.png";
 import bdtask_dark from "../../public/images/Bdtask-Logo-white.png";
 import NavbarSkeleton from "../skeleton/NavbarSkeleton";
+import { FaChevronDown } from "react-icons/fa";
+import { AnimatePresence, motion } from "framer-motion";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const NavBar = () => {
   const { theme, setTheme } = useTheme();
@@ -84,10 +87,9 @@ const NavBar = () => {
 
   return (
     <Fragment>
-      <header className="sticky top-0 z-10 bg-[var(--bg)] dark:bg-[#191c20] shadow-[0px_1px_2px_rgba(0,0,0,0.2)] hidden md:block">
-        <div className="container px-4 py-0 mx-auto">
-          <div className="flex items-center justify-between">
-
+      <header className='sticky top-0 z-10 bg-[var(--bg)] dark:bg-[#191c20] shadow-[0px_1px_2px_rgba(0,0,0,0.2)] hidden md:block'>
+        <div className='container px-4 py-0 mx-auto'>
+          <div className='flex items-center justify-between'>
             {/* <div className="">
               {!isLoading ? (
                 <Link
@@ -112,19 +114,19 @@ const NavBar = () => {
               activeMenu={activeMenu || ""}
             />
 
-            <div className="flex items-center justify-center print:hidden">
-              <div className="p-3 last:pr-0 hidden md:block">
+            <div className='flex items-center justify-center print:hidden'>
+              <div className='p-3 last:pr-0 hidden md:block'>
                 <button
-                  className="flex hidden"
-                  aria-label="theme"
+                  className='flex hidden'
+                  aria-label='theme'
                   onClick={handleTheme}
                 >
                   {theme === "light" ? (
-                    <div className="text-black">
+                    <div className='text-black'>
                       <MoonIcon />
                     </div>
                   ) : (
-                    <div className="text-white">
+                    <div className='text-white'>
                       <SunIcon />
                     </div>
                   )}
@@ -132,16 +134,16 @@ const NavBar = () => {
               </div>
 
               <button
-                className=" p-2 last:pr-0"
-                aria-label="search"
+                className=' p-2 last:pr-0'
+                aria-label='search'
                 onClick={() => setShowSearch(!showSearch)}
               >
-                <SearchIcon clss="" />
+                {showSearch ? <XIcon clss='' /> : <SearchIcon clss='' />}
               </button>
               <button
-                className="p-2 last:pr-0 "
-                type="button"
-                aria-label="menu"
+                className='p-2 last:pr-0 '
+                type='button'
+                aria-label='menu'
                 onClick={handleSidebar}
               >
                 <MenuIcon />
@@ -151,35 +153,43 @@ const NavBar = () => {
         </div>
       </header>
 
-      {showSearch && (
-        <div className="container mx-auto border-tz border-[var(--primary)] sticky top-0 z-50   shadow-[0px_1px_2px_rgba(0,0,0,0.2)]">
-          <div className="">
-            <div className="p-3z absolute container">
-              <form className="flex items-center" onSubmit={handleSearchItem}>
+      <AnimatePresence>
+        {showSearch && (
+          <motion.div
+            className='container mx-auto sticky top-0 z-50  '
+            initial={{ y: -100, opacity: 0 }} // Start off-screen above
+            animate={{ y: 0, opacity: 1 }} // Slide down and fade in
+            exit={{ y: -100, opacity: 0 }} // Slide up and fade out on exit
+            transition={{ duration: 0.3, ease: "easeInOut" }} // Smooth transition
+          >
+            <div className='relative'>
+              <motion.form
+                className='flex items-center justify-end p-4'
+                onSubmit={handleSearchItem}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ delay: 0.1, duration: 0.3 }}
+              >
                 <input
-                  type="text"
-                  className="w-full py-3 px-4 text-[var(--dark)] dark:text-white focus:outline-none focus:bottom-0 rounded-l border"
-                  placeholder="Search....."
-                  onChange={(e: any) => setSearchText(e.target.value)}
+                  type='text'
+                  className='w-80 py-2 px-4 text-[var(--dark)] dark:text-white focus:outline-none focus:border-[var(--primary)] rounded-l-md border-2 border-gray-300 transition-all duration-300 placeholder-gray-500'
+                  placeholder='আপনার অনুসন্ধানের বিষয়টি লিখুন'
+                  value={searchText}
+                  onChange={(e) => setSearchText(e.target.value)}
                 />
                 <button
-                  type="submit"
-                  className="px-6 py-3 text-white bg-[var(--primary)]"
+                  type='submit'
+                  className='px-4 py-2 bg-[var(--primary)] text-white rounded-r-md hover:bg-opacity-90 transition-all duration-300 flex items-center'
                 >
-                  <SearchIcon clss="stroke-white" />
+                  <SearchIcon clss='stroke-white' />
                 </button>
-                <button
-                  type="button"
-                  className="border-l px-6 py-3 text-white bg-[var(--primary)] rounded-r"
-                  onClick={() => setShowSearch(false)}
-                >
-                  <XIcon clss="w-6 h-6" />
-                </button>
-              </form>
+                
+              </motion.form>
             </div>
-          </div>
-        </div>
-      )}
+          </motion.div>
+        )}
+      </AnimatePresence>
       {showSidebar && (
         <SideBar
           handleSidebar={handleSidebar}

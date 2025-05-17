@@ -53,7 +53,7 @@ const HomeMain = () => {
             )}
             {/* home ads 11 here */}
             {data?.ads.home_11 && (
-                <AddBanner imgPath={data?.ads.home_11} clss="mt-5"/>
+                <AddBanner imgPath={data?.ads.home_11} clss=""/>
             )}
             {/* top news here */}
             {/* home ads 12 && 13 here */}

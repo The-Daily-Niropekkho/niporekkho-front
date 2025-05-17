@@ -3,6 +3,7 @@ import fetcher from "@/utils/fetcher";
 import { useTheme } from "next-themes";
 import Link from "next/link";
 import { useState } from "react";
+import { FaChevronDown } from "react-icons/fa";
 import useSWR from "swr";
 
 interface MenuContent {
@@ -33,26 +34,27 @@ const NavItems = ({
     isLoading,
   }: { data: any; error: any; isLoading: boolean } = useSWR(
     "/category-list",
-    fetcher
-  );
+    fetcher,
+    );
+  
   const { theme } = useTheme();
 
-  if (error) return <div className="hidden lg:block">Error loading data</div>;
+  if (error) return <div className='hidden lg:block'>Error loading data</div>;
   if (isLoading) return <NavbarSkeleton theme={theme} />;
 
   return (
-    <nav className="flex-nowrap overflow-x-auto lg:flex-wrap hidden lg:block">
-      <div className="flex flex-wrap items-center lg:justify-center">
-        <ul className="flex gap-6 whitespace-nowrap lg:overflow-hidden">
+    <nav className='flex-nowrap overflow-x-auto lg:flex-wrap hidden lg:block'>
+      <div className='flex flex-wrap items-center lg:justify-center'>
+        <ul className='flex whitespace-nowrap lg:overflow-hidden gap3'>
           {data?.slice(0, 10)?.map((category: MenuContent) => {
             const { menu_content_id, slug, menu_lavel } = category;
             return (
               <li
                 key={menu_content_id}
-                className="text-black  dark:text-white "
+                className='text-black  dark:text-white border-r-2 '
               >
                 <Link
-                  className="flex items-center gap-1 py-[11px] px-3 text-md text-[var(--dark)] dark:text-white hover:font-bold capitalize"
+                  className='flex items-center gap-1 py-[11px] px-5  text-md text-[var(--dark)] dark:text-white hover:font-bold capitalize'
                   href={`/${slug?.toLowerCase()}`}
                   onClick={() => setActiveMenu(menu_lavel.toLowerCase())}
                 >
@@ -69,6 +71,27 @@ const NavItems = ({
               </li>
             );
           })}
+          <div className='group relative flex gap-6 whitespace-nowrap lg:overflow-hidden items-center px-3 text-md text-[var(--dark)] dark:text-white font-bold capitalize'>
+            <p className='flex items-center gap-1'>
+              অন্যান্য
+              <FaChevronDown className='group-hover:rotate-180 transition-transform duration-200' />
+            </p>
+            <div className='absolute hidden group-hover:block bg-white dark:bg-[#1A202C] shadow-md rounded-md p-2 top-full mt-2 right-0'>
+              {data?.slice(10, data.length)?.map((category: MenuContent) => {
+                const { menu_content_id, slug, menu_lavel } = category;
+                return (
+                  <Link
+                    key={menu_content_id}
+                    className='flex items-center gap-1 py-1 px-3 text-md text-[var(--dark)] dark:text-white hover:font-bold capitalize'
+                    href={`/${slug?.toLowerCase()}`}
+                    onClick={() => setActiveMenu(menu_lavel.toLowerCase())}
+                  >
+                    {menu_lavel.toLowerCase()}
+                  </Link>
+                );
+              })}
+            </div>
+          </div>
         </ul>
       </div>
     </nav>

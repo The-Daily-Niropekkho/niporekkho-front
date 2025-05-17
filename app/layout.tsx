@@ -18,6 +18,7 @@ import "slick-carousel/slick/slick.css";
 import "./globals.css";
 import DynamicFavicon from "@/components/dynamicFavicon/DynamicFavicon";
 import TopBar from "@/components/home/TopBar";
+import BreakingNewsMarquee from "@/components/common/breaking-news/breaking-news";
 
 export async function generateMetadata(): Promise<Metadata> {
   const { data } = await instance.get("/metadata");
@@ -80,6 +81,7 @@ export default function RootLayout({
             <ScrollToTop />
 
             <DynamicFavicon />
+            <BreakingNewsMarquee />
           </WebSettingProvider>
         </ThemeWrapper>
       </body>

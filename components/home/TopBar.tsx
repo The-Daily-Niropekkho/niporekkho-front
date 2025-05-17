@@ -175,7 +175,7 @@ const TopBar = () => {
                 </p>
               </div>
               <div className='flex gap-2 hover:text-[#f04130] cursor-pointer duration-300'>
-                <FaRegCalendarAlt />
+                <FaRegCalendarAlt className="mt-0.5"/>
                 <span>{formatBanglaAndHijri()}</span>
               </div>
             </div>

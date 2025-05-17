@@ -23,7 +23,7 @@ const TopNews = ({ data, ads, sideData }: TopNewsProps) => {
         sideData || {};
 
     return (
-        <section className="mt-5">
+        <section className="">
             <div className="container px-4 mx-auto">
                 <div
                     className="grid grid-cols-1 md:grid-cols-12 gap-6 relative after:bg-[var(--border-color)] dark:after:bg-[var(--border-dark)] after:absolute after:w-full md:after:w-full after:h-[1px] after:right-0 after:left-0 after:-bottom-3">
