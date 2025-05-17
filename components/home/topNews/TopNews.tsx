@@ -23,7 +23,7 @@ const TopNews = ({ data, ads, sideData }: TopNewsProps) => {
         sideData || {};
 
     return (
-        <section className="">
+        <section className="mt-5">
             <div className="container px-4 mx-auto">
                 <div
                     className="grid grid-cols-1 md:grid-cols-12 gap-6 relative after:bg-[var(--border-color)] dark:after:bg-[var(--border-dark)] after:absolute after:w-full md:after:w-full after:h-[1px] after:right-0 after:left-0 after:-bottom-3">
@@ -47,67 +47,70 @@ const TopNews = ({ data, ads, sideData }: TopNewsProps) => {
                                     } = itm || {};
 
                                     return (
-                                        <div key={i} className="-mx-4 md:px-4">
-                                            <div className="group flex flex-col lg:flex-row gap-3">
-                                                <div className="w-auto lg:w-1/2 order-2 mx-4 md:mx-2 relative">
-                                                    <Link
-                                                        href={`/${category.toLocaleLowerCase()}/${encode_titl}`}
-                                                    >
-                                                        <h1 className="text-2xl left-9 text-[var(--dark)] lg:mb-2 mr-2 md:mr-0    dark:text-white    font-semibold">
-                                                            {post_title}
-                                                        </h1>
-
-                                                        <p className="hidden lg:block">
-                                                            <span
+                                      <div key={i} className='-mx-4 md:px-4'>
+                                        <div className='group flex flex-col lg:flex-row gap-3'>
+                                          <div className='w-full lg:w-1/2 overflow-hidden order-1 relative aspect-video'>
+                                            <Link
+                                              href={`/${category.toLocaleLowerCase()}/${encode_titl}`}
+                                            >
+                                              <Image
+                                                alt={post_title}
+                                                width={560}
+                                                height={315}
+                                                decoding='async'
+                                                className='group-hover:scale-105 duration-700 ease-out w-full h-full'
+                                                src={image_large}
+                                              />
+                                              <div className='absolute inset-0 bg-gradient-to-t from-black to-transparent bg-opacity-30 pointer-events-none' />
+                                              <h1 className='absolute bottom-0 left-0 right-0  text-white text-2xl font-semibold p-2'>
+                                                {post_title}
+                                              </h1>
+                                              {video && (
+                                                <div className='w-8 h-8 xl:w-8 xl:h-8 rounded-full flex items-center justify-center shadow-md absolute top-1 left-1 bg-[var(--secondary)] group-hover:bg-[var(--secondary)]'>
+                                                  <VideoIcon />
+                                                </div>
+                                              )}
+                                            </Link>
+                                          </div>
+                                          <div className='w-auto lg:w-1/2 order-2 mx-4 md:mx-2 relative'>
+                                            <Link
+                                              href={`/${category.toLocaleLowerCase()}/${encode_titl}`}
+                                            >
+                                              {/* <p className="hidden lg:block"> */}
+                                              {/* <span
                                                                 className="text-lg text-[var(--gray-2)] dark:text-[var(--gray-3)] overflow-hidden line-clamp-3">
                                                                 {excerpt || stitle}
-                                                            </span>
-                                                        </p>
-                                                    </Link>
+                                                            </span> */}
+                                              {/* </p> */}
+                                            </Link>
 
-                                                    <ul className="mt-5 xl:mt-10">
-                                                        {data.slice(1, 4).map((itm, i) => {
-                                                            const { encode_titl, post_title, news_id } =
-                                                                itm || {};
-                                                            return (
-                                                                <li
-                                                                    key={news_id}
-                                                                    className="before:h-2 before:w-2 before:rounded-full before:bg-black before:border relative before:absolute before:top-2 before:left-0"
-                                                                >
-                                                                    <Link
-                                                                        href={`/${category.toLocaleLowerCase()}/${encode_titl}`}
-                                                                        className="line-clamp-1 text-lg font-bold left-9 text-[var(--dark)] mb-2 mr-2 md:mr-0 ml-4    dark:text-white   "
-                                                                    >
-                                                                        {post_title}
-                                                                    </Link>
-                                                                </li>
-                                                            );
-                                                        })}
-                                                    </ul>
-
-                                                    {/* <TimeBefore
-                            title={post_date}
-                            clss="xl:absolute bottom-0 right-4"
-                          /> */}
-                                                </div>
-                                                <div className="w-full lg:w-1/2 overflow-hidden order-1 relative aspect-video">
-                                                    <Link href={`/${category.toLocaleLowerCase()}/${encode_titl}`}>
-                                                        <Image
-                                                            alt={post_title}
-                                                            width={560}
-                                                            height={315}
-                                                            decoding="async"
-                                                            className="group-hover:scale-105 duration-700 ease-out w-full h-full"
-                                                            src={image_large}
-                                                        />
-                                                        {video &&
-                                                            <div className="w-8 h-8 xl:w-8 xl:h-8 rounded-full flex items-center justify-center shadow-md absolute top-1 left-1  bg-[var(--secondary)] group-hover:bg-[var(--secondary)]">
-                                                                <VideoIcon /></div>
-                                                        }
-                                                    </Link>
-                                                </div>
-                                            </div>
+                                            <ul className='mt-5 xl:mt-10'>
+                                              {data
+                                                .slice(1, 4)
+                                                .map((itm, i) => {
+                                                  const {
+                                                    encode_titl,
+                                                    post_title,
+                                                    news_id,
+                                                  } = itm || {};
+                                                  return (
+                                                    <li
+                                                      key={news_id}
+                                                      className='before:h-2 before:w-2 before:rounded-full before:bg-black before:border relative before:absolute before:top-2 before:left-0'
+                                                    >
+                                                      <Link
+                                                        href={`/${category.toLocaleLowerCase()}/${encode_titl}`}
+                                                        className='line-clamp-1 text-lg font-bold left-9 text-[var(--dark)] mb-2 mr-2 md:mr-0 ml-4 dark:text-white'
+                                                      >
+                                                        {post_title}
+                                                      </Link>
+                                                    </li>
+                                                  );
+                                                })}
+                                            </ul>
+                                          </div>
                                         </div>
+                                      </div>
                                     );
                                 })}
                             </div>
