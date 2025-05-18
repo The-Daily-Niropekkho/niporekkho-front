@@ -14,6 +14,11 @@ const config: Config = {
         "gradient-conic":
           "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
       },
+      fontWeight: {
+        "custom-450": "450", // Example: Add a font weight of 450
+        "custom-550": "550", // Example: Add a font weight of 550
+        extraheavy: "950", // Example: Add a named font weight
+      },
     },
     container: {
       screens: {

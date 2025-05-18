@@ -205,7 +205,7 @@ const NavItems = () => {
             maxWidth: "1200px",
           }}
         >
-          <div className='grid grid-cols-5 gap-4 p-6'>
+          <div className='grid grid-cols-5 gap-10 p-6 md:p-6'>
             {/* Column 1 */}
             <div>
               <ul className='space-y-2'>
