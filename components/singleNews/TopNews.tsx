@@ -66,7 +66,7 @@ function NewsList({ posts }: { posts: NewsProps[] }) {
                         />
                       </div>
                     </div>
-                    <h3 className='text-lg text-[var(--dark)] dark:text-white hover:text-[#A90303]'>
+                    <h3 className='text-lg text-[var(--dark)] dark:text-white group-hover:text-[var(--text-primary)] cursor-pointer '>
                       {post_title}
                     </h3>
                   </div>
