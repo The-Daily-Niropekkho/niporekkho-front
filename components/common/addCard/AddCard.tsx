@@ -11,6 +11,7 @@ const AddCard = ({ imgPath }: AddCardProps) => {
         className="news_view"
           // className="[&>p]:mt-5"
           dangerouslySetInnerHTML={{ __html: imgPath }}
+          
         />
       )}
     </>

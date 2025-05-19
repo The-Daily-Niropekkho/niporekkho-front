@@ -6,7 +6,7 @@
   /* --primary: #51c27c; */
   --primary: #202327;
   --secondary: #f06a3d;
-  --text-primary: #F9C802;
+  --text-primary:  rgb(160, 3, 3);
 
   --bg: #fbfbfb;
   --hot-bg: #ff000018;
@@ -31,18 +31,32 @@
   --border-dark: #525255;
 }
 
+.text-primary {
+  color: var(--text-primary);
+}
+.text-anchor {
+  color: var(--text-primary);
+  transition-property: color;
+  transition-duration: 300ms;
+  transition-timing-function: ease-in-out;
+  &:hover {
+    color: black;
+  }
+}
+
 @font-face {
-  font-family: 'SolaimanLipil';
-  src: url('/fonts/SolaimanLipi5e1f.ttf') format('truetype');
+  font-family: "SolaimanLipil";
+  src: url("/fonts/SolaimanLipi5e1f.ttf") format("truetype");
   font-weight: normal;
   font-style: normal;
 }
 
 @font-face {
-  font-family: 'SolaimanLipiz';
+  font-family: "SolaimanLipiz";
   font-style: normal;
   font-weight: 400;
-  src: url('https://fonts.cdnfonts.com/s/14639/solaimanlipi.woff') format('woff');
+  src: url("https://fonts.cdnfonts.com/s/14639/solaimanlipi.woff")
+    format("woff");
 }
 
 body,
@@ -52,7 +66,6 @@ html {
 }
 
 @layer base {
-
   input[type="number"]::-webkit-inner-spin-button,
   input[type="number"]::-webkit-outer-spin-button {
     -webkit-appearance: none;
@@ -74,7 +87,7 @@ html {
 
 @layer components {
   .category-text {
-    @apply text-2xl md:text-3xl pl-4 dark:text-white text-[var(--primary)] relative before:absolute before:bg-[var(--primary)] before:w-[3px] before:h-[80%] before:left-0 before:top-0 before:bottom-0 before:my-auto;
+    @apply text-2xl md:text-3xl pl-4 dark:text-white text-[var(--primary)] relative before:absolute before:bg-[var(--primary)] before:w-[5px] before:h-[80%] before:left-0 before:top-0 before:bottom-0 before:my-auto;
   }
 }
 
@@ -167,15 +180,13 @@ html {
 } */
 /* =======  End of scroll to top  ======= */
 
-
-a :hover {
+/* a :hover {
   color: rgb(160, 3, 3);
-}
+} */
 
 .timebar a :hover {
   color: inherit;
 }
-
 
 /** for a single news post */
 
@@ -195,8 +206,8 @@ a :hover {
 }
 
 @media (min-width: 768px) {
-  .md\:before\:\[\&\>\*\]\:bg-\[var\(--border-color\)\]>*::before {
-      content: '';
-      background-color: transparent !important;
+  .md\:before\:\[\&\>\*\]\:bg-\[var\(--border-color\)\] > *::before {
+    content: "";
+    background-color: transparent !important;
   }
 }
