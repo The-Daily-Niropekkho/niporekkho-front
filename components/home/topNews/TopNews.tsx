@@ -31,7 +31,7 @@ const TopNews = ({ data, ads, sideData }: TopNewsProps) => {
             <div className='grid grid-cols-1 md:grid-cols-12 gap-6'>
               <div className='col-span-12 flex flex-col lg:flex-row gap-3 relative after:bg-[var(--border-color)] after:absolute after:w-full after:h-[1px] last:after:h-0 after:-bottom-3 dark:after:bg-[var(--border-dark)]'>
                 {/* Left Section: Featured News Item */}
-                <div className='w-full lg:w-3/5 lg:border-r-2 border-[var(--border-color)] dark:border-[var(--border-dark)]'>
+                <div className='w-full lg:w-3/5 lg:border-r border-[var(--border-color)] dark:border-[var(--border-dark)]'>
                   {data?.slice(0, 1)?.map((itm, i) => {
                     const {
                       post_title,
@@ -103,7 +103,8 @@ const TopNews = ({ data, ads, sideData }: TopNewsProps) => {
                   <ul className='mt-4 lg:mt-0 grid grid-cols-1 gap-6'>
                     {(() => {
                       const adImgPath = `https://i.ibb.co/wZgh8TTM/370-110-add-news.webp`;
-                      const hasValidAddCard = adImgPath && adImgPath.trim().length > 0;
+                      const hasValidAddCard =
+                        adImgPath && adImgPath.trim().length > 0;
                       const sliceEnd = hasValidAddCard ? 4 : 5;
 
                       return (
@@ -135,10 +136,7 @@ const TopNews = ({ data, ads, sideData }: TopNewsProps) => {
                                       {post_title}
                                     </h1>
                                     <span className='text-[var(--gray-2)] dark:text-[var(--gray-3)] mt-1 text-base line-clamp-2'>
-                                      {(excerpt || stitle)
-                                        .split(" ")
-                                        .slice(0, 7)
-                                        .join(" ") + " ..."}
+                                      {excerpt || stitle}
                                     </span>
                                   </Link>
                                 </div>
@@ -151,7 +149,7 @@ const TopNews = ({ data, ads, sideData }: TopNewsProps) => {
                                       width={120}
                                       height={80}
                                       decoding='async'
-                                      className='w-full h-[40px] md:h-[100px] lg:h-[100px] object-cover group-hover:scale-105 duration-700 ease-out'
+                                      className='w-full h-full md:h-[100px] lg:h-[100px] object-cover group-hover:scale-105 duration-700 ease-out'
                                       src={image_thumb}
                                     />
                                     <div className='absolute inset-0 bg-gradient-to-t from-black/30 to-transparent pointer-events-none' />
@@ -218,15 +216,29 @@ const TopNews = ({ data, ads, sideData }: TopNewsProps) => {
                                 </div>
                               )}
                             </div>
+                            <div className='hidden lg:block'>
+                              <h2 className='text-lg text-[var(--dark)] dark:text-white font-semibold group-hover:text-[var(--text-primary)] cursor-pointer '>
+                                <span className='line-clamp-2'>
+                                  {post_title}
+                                </span>
+                              </h2>
+                              <p className='hidden lg:block'>
+                                <span className='text-[var(--gray-2)] dark:text-[var(--gray-3)] mt-2 text-base line-clamp-2'>
+                                  {excerpt || stitle}
+                                </span>
+                              </p>
+                            </div>
                           </div>
-                          <h2 className='text-lg text-[var(--dark)] dark:text-white font-semibold group-hover:text-[var(--text-primary)] cursor-pointer'>
-                            {post_title}
-                          </h2>
-                          <p className='hidden lg:block'>
-                            <span className='text-[var(--gray-2)] dark:text-[var(--gray-3)] mt-2 text-base line-clamp-2'>
-                              {excerpt || stitle}
-                            </span>
-                          </p>
+                          <div className=' lg:hidden'>
+                            <h2 className='text-lg text-[var(--dark)] dark:text-white font-semibold group-hover:text-[var(--text-primary)] cursor-pointer '>
+                              <span className='line-clamp-2'>{post_title}</span>
+                            </h2>
+                            <p className='hidden lg:block'>
+                              <span className='text-[var(--gray-2)] dark:text-[var(--gray-3)] mt-2 text-base line-clamp-2'>
+                                {excerpt || stitle}
+                              </span>
+                            </p>
+                          </div>
                           <TimeBefore title={post_date} />
                         </Link>
                       </div>
@@ -242,7 +254,7 @@ const TopNews = ({ data, ads, sideData }: TopNewsProps) => {
               <div className={`${ads?.home_12 ? "" : "h-[250px]"}`}>
                 {/* home ads 12 here */}
                 <AddCard
-                  imgPath={`<a target=\"_blank\" href=\"https://dailyniropekkho.com/\"><img width=\"100%\" src=\"https://i.ibb.co/przFDZSQ/ea2710b7-9091-48b0-9519-80152b9e2688.jpg\" alt=\"\"></a>`}
+                  imgPath={`<a target=\"_blank\" href=\"https://dailyniropekkho.com/\"><img width=\"100%\" src=\"https://tpc.googlesyndication.com/simgad/16713525573530791060\" alt=\"\"></a>`}
                 />
               </div>
             </div>
@@ -301,7 +313,7 @@ const TopNews = ({ data, ads, sideData }: TopNewsProps) => {
                         <p className='font-normal mt-2 text-green-600 hover:text-green-700 dark:text-gray-300 flex gap-2 items-center'>
                           <FaRegPenToSquare /> {post_by_name}
                         </p>
-                        <h2 className='text-base text-[var(--dark)] dark:text-white'>
+                        <h2 className='text-base text-[var(--dark)] dark:text-white line-clamp-2'>
                           <span className='text-red-500 font-bold'>
                             {category_name}
                           </span>{" "}
@@ -337,28 +349,39 @@ const TopNews = ({ data, ads, sideData }: TopNewsProps) => {
                           : ""
                       }`}
                       href={`/${category.toLocaleLowerCase()}/${encode_titl}`}
+                      scroll={false} // Prevent scroll-to-top as per your previous query
                     >
-                      <div>
+                      {/* Thumbnail Image */}
+                      <div className='flex-shrink-0'>
                         <Image
                           alt={post_by_name}
                           width={100}
                           height={100}
                           decoding='async'
-                          className='w-24 md:w-36 lg:w-44 h-24 md:h-36 lg:h-28 object-cover'
+                          className='w-24 h-24 object-cover rounded-sm' // Fixed size like in the image
                           src={post_by_image}
                           loading='lazy'
                         />
                       </div>
-                      <div>
-                        <p className='font-normal text-green-600 hover:text-green-700 dark:text-gray-300 flex gap-2 items-center'>
-                          <FaRegPenToSquare /> {post_by_name}
+
+                      {/* Text Section */}
+                      <div className='flex-1 min-w-0'>
+                        {" "}
+                        {/* min-w-0 ensures truncation works */}
+                        {/* Author Name */}
+                        <p className='font-normal text-green-600 hover:text-green-700 dark:text-gray-300 flex gap-2 items-center text-sm'>
+                          <FaRegPenToSquare className='text-sm' />{" "}
+                          {post_by_name}
                         </p>
-                        <h2 className='text-base text-[var(--dark)] dark:text-white font-'>
+                        {/* Category and Title */}
+                        <h2 className='text-base text-[var(--dark)] dark:text-white font-semibold leading-tight'>
                           <span className='text-red-600 font-bold'>
                             {category_name}
-                          </span>{" "}
-                          /{" "}
-                          <span className='hover:font-bold'>{post_title}</span>
+                          </span>
+                          {" / "}
+                          <span className='hover:font-bold inline-block max-w-full'>
+                            {post_title}
+                          </span>
                         </h2>
                       </div>
                     </Link>
@@ -406,7 +429,7 @@ const TopNews = ({ data, ads, sideData }: TopNewsProps) => {
                       loading='lazy'
                     />
                   </div>
-                  <h3 className='text-lg text-[var(--dark)]    dark:text-white   font-bold group-hover:text-[var(--text-primary)] cursor-pointer'>
+                  <h3 className='text-lg text-[var(--dark)]    dark:text-white   font-bold group-hover:text-[var(--text-primary)] cursor-pointer line-clamp-3'>
                     {post_title}
                   </h3>
                 </Link>

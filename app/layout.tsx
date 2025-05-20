@@ -6,7 +6,7 @@ import ThemeWrapper from "@/components/themeWrapper/ThemeWrapper";
 import WebSettingProvider from "@/context/webSettingContext";
 import instance from "@/utils/instance";
 import { Metadata } from "next";
-import 'react-loading-skeleton/dist/skeleton.css';
+import "react-loading-skeleton/dist/skeleton.css";
 
 // react-datepicker css
 import "react-datepicker/dist/react-datepicker.css";
@@ -19,6 +19,7 @@ import "./globals.css";
 import DynamicFavicon from "@/components/dynamicFavicon/DynamicFavicon";
 import TopBar from "@/components/home/TopBar";
 import BreakingNewsMarquee from "@/components/common/breaking-news/breaking-news";
+import ScrollPreserver from "./ScrollPreserver";
 
 export async function generateMetadata(): Promise<Metadata> {
   const { data } = await instance.get("/metadata");
@@ -29,11 +30,11 @@ export async function generateMetadata(): Promise<Metadata> {
   const faviconWithCacheBuster = `${favicon}?v=${new Date().getTime()}`;
   return {
     title: title,
-    description: meta_description !== '' ? meta_description : title,
+    description: meta_description !== "" ? meta_description : title,
     keywords: [meta_keyword],
     openGraph: {
       title: title,
-      description: meta_description !== '' ? meta_description : title,
+      description: meta_description !== "" ? meta_description : title,
       url: site_name,
       siteName: site_name,
       images: [
@@ -52,28 +53,23 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
-
-
 export default function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-
   return (
-    <html lang="en">
-      <head>
-      </head>
+    <html lang='en'>
+      <head></head>
       <body>
         <ThemeWrapper>
+          <ScrollPreserver />
           <WebSettingProvider>
-
             <TopBar />
 
             <NavBar />
 
             <BreakingNews />
-
             {children}
 
             <Footer />

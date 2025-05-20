@@ -72,11 +72,11 @@ const HomeMain = () => {
         {data?.newsByCategory[0] && (
           <NewsWithLatest data={data?.newsByCategory[0]} topnews={true} />
         )}
+        {/* home ads 14 here */}
         {/* news By position 2 */}
         {data?.ads.home_11 && (
           <AddBanner imgPath={data?.ads.home_11} clss='mt-5' />
         )}
-        {/* home ads 14 here */}
         {data?.newsByCategory[1] && (
           <NewsWithAdd data={data?.newsByCategory[1]} ads={data?.ads} />
         )}

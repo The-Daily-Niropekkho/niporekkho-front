@@ -61,7 +61,7 @@ const NewsWithLatest = ({ data, end_point, title, topnews }: NewsProps) => {
                                       <div key={i} className='-mx-4 md:px-4'>
                                         <div>
                                           <Link
-                                            className='group flex flex-col gap-0 md:flex-row md:gap-3 lg:flex-col lg:gap-0'
+                                            className='group flex flex-col gap-0 md:flex-row md:gap-3 lg:flex-col lg:gap-[16px]'
                                             href={`/${category.toLocaleLowerCase()}/${encode_titl}`}
                                           >
                                             <div className='overflow-hidden w-full md:w-1/2 lg:w-full relative'>
@@ -163,7 +163,7 @@ const NewsWithLatest = ({ data, end_point, title, topnews }: NewsProps) => {
                             <div
                                 className="col-span-12 md:col-span-12 lg:col-span-6 xl:col-span-5 relative after:bg-[var(--border-color)] after:absolute after:w-full after:h-[1px] after:-bottom-3 after:right-0 after:last:h-0 lg:after:w-[1px] lg:after:h-full lg:after:-right-3 lg:after:top-0 lg:after:last:w-0 dark:after:bg-[var(--border-dark)]">
                                 <div className="flex flex-col">
-                                    {post?.slice(2, 5)?.map((item, i) => {
+                                    {post?.slice(2, 6)?.map((item, i) => {
                                         const {
                                             category_name,
                                             image_large,
@@ -204,17 +204,14 @@ const NewsWithLatest = ({ data, end_point, title, topnews }: NewsProps) => {
                                                   )}
                                                 </div>
                                               </div>
-                                              <h3 className='text-lg text-[var(--dark)]    dark:text-white    font-bold group-hover:text-[var(--text-primary)]'>
+                                              <h3 className='text-lg text-[var(--dark)]    dark:text-white    font-bold group-hover:text-[var(--text-primary)] line-clamp-2'>
                                                 {post_title}
                                               </h3>
                                               {i !==
-                                                post?.slice(2, 6).length -
+                                                post?.slice(2, 7).length -
                                                   1 && (
                                                 <span className='text-[var(--gray-2)] dark:text-[var(--gray-3)] mt-1 text-base line-clamp-2'>
-                                                  {(excerpt || stitle)
-                                                    .split(" ")
-                                                    .slice(0, 7)
-                                                    .join(" ") + " ..."}
+                                                  {(excerpt || stitle)}
                                                 </span>
                                               )}
                                             </Link>
