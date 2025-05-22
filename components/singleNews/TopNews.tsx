@@ -34,7 +34,7 @@ function NewsList({ posts }: { posts: NewsProps[] }) {
           encode_titl,
         } = post;
         return (
-          <div key={news_id} className=' pb-2 '>
+          <div key={news_id} className='pb-2'>
             <div className='flex mb-4'>
               <div
                 className={`mb-6 last:mb-0 relative ${
@@ -66,7 +66,7 @@ function NewsList({ posts }: { posts: NewsProps[] }) {
                         />
                       </div>
                     </div>
-                    <h3 className='text-lg text-[var(--dark)] dark:text-white group-hover:text-[var(--text-primary)] cursor-pointer '>
+                    <h3 className='text-lg text-[var(--dark)] dark:text-white group-hover:text-[var(--text-primary)] cursor-pointer'>
                       {post_title}
                     </h3>
                   </div>
@@ -80,7 +80,7 @@ function NewsList({ posts }: { posts: NewsProps[] }) {
   );
 }
 
-function TopNews({ count = 10 }: { count: number }) {
+function TopNews({ count = 50 }: { count: number }) {
   const [tab1Active, setTab1Active] = useState(true);
 
   const popularData = useSWR("/populer-post", fetcher);
@@ -160,8 +160,9 @@ function TopNews({ count = 10 }: { count: number }) {
         />
       </div>
 
+      {/* Tab Panel for Latest News */}
       <div
-        className='tab-panel2 px-4 pt-5 -pb-2'
+        className='tab-panel2 px-4 py-2 h-[535px] overflow-y-auto'
         style={{
           display: tab1Active ? "block" : "none",
           backgroundColor: "#F0F0F0",
@@ -169,8 +170,10 @@ function TopNews({ count = 10 }: { count: number }) {
       >
         <NewsList posts={latestData.data.slice(0, count)} />
       </div>
+
+      {/* Tab Panel for Popular News */}
       <div
-        className='tab-panel2 px-4 py-2'
+        className='tab-panel2 px-4 py-2 h-[535px] overflow-y-auto'
         style={{
           display: tab1Active ? "none" : "block",
           backgroundColor: "#F0F0F0",
@@ -184,9 +187,7 @@ function TopNews({ count = 10 }: { count: number }) {
 
 export default TopNews;
 
-
 <style jsx>{`
- 
   .after\\:last\\:h-0:last-child::after {
     content: var(--tw-content);
     height: 1px;

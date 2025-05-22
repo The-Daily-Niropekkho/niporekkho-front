@@ -80,16 +80,16 @@ const TopNews = ({ data, ads, sideData }: TopNewsProps) => {
                               <h1 className='text-xl md:text-2xl lg:text-3xl font-[600] text-[var(--dark)] dark:text-white mb-2 tracking-tight group-hover:text-[var(--text-primary)] cursor-pointer'>
                                 {post_title}
                               </h1>
-                              <h2 className='text-lg font-[500] text-[var(--dark)] dark:text-white mb-2 tracking-tight'>
+                              <h2 className='text-lg font-[500] text-[var(--dark)] dark:text-white mb tracking-tight'>
                                 {stitle || "শিরোনাম নেই"}
                               </h2>
                               {/* <p className='text-sm text-gray-600 dark:text-gray-300 line-clamp-3 mb-3 leading-relaxed'>
                               {excerpt || "বিস্তারিত তথ্য নেই"}
                             </p> */}
-                              <div className='text-xs flex justify-between items-center text-gray-500 dark:text-gray-400'>
+                              {/* <div className='text-xs flex justify-between items-center text-gray-500 dark:text-gray-400'>
                                 <span>{"২ ঘণ্টা আগে"}</span>
                                 <span>{category_name || "অজানা সূত্র"}</span>
-                              </div>
+                              </div> */}
                             </div>
                           </Link>
                         </div>
@@ -102,7 +102,7 @@ const TopNews = ({ data, ads, sideData }: TopNewsProps) => {
                 <div className='w-full lg:w-2/5'>
                   <ul className='mt-4 lg:mt-0 grid grid-cols-1 gap-6'>
                     {(() => {
-                      const adImgPath = `https://i.ibb.co/wZgh8TTM/370-110-add-news.webp`;
+                      const adImgPath = `https://i.ibb.co/RTFyHLvK/325-66.webp`;
                       const hasValidAddCard =
                         adImgPath && adImgPath.trim().length > 0;
                       const sliceEnd = hasValidAddCard ? 4 : 5;

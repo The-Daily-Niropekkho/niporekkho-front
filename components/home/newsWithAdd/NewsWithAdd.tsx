@@ -28,7 +28,7 @@ const NewsWithAdd = ({ data, ads }: NewsProps) => {
         <div className='border-[var(--border-color)] dark:border-[var(--border-dark)] border-b-[2px] mb-3 pb-1'>
           <div className='flex items-center justify-between'>
             <Link href={`/${slug}`}>
-              <h2 className='category-text'>{category_name}</h2>
+              <h2 className='category-text text-anchor'>{category_name}</h2>
               {/* <h2 className='category-text'>রাজধানী</h2> */}
             </Link>
           </div>
@@ -77,7 +77,7 @@ const NewsWithAdd = ({ data, ads }: NewsProps) => {
                           </div>
                         </div>
                         <div className='w-full'>
-                          <h3 className='text-2xl mx-4 md:mx-0 mb-0 md:mb-2 text-[var(--dark)] dark:text-white font-semibold'>
+                          <h3 className='text-2xl mx-4 md:mx-0 mb-0 md:mb-2 text-[var(--dark)] dark:text-white font-semibold line-clamp-2 group-hover:text-[var(--text-primary)]'>
                             {post_title}
                           </h3>
                           <p className='hidden lg:block text-base text-[var(--gray-2)] dark:text-[var(--gray-3)] mx-4 md:mx-0'>
@@ -135,7 +135,7 @@ const NewsWithAdd = ({ data, ads }: NewsProps) => {
                           )}
                         </div>
                         <div className='flex-1'>
-                          <h3 className='text-lg text-[var(--dark)] dark:text-white line-clamp-2 font-bold'>
+                          <h3 className='text-lg text-[var(--dark)] dark:text-white line-clamp-2 font-bold group-hover:text-[var(--text-primary)]'>
                             {post_title}
                           </h3>
                           <TimeBefore title={post_date} />
@@ -155,7 +155,7 @@ const NewsWithAdd = ({ data, ads }: NewsProps) => {
           <div className='flex items-center justify-between'>
             <Link href={`/${slug}`}>
               {/* <h2 className='category-text'>{category_name}</h2> */}
-              <h2 className='category-text'>রাজধানী</h2>
+              <h2 className='category-text text-anchor'>রাজধানী</h2>
             </Link>
           </div>
         </div>
@@ -183,7 +183,7 @@ const NewsWithAdd = ({ data, ads }: NewsProps) => {
                       href={`/${category.toLocaleLowerCase()}/${encode_titl}`}
                     >
                       <div className='w-full md:w-1/2 lg:w-full xl:w-1/2'>
-                        <h3 className='text-2xl left-9 mx-4 md:mx-0 mb-0 md:mb-2 text-[var(--dark)]    dark:text-white    font-semibold group-hover:text-[var(--text-primary)] cursor-pointer'>
+                        <h3 className='text-2xl left-9 mx-4 md:mx-0 mb-0 md:mb-2 text-[var(--dark)]    dark:text-white    font-semibold group-hover:text-[var(--text-primary)] cursor-pointer line-clamp-2'>
                           {post_title}
                         </h3>
                         <p className='hidden xl:block text-base text-[var(--gray-2)] dark:text-[var(--gray-3)] lg:overflow-hidden'>

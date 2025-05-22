@@ -193,7 +193,7 @@ const NewsWithLatest = ({ data, end_point, title, topnews }: NewsProps) => {
                                                     width={330}
                                                     height={186}
                                                     decoding='async'
-                                                    className='w-[124px] h-auto lg:w-[110px] lg:h-[75px] xl:w-[180px] xl:h-[120px] object-cover group-hover:scale-105 duration-700 ease-out'
+                                                    className='w-[124px] h-auto lg:w-[110px] lg:h-[75px] xl:w-[160px] xl:h-[120px] object-cover group-hover:scale-105 duration-700 ease-out'
                                                     src={image_thumb}
                                                     loading='lazy'
                                                   />
@@ -236,7 +236,7 @@ const NewsWithLatest = ({ data, end_point, title, topnews }: NewsProps) => {
             </div>
 
             <LatestNewsVertical end_point={end_point} /> */}
-                        {topnews ? <TopNews count={8} /> : ""}
+                        {topnews ? <TopNews count={50} /> : ""}
                     </div>
                 </div>
             </div>

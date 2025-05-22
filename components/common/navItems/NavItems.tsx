@@ -102,91 +102,56 @@
 
 import Link from "next/link";
 import { FaChevronDown } from "react-icons/fa";
-
+import { useState } from "react";
+// data/navData.ts
+export const navItems = [
+  { menu_content_id: 1, slug: "", menu_lavel: "সর্বশেষ", menu_style: null },
+  { menu_content_id: 2, slug: "latest", menu_lavel: "জাতীয়", menu_style: null },
+  { menu_content_id: 3, slug: "popular", menu_lavel: "সারাদেশ", menu_style: null },
+  { menu_content_id: 4, slug: "politics", menu_lavel: "রাজনীতি", menu_style: null },
+  { menu_content_id: 5, slug: "country", menu_lavel: "দেশ", menu_style: null },
+  { menu_content_id: 6, slug: "international", menu_lavel: "আন্তর্জাতিক", menu_style: null },
+  { menu_content_id: 7, slug: "sports", menu_lavel: "খেলা", menu_style: null },
+  { menu_content_id: 8, slug: "entertainment", menu_lavel: "বিনোদন", menu_style: null },
+  { menu_content_id: 9, slug: "entertainment", menu_lavel: "সর্বশেষ", menu_style: null },
+  { menu_content_id: 10, slug: "entertainment", menu_lavel: "ধর্ম", menu_style: null },
+  { menu_content_id: 11, slug: "chaturango", menu_lavel: "চতুরঙ্", menu_style: null },
+  { menu_content_id: 12, slug: "womensday", menu_lavel: "নারী দিবস", menu_style: null },
+  { menu_content_id: 13, slug: "sahitto-o-sangskriti", menu_lavel: "সাহিত্য ও সংস্কৃতি", menu_style: null },
+  { menu_content_id: 14, slug: "photogallery", menu_lavel: "ছবি", menu_style: null },
+  { menu_content_id: 15, slug: "probas", menu_lavel: "প্রবাস", menu_style: null },
+  { menu_content_id: 16, slug: "life-struggle", menu_lavel: "জীবন সংগ্রাম", menu_style: null },
+  { menu_content_id: 17, slug: "travel", menu_lavel: "ভ্রমণ", menu_style: null },
+  { menu_content_id: 18, slug: "feature", menu_lavel: "ফিচার", menu_style: null },
+  { menu_content_id: 19, slug: "education", menu_lavel: "শিক্ষা", menu_style: null },
+  { menu_content_id: 20, slug: "industry-trade", menu_lavel: "শিল্প-বাণিজ্য", menu_style: null },
+  { menu_content_id: 21, slug: "interview", menu_lavel: "সাক্ষাৎকার", menu_style: null },
+  { menu_content_id: 22, slug: "technology", menu_lavel: "প্রযুক্তি", menu_style: null },
+  { menu_content_id: 23, slug: "priyochattogram", menu_lavel: "প্রিয় চট্টগ্রাম", menu_style: null },
+  { menu_content_id: 24, slug: "stock-market", menu_lavel: "শেয়ারবাজার", menu_style: null },
+  { menu_content_id: 25, slug: "samakal-investigation", menu_lavel: "সমকাল অনুসন্ধান", menu_style: null },
+  { menu_content_id: 26, slug: "offbit", menu_lavel: "অফবিট", menu_style: null },
+  { menu_content_id: 27, slug: "archive", menu_lavel: "আর্কাইভ", menu_style: null },
+  { menu_content_id: 28, slug: "opinion", menu_lavel: "মতামত", menu_style: null },
+  { menu_content_id: 29, slug: "chakri", menu_lavel: "চাকরি", menu_style: null },
+  { menu_content_id: 30, slug: "shilpomoncho", menu_lavel: "শিল্পমঞ্চ", menu_style: null },
+  { menu_content_id: 31, slug: "special-ayojon", menu_lavel: "বিশেষ আয়োজন", menu_style: null },
+];
 const NavItems = () => {
-  return (
-    <ul className='lg:flex items-center gap-5 hidden '>
-      <li>
-        <Link
-          href='/'
-          className='py-[11px] px-5 text-md text-[var(--dark)] dark:text-white hover:text-red-500 capitalize border-r-2 '
-        >
-          সর্বশেষ
-        </Link>
-      </li>
-      <li>
-        <Link
-          href='/latest'
-          className='py-[11px] px-5 text-md text-[var(--dark)] dark:text-white hover:text-red-500 capitalize border-r-2'
-        >
-          জাতীয়
-        </Link>
-      </li>
-      <li>
-        <Link
-          href='/popular'
-          className='py-[11px] px-5 text-md text-[var(--dark)] dark:text-white hover:text-red-500 capitalize border-r-2'
-        >
-          সারাদেশ
-        </Link>
-      </li>
-      <li>
-        <Link
-          href='/politics'
-          className='py-[11px] px-5 text-md text-[var(--dark)] dark:text-white hover:text-red-500 capitalize border-r-2'
-        >
-          রাজনীতি
-        </Link>
-      </li>
-      <li>
-        <Link
-          href='/country'
-          className='py-[11px] px-5 text-md text-[var(--dark)] dark:text-white hover:text-red-500 capitalize border-r-2'
-        >
-          দেশ
-        </Link>
-      </li>
-      <li>
-        <Link
-          href='/international'
-          className='py-[11px] px-5 text-md text-[var(--dark)] dark:text-white hover:text-red-500 capitalize border-r-2'
-        >
-          আন্তর্জাতিক
-        </Link>
-      </li>
-      <li>
-        <Link
-          href='/sports'
-          className='py-[11px] px-5 text-md text-[var(--dark)] dark:text-white hover:text-red-500 capitalize border-r-2'
-        >
-          খেলা
-        </Link>
-      </li>
-      <li>
-        <Link
-          href='/entertainment'
-          className='py-[11px] px-5 text-md text-[var(--dark)] dark:text-white hover:text-red-500 capitalize border-r-2'
-        >
-          বিনোদন
-        </Link>
-      </li>
-      <li>
-        <Link
-          href='/entertainment'
-          className='py-[11px] px-5 text-md text-[var(--dark)] dark:text-white hover:text-red-500 capitalize border-r-2'
-        >
-          সর্বশেষ
-        </Link>
-      </li>
-      <li>
-        <Link
-          href='/entertainment'
-          className='py-[11px] px-5 text-md text-[var(--dark)] dark:text-white hover:text-red-500 capitalize border-r-2'
-        >
-         ধর্ম
-        </Link>
-      </li>
+  const [menuData, setMenuData] = useState(navItems); // Dynamic state for menu items
 
+  return (
+    <ul className='lg:flex items-center gap-5 hidden'>
+      {menuData.slice(0, 9).map((item) => (
+        <li key={item.menu_content_id}>
+          <Link
+            href={`/${item.slug}`}
+            className='py-[11px] px-5 text-md text-[var(--dark)] dark:text-white hover:text-red-500 capitalize border-r-2'
+          >
+            {item.menu_lavel}
+          </Link>
+        </li>
+      ))}
       <li className='group relative text-black dark:text-white'>
         <div className='flex items-center gap-1 py-[11px] px-5 text-md text-[var(--dark)] dark:text-white hover:text-red-500 capitalize border-r-2'>
           <p className='flex items-center gap-1'>
@@ -209,198 +174,80 @@ const NavItems = () => {
             {/* Column 1 */}
             <div>
               <ul className='space-y-2'>
-                <li>
-                  <Link
-                    href='/sub/chaturango'
-                    className='block text-gray-700 dark:text-gray-300 hover:text-red-500 dark:hover:text-red-500 transition-colors duration-200'
-                  >
-                    চতুরঙ্
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href='/sub/womensday'
-                    className='block text-gray-700 dark:text-gray-300 hover:text-red-500 dark:hover:text-red-500 transition-colors duration-200'
-                  >
-                    নারী দিবস
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href='/sahitto-o-sangskriti'
-                    className='block text-gray-700 dark:text-gray-300 hover:text-red-500 dark:hover:text-red-500 transition-colors duration-200'
-                  >
-                    সাহিত্য ও সংস্কৃতি
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href='/photogallery'
-                    className='block text-gray-700 dark:text-gray-300 hover:text-red-500 dark:hover:text-red-500 transition-colors duration-200'
-                  >
-                    ছবি
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href='/probas'
-                    className='block text-gray-700 dark:text-gray-300 hover:text-red-500 dark:hover:text-red-500 transition-colors duration-200'
-                  >
-                    প্রবাস
-                  </Link>
-                </li>
+                {menuData.slice(9, 14).map((item) => (
+                  <li key={item.menu_content_id}>
+                    <Link
+                      href={`/${item.slug}`}
+                      className='block text-gray-700 dark:text-gray-300 hover:text-red-500 dark:hover:text-red-500 transition-colors duration-200'
+                    >
+                      {item.menu_lavel}
+                    </Link>
+                  </li>
+                ))}
               </ul>
             </div>
 
             {/* Column 2 */}
             <div>
               <ul className='space-y-2'>
-                <li>
-                  <Link
-                    href='/life-struggle'
-                    className='block text-gray-700 dark:text-gray-300 hover:text-red-500 dark:hover:text-red-500 transition-colors duration-200'
-                  >
-                    জীবন সংগ্রাম
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href='/travel'
-                    className='block text-gray-700 dark:text-gray-300 hover:text-red-500 dark:hover:text-red-500 transition-colors duration-200'
-                  >
-                    ভ্রমণ
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href='/feature'
-                    className='block text-gray-700 dark:text-gray-300 hover:text-red-500 dark:hover:text-red-500 transition-colors duration-200'
-                  >
-                    ফিচার
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href='/sub/education'
-                    className='block text-gray-700 dark:text-gray-300 hover:text-red-500 dark:hover:text-red-500 transition-colors duration-200'
-                  >
-                    শিক্ষা
-                  </Link>
-                </li>
+                {menuData.slice(14, 18).map((item) => (
+                  <li key={item.menu_content_id}>
+                    <Link
+                      href={`/${item.slug}`}
+                      className='block text-gray-700 dark:text-gray-300 hover:text-red-500 dark:hover:text-red-500 transition-colors duration-200'
+                    >
+                      {item.menu_lavel}
+                    </Link>
+                  </li>
+                ))}
               </ul>
             </div>
 
             {/* Column 3 */}
             <div>
               <ul className='space-y-2'>
-                <li>
-                  <Link
-                    href='/sub/industry-trade'
-                    className='block text-gray-700 dark:text-gray-300 hover:text-red-500 dark:hover:text-red-500 transition-colors duration-200'
-                  >
-                    শিল্প-বাণিজ্য
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href='/interview'
-                    className='block text-gray-700 dark:text-gray-300 hover:text-red-500 dark:hover:text-red-500 transition-colors duration-200'
-                  >
-                    সাক্ষাৎকার
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href='/technology'
-                    className='block text-gray-700 dark:text-gray-300 hover:text-red-500 dark:hover:text-red-500 transition-colors duration-200'
-                  >
-                    প্রযুক্তি
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href='/priyochattogram'
-                    className='block text-gray-700 dark:text-gray-300 hover:text-red-500 dark:hover:text-red-500 transition-colors duration-200'
-                  >
-                    প্রিয় চট্টগ্রাম
-                  </Link>
-                </li>
+                {menuData.slice(18, 22).map((item) => (
+                  <li key={item.menu_content_id}>
+                    <Link
+                      href={`/${item.slug}`}
+                      className='block text-gray-700 dark:text-gray-300 hover:text-red-500 dark:hover:text-red-500 transition-colors duration-200'
+                    >
+                      {item.menu_lavel}
+                    </Link>
+                  </li>
+                ))}
               </ul>
             </div>
 
             {/* Column 4 */}
             <div>
               <ul className='space-y-2'>
-                <li>
-                  <Link
-                    href='/sub/stock-market'
-                    className='block text-gray-700 dark:text-gray-300 hover:text-red-500 dark:hover:text-red-500 transition-colors duration-200'
-                  >
-                    শেয়ারবাজার
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href='/samakal-investigation'
-                    className='block text-gray-700 dark:text-gray-300 hover:text-red-500 dark:hover:text-red-500 transition-colors duration-200'
-                  >
-                    সমকাল অনুসন্ধান
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href='/offbit'
-                    className='block text-gray-700 dark:text-gray-300 hover:text-red-500 dark:hover:text-red-500 transition-colors duration-200'
-                  >
-                    অফবিট
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href='/archive'
-                    className='block text-gray-700 dark:text-gray-300 hover:text-red-500 dark:hover:text-red-500 transition-colors duration-200'
-                  >
-                    আর্কাইভ
-                  </Link>
-                </li>
+                {menuData.slice(22, 26).map((item) => (
+                  <li key={item.menu_content_id}>
+                    <Link
+                      href={`/${item.slug}`}
+                      className='block text-gray-700 dark:text-gray-300 hover:text-red-500 dark:hover:text-red-500 transition-colors duration-200'
+                    >
+                      {item.menu_lavel}
+                    </Link>
+                  </li>
+                ))}
               </ul>
             </div>
 
             {/* Column 5 */}
             <div>
               <ul className='space-y-2'>
-                <li>
-                  <Link
-                    href='/opinion'
-                    className='block text-gray-700 dark:text-gray-300 hover:text-red-500 dark:hover:text-red-500 transition-colors duration-200'
-                  >
-                    মতামত
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href='/chakri'
-                    className='block text-gray-700 dark:text-gray-300 hover:text-red-500 dark:hover:text-red-500 transition-colors duration-200'
-                  >
-                    চাকরি
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href='/shilpomoncho'
-                    className='block text-gray-700 dark:text-gray-300 hover:text-red-500 dark:hover:text-red-500 transition-colors duration-200'
-                  >
-                    শিল্পমঞ্চ
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href='/special-ayojon'
-                    className='block text-gray-700 dark:text-gray-300 hover:text-red-500 dark:hover:text-red-500 transition-colors duration-200'
-                  >
-                    বিশেষ আয়োজন
-                  </Link>
-                </li>
+                {menuData.slice(26, 31).map((item) => (
+                  <li key={item.menu_content_id}>
+                    <Link
+                      href={`/${item.slug}`}
+                      className='block text-gray-700 dark:text-gray-300 hover:text-red-500 dark:hover:text-red-500 transition-colors duration-200'
+                    >
+                      {item.menu_lavel}
+                    </Link>
+                  </li>
+                ))}
               </ul>
             </div>
           </div>

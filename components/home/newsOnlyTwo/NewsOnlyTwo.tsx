@@ -26,7 +26,7 @@ const NewsOnlyTwo = ({data, style}: NewsProps) => {
                 <div className="border-[var(--border-color)] dark:border-[var(--border-dark)] border-b-[2px] mb-3 pb-1">
                     <div className="flex items-center justify-between">
                         <Link href={`/${slug}`}>
-                            <h2 className="category-text">{category_name}</h2>
+                            <h2 className="category-text text-anchor">{category_name}</h2>
                         </Link>
                     </div>
                 </div>
@@ -49,40 +49,44 @@ const NewsOnlyTwo = ({data, style}: NewsProps) => {
                             } = item || {};
 
                             return (
-                                <div key={i} className="-mx-4 md:px-4">
-                                    <Link
-                                        className="group flex flex-col gap-0 md:flex-row md:gap-3 lg:flex-col lg:gap-0"
-                                        href={`/${category.toLocaleLowerCase()}/${encode_titl}`}
-                                    >
-                                        <div className="overflow-hidden w-full md:w-1/2 lg:w-full relative">
-                                            <div>
-                                                <Image
-                                                    alt={post_title}
-                                                    width={560}
-                                                    height={315}
-                                                    decoding="async"
-                                                    className="w-full h-auto object-cover group-hover:scale-105 duration-700 ease-out"
-                                                    src={image_large}
-                                                    loading="lazy"
-                                                />
-                                            </div>
-                                            { video &&
-                                                            <div className="w-8 h-8 xl:w-8 xl:h-8 rounded-full flex items-center justify-center shadow-md absolute top-1 left-1  bg-[var(--secondary)] group-hover:bg-[var(--secondary)]">
-                                                                <VideoIcon/></div>
-                                                            }
-                                        </div>
-                                        <div className="w-full md:w-1/2 lg:w-full">
-                                            <h3 className="text-2xl left-9 mx-4 md:mx-0 mt-2 md:mt-0 lg:mt-2 mb-0 md:mb-2 text-[var(--dark)]    dark:text-white    font-semibold">
-                                                {post_title}
-                                            </h3>
-                                            <p className="hidden xl:block text-base text-[var(--gray-2)] dark:text-[var(--gray-3)]">
-                                                {excerpt || stitle}
-                                            </p>
+                              <div key={i} className='-mx-4 md:px-4'>
+                                <Link
+                                  className='group flex flex-col gap-0 md:flex-row md:gap-3 lg:flex-col lg:gap-0'
+                                  href={`/${category.toLocaleLowerCase()}/${encode_titl}`}
+                                >
+                                  <div className='overflow-hidden w-full md:w-1/2 lg:w-full relative'>
+                                    <div>
+                                      <Image
+                                        alt={post_title}
+                                        width={560}
+                                        height={315}
+                                        decoding='async'
+                                        className='w-full h-auto object-cover group-hover:scale-105 duration-700 ease-out'
+                                        src={image_large}
+                                        loading='lazy'
+                                      />
+                                    </div>
+                                    {video && (
+                                      <div className='w-8 h-8 xl:w-8 xl:h-8 rounded-full flex items-center justify-center shadow-md absolute top-1 left-1  bg-[var(--secondary)] group-hover:bg-[var(--secondary)]'>
+                                        <VideoIcon />
+                                      </div>
+                                    )}
+                                  </div>
+                                  <div className='w-full md:w-1/2 lg:w-full'>
+                                    <h3 className='text-2xl left-9 mx-4 md:mx-0 mt-2 md:mt-0 lg:mt-2 mb-0 md:mb-2 text-[var(--dark)]    dark:text-white  group-hover:text-[var(--text-primary)]  font-semibold'>
+                                      {post_title}
+                                    </h3>
+                                    <p className='hidden xl:block text-base text-[var(--gray-2)] dark:text-[var(--gray-3)]'>
+                                      {excerpt || stitle}
+                                    </p>
 
-                                            <TimeBefore title={post_date} clss="ml-4 md:ml-0"/>
-                                        </div>
-                                    </Link>
-                                </div>
+                                    <TimeBefore
+                                      title={post_date}
+                                      clss='ml-4 md:ml-0'
+                                    />
+                                  </div>
+                                </Link>
+                              </div>
                             );
                         })}
                     </div>
@@ -104,43 +108,42 @@ const NewsOnlyTwo = ({data, style}: NewsProps) => {
                                 } = item || {};
 
                                 return (
-                                    <div
-                                        key={i}
-                                        className="mb-6 last:mb-0 relative after:bg-[var(--border-color)] after:absolute after:w-full after:h-[1px] after:-bottom-3 after:last:h-0 dark:after:bg-[var(--border-dark)]"
+                                  <div
+                                    key={i}
+                                    className='mb-6 last:mb-0 relative after:bg-[var(--border-color)] after:absolute after:w-full after:h-[1px] after:-bottom-3 after:last:h-0 dark:after:bg-[var(--border-dark)]'
+                                  >
+                                    <Link
+                                      className='group'
+                                      href={`/${category.toLocaleLowerCase()}/${encode_titl}`}
                                     >
-                                        <Link
-                                            className="group"
-                                            href={`/${category.toLocaleLowerCase()}/${encode_titl}`}
-                                        >
-                                            <div
-                                                className="ml-2 md:ml-0 lg:ml-2 mb-2 xl:mb-0 overflow-hidden float-right relative">
-                                                <div>
-                                                    <Image
-                                                        alt={post_title}
-                                                        width={330}
-                                                        height={186}
-                                                        decoding="async"
-                                                        className="w-[124px] h-auto lg:w-[110px] lg:h-[75px] xl:w-[180px] xl:h-[120px] object-cover group-hover:scale-105 duration-700 ease-out"
-                                                        src={image_thumb}
-                                                        loading="lazy"
-                                                    />
-                                                </div>
-                                                { video &&
-                                                            <div className="w-8 h-8 xl:w-8 xl:h-8 rounded-full flex items-center justify-center shadow-md absolute top-1 left-1  bg-[var(--secondary)] group-hover:bg-[var(--secondary)]">
-                                                                <VideoIcon/></div>
-                                                            }
-                                            </div>
-                                            <h3 className="text-lg text-[var(--dark)]    dark:text-white   font-bold">
-                                                {post_title}
-                                            </h3>
-                                            <span
-                                                className="text-[var(--gray-2)] dark:text-[var(--gray-3)] mt-2 text-base line-clamp-2">
-                                                  {excerpt || stitle}
-                                            </span>
-                                        </Link>
+                                      <div className='ml-2 md:ml-0 lg:ml-2 mb-2 xl:mb-0 overflow-hidden float-right relative'>
+                                        <div>
+                                          <Image
+                                            alt={post_title}
+                                            width={330}
+                                            height={186}
+                                            decoding='async'
+                                            className='w-[124px] h-auto lg:w-[110px] lg:h-[75px] xl:w-[180px] xl:h-[120px] object-cover group-hover:scale-105 duration-700 ease-out'
+                                            src={image_thumb}
+                                            loading='lazy'
+                                          />
+                                        </div>
+                                        {video && (
+                                          <div className='w-8 h-8 xl:w-8 xl:h-8 rounded-full flex items-center justify-center shadow-md absolute top-1 left-1  bg-[var(--secondary)] group-hover:bg-[var(--secondary)]'>
+                                            <VideoIcon />
+                                          </div>
+                                        )}
+                                      </div>
+                                      <h3 className='text-lg text-[var(--dark)]  group-hover:text-[var(--text-primary)]  dark:text-white   font-bold'>
+                                        {post_title}
+                                      </h3>
+                                      <span className='text-[var(--gray-2)] dark:text-[var(--gray-3)] mt-2 text-base line-clamp-2'>
+                                        {excerpt || stitle}
+                                      </span>
+                                    </Link>
 
-                                        <TimeBefore title={post_date}/>
-                                    </div>
+                                    <TimeBefore title={post_date} />
+                                  </div>
                                 );
                             })}
                         </div>
@@ -163,43 +166,42 @@ const NewsOnlyTwo = ({data, style}: NewsProps) => {
                                 } = item || {};
 
                                 return (
-                                    <div
-                                        key={i}
-                                        className="mb-6 last:mb-0 relative after:bg-[var(--border-color)] after:absolute after:w-full after:h-[1px] after:-bottom-3 after:last:h-0 dark:after:bg-[var(--border-dark)]"
+                                  <div
+                                    key={i}
+                                    className='mb-6 last:mb-0 relative after:bg-[var(--border-color)] after:absolute after:w-full after:h-[1px] after:-bottom-3 after:last:h-0 dark:after:bg-[var(--border-dark)]'
+                                  >
+                                    <Link
+                                      className='group'
+                                      href={`/${category.toLocaleLowerCase()}/${encode_titl}`}
                                     >
-                                        <Link
-                                            className="group"
-                                            href={`/${category.toLocaleLowerCase()}/${encode_titl}`}
-                                        >
-                                            <div
-                                                className="ml-2 md:ml-0 lg:ml-2 mb-2 xl:mb-0 overflow-hidden float-right relative">
-                                                <div>
-                                                    <Image
-                                                        alt={post_title}
-                                                        width={330}
-                                                        height={186}
-                                                        decoding="async"
-                                                        className="w-[124px] h-auto lg:w-[110px] lg:h-[75px] xl:w-[180px] xl:h-[120px] object-cover group-hover:scale-105 duration-700 ease-out"
-                                                        src={image_thumb}
-                                                        loading="lazy"
-                                                    />
-                                                </div>
-                                                { video &&
-                                                            <div className="w-8 h-8 xl:w-8 xl:h-8 rounded-full flex items-center justify-center shadow-md absolute top-1 left-1  bg-[var(--secondary)] group-hover:bg-[var(--secondary)]">
-                                                                <VideoIcon/></div>
-                                                            }
-                                            </div>
-                                            <h3 className="text-lg text-[var(--dark)]    dark:text-white   font-bold">
-                                                {post_title}
-                                            </h3>
-                                            <span
-                                                className="text-[var(--gray-2)] dark:text-[var(--gray-3)] mt-2 text-base line-clamp-2">
-                                                  {excerpt || stitle}
-                                            </span>
-                                        </Link>
+                                      <div className='ml-2 md:ml-0 lg:ml-2 mb-2 xl:mb-0 overflow-hidden float-right relative'>
+                                        <div>
+                                          <Image
+                                            alt={post_title}
+                                            width={330}
+                                            height={186}
+                                            decoding='async'
+                                            className='w-[124px] h-auto lg:w-[110px] lg:h-[75px] xl:w-[180px] xl:h-[120px] object-cover group-hover:scale-105 duration-700 ease-out'
+                                            src={image_thumb}
+                                            loading='lazy'
+                                          />
+                                        </div>
+                                        {video && (
+                                          <div className='w-8 h-8 xl:w-8 xl:h-8 rounded-full flex items-center justify-center shadow-md absolute top-1 left-1  bg-[var(--secondary)] group-hover:bg-[var(--secondary)]'>
+                                            <VideoIcon />
+                                          </div>
+                                        )}
+                                      </div>
+                                      <h3 className='text-lg text-[var(--dark)]  group-hover:text-[var(--text-primary)]  dark:text-white   font-bold'>
+                                        {post_title}
+                                      </h3>
+                                      <span className='text-[var(--gray-2)] dark:text-[var(--gray-3)] mt-2 text-base line-clamp-2'>
+                                        {excerpt || stitle}
+                                      </span>
+                                    </Link>
 
-                                        <TimeBefore title={post_date}/>
-                                    </div>
+                                    <TimeBefore title={post_date} />
+                                  </div>
                                 );
                             })}
                         </div>

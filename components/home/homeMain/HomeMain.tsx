@@ -36,8 +36,8 @@ const HomeMain = () => {
     if (isLoading) return <HomePageSkeleton/>;
 
     const specialStyle = {
-        backgroundColor: "#fbfaf3",
-        boxShadow: "-1px 1px 5px 5px rgba(0, 0, 0, 0.05)",
+        // backgroundColor: "#fbfaf3",
+        // boxShadow: "-1px 1px 5px 5px rgba(0, 0, 0, 0.05)",
         paddingTop: "0.8rem",
         paddingBottom: "0.8rem",
         borderRadius: "10px"
@@ -94,6 +94,9 @@ const HomeMain = () => {
             category_name='ভিডিও'
           />
         )}
+        {data?.ads.home_11 && (
+          <AddBanner imgPath={data?.ads.home_17} clss='mt-5' />
+        )}
         {/* news By position 4 */}
         {/* home ads 16 here */}
         {data?.newsByCategory[3] && (
@@ -143,6 +146,9 @@ const HomeMain = () => {
         {/* home ads 18 here */}
         {data?.ads.home_18 && (
           <AddBanner imgPath={data?.ads.home_18} clss='mt-5 -mb-10' />
+        )}
+        {data?.ads.home_11 && (
+          <AddBanner imgPath={data?.ads.home_11} clss='mt-5' />
         )}
       </Fragment>
     );
