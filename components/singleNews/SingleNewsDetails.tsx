@@ -27,6 +27,8 @@ import PrintIcon from "@/public/icons/PrintIcon";
 import TopNewsForNewsDetails from "./top-news-for-news-details";
 import { FaHome } from "react-icons/fa";
 import Breadcrumb from "@/ui/Breadcrumb";
+import AnyShare from "@/app/AnyShare";
+import Script from "next/script";
 
 interface Comment {
   comments: string;
@@ -100,7 +102,11 @@ const SingleNewsDetails = ({
   const handlePrint = () => {
     window.print();
   };
-
+  useEffect(() => {
+    const handleScroll = () => console.log("Scroll detected");
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
   const get_comments = () => {
     if (!data.id) {
       console.warn("cannot fetch comments, post id not available");
@@ -203,7 +209,46 @@ const SingleNewsDetails = ({
                 >
                   {title}
                 </h1>
+                <div className='flex flex-col md:flex-row gap-3 items-center justify-between relative after:bg-[var(--border-color)] after:absolute after:w-full after:h-[1px] after:right-0 after:-top-3 dark:after:bg-[var(--border-dark)] print:after:bg-transparent'>
+                  <div className='w-full md:w-1/2'>
+                    <div className='flex flex-row gap-2 items-center text-[var(--dark)] text-sm dark:text-white print:dark:text-[var(--dark)]'>
+                      <Image
+                        alt={title}
+                        loading='lazy'
+                        width={192}
+                        height={192}
+                        decoding='async'
+                        className='w-9 h-9 rounded-full author-image print:hidden'
+                        src={
+                          reporter_image
+                            ? reporter_image
+                            : "/images/no_user.png"
+                        }
+                      />
+                      <div className='flex flex-col'>
+                        <div>
+                          <span>{reporter}</span>
+                          <span className='ml-1'>|</span>
+                          <span className='ml-1'>
+                            {is_on_print_media === 1
+                              ? "প্রিন্ট সংস্করণ"
+                              : "অনলাইন সংস্করণ"}
+                          </span>
+                        </div>
+                        <div className='whitespace-nowrap'>
+                          {" "}
+                          প্রকাশ: {date_output_bn(publish_date)} | আপডেট:
+                          {date_output_bn(publish_date)}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div className='w-full md:w-1/2 print:hidden flex items-center whitespace-nowrap justify-start md:justify-end min-h-[40px] md:min-h-[48px] select-none mt-4'>
+                    <div className='flex items-center '></div>
+                  </div>
+                </div>
               </div>
+
               <div className='clss'>
                 {video ? (
                   <div className='print:hidden'>
@@ -225,8 +270,8 @@ const SingleNewsDetails = ({
                   </figure>
                 )}
               </div>
-              <div className='flex flex-col md:flex-row gap-3 items-center justify-between relative after:bg-[var(--border-color)] after:absolute after:w-full after:h-[1px] after:right-0 after:-top-3 dark:after:bg-[var(--border-dark)] print:after:bg-transparent'>
-                <div className='w-full md:w-1/2'>
+              <div className='flex flex-col md:flex-row gap-3 items-center justify-end relative after:bg-[var(--border-color)] after:absolute after:w-full after:h-[1px] after:right-0 after:-top-3 dark:after:bg-[var(--border-dark)] print:after:bg-transparent'>
+                {/* <div className='w-full md:w-1/2'>
                   <div className='flex flex-row gap-2 items-center text-[var(--dark)] text-sm dark:text-white print:dark:text-[var(--dark)]'>
                     <Image
                       alt={title}
@@ -256,7 +301,7 @@ const SingleNewsDetails = ({
                       </div>
                     </div>
                   </div>
-                </div>
+                </div> */}
                 <div className='w-full md:w-1/2 print:hidden flex items-center whitespace-nowrap justify-start md:justify-end min-h-[40px] md:min-h-[48px] select-none mt-4'>
                   <div className='flex items-center '>
                     {/* <div className='flex items-center print:hidden '>
@@ -300,43 +345,79 @@ const SingleNewsDetails = ({
                     </div> */}
                     <div className='flex items-center'>
                       <div className='print:hidden'>
-                        {/* AddToAny Share Buttons with Fallback Styles */}
+                        {/* AddToAny Share Buttons */}
                         <div
-                          className='a2a_kit a2a_default_style flex space-x-2'
+                          className='a2a_kit a2a_kit_size_32 a2a_default_style flex space-x-2'
+                          style={{ lineHeight: "32px" }}
                           data-a2a-url={shareUrl}
                           data-a2a-title={shareTitle}
                           data-a2a-description={shareDescription}
                         >
                           <a
+                            className='a2a_button_facebook'
+                            target='_blank'
+                            rel='nofollow noopener'
+                          ></a>
+                          <a
+                            className='a2a_button_x'
+                            target='_blank'
+                            rel='nofollow noopener'
+                          ></a>
+                          <a
+                            className='a2a_button_whatsapp'
+                            target='_blank'
+                            rel='nofollow noopener'
+                          ></a>
+                          <a
+                            className='a2a_button_linkedin'
+                            target='_blank'
+                            rel='nofollow noopener'
+                          ></a>
+                          <a
+                            className='a2a_button_telegram'
+                            target='_blank'
+                            rel='nofollow noopener'
+                          ></a>
+                          <a
+                            className='a2a_button_facebook_messenger'
+                            target='_blank'
+                            rel='nofollow noopener'
+                          ></a>
+                          <a
+                            className='a2a_button_email'
+                            target='_blank'
+                            rel='nofollow noopener'
+                          ></a>
+                          <a
                             className='a2a_dd'
                             href='https://www.addtoany.com/share'
                           ></a>
-                          <a className='a2a_button_facebook'>Facebook</a>
-                          <a className='a2a_button_twitter'>zxc</a>
-                          <a className='a2a_button_whatsapp'>vzcxz</a>
                         </div>
                         {/* Fallback Style for Debugging */}
                         <style jsx>{`
                           .a2a_default_style img {
                             display: inline-block !important;
-                            width: 24px !important;
-                            height: 24px !important;
+                            width: 32px !important;
+                            height: 32px !important;
                           }
                           .a2a_dd {
                             display: inline-block !important;
                           }
                         `}</style>
                       </div>
-                      <div onClick={handlePrint} className='cursor-pointer'>
+                      <div
+                        onClick={handlePrint}
+                        className='cursor-pointer mr-2'
+                      >
                         <PrintIcon />
                       </div>
                     </div>
-                    <div
+                    {/* <div
                       onClick={handlePrint}
                       className='flex justify-center cursor-pointer text-xs h-[32px] w-[36px] mr-2 bg-[var(--slate)] dark:bg-[var(--gray-1)] dark:text-white rounded-md items-center hover:transform hover:-translate-y-1 duration-300'
                     >
                       <PrintIcon />
-                    </div>
+                    </div> */}
                   </div>
                   <div className='flex items-center mr-2 space-x-2'>
                     <button
@@ -599,6 +680,15 @@ const SingleNewsDetails = ({
           </div>
         </div>
       </div>
+      <Script
+        src='https://static.addtoany.com/menu/page.js'
+        strategy='lazyOnload'
+        onLoad={() => {
+          if (typeof window !== "undefined" && window.a2a) {
+            window.a2a.init_all();
+          }
+        }}
+      />
     </div>
   );
 };

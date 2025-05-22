@@ -20,7 +20,6 @@ import DynamicFavicon from "@/components/dynamicFavicon/DynamicFavicon";
 import TopBar from "@/components/home/TopBar";
 import BreakingNewsMarquee from "@/components/common/breaking-news/breaking-news";
 import ScrollPreserver from "./ScrollPreserver";
-import AnyShare from "./AnyShare";
 export async function generateMetadata(): Promise<Metadata> {
   const { data } = await instance.get("/metadata");
 
@@ -57,10 +56,9 @@ export default function RootLayout({
   children,
 }: {
   children: React.ReactNode;
-  }) {
-  
+}) {
   return (
-    <html lang='bn'>
+    <html lang='en'>
       <head></head>
       <body>
         <ThemeWrapper>
@@ -76,10 +74,8 @@ export default function RootLayout({
             <Footer />
 
             {/* <ScrollToTop /> */}
-
             <DynamicFavicon />
             <BreakingNewsMarquee />
-            <AnyShare/>
           </WebSettingProvider>
         </ThemeWrapper>
       </body>

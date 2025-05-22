@@ -135,9 +135,8 @@ const TopBar = () => {
         hideTranslateBar();
         window.addEventListener("load", hideTranslateBar);
 
-        // Ensure language button label is correct after translation
         const updateLanguageLabel = () => {
-          setCurrentLanguage(lang as "bn" | "en"); // Refresh state to match cookie
+          setCurrentLanguage(lang as "bn" | "en"); 
         };
         updateLanguageLabel();
         window.addEventListener("load", updateLanguageLabel);
