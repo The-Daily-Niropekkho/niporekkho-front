@@ -51,7 +51,7 @@ const SinglePostMain = () => {
           setRelatedItems(data.data.relatedPost);
         }
         setItems([data.data]);
-        setPage((prevPage) => prevPage + 1);
+        // setPage((prevPage) => prevPage + 1);
       }
     } catch (error: any) {
       setError(error);

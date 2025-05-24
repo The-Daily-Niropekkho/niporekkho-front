@@ -132,7 +132,12 @@ const Footer = () => {
               প্রকাশ করা সম্পূর্ণ বেআইনি।
             </p>
             <p>
-              Developed and Maintained by <span className="font-medium">Naria It Solution</span>
+              Developed and Maintained by{" "}
+              <Link href='https://www.nariaitsolution.com' target='_blank' rel='noopener noreferrer'>
+                <span className='font-medium uppercase text-[#2563eb]'>
+                  Naria It Solution
+                </span>
+              </Link>
             </p>
           </div>
         </div>

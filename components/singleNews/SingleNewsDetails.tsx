@@ -102,11 +102,7 @@ const SingleNewsDetails = ({
   const handlePrint = () => {
     window.print();
   };
-  useEffect(() => {
-    const handleScroll = () => console.log("Scroll detected");
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+ 
   const get_comments = () => {
     if (!data.id) {
       console.warn("cannot fetch comments, post id not available");
@@ -170,7 +166,31 @@ const SingleNewsDetails = ({
     relatedPost,
     is_on_print_media,
   } = data;
-
+console.log([
+  {
+    id,
+    title,
+    stitle,
+    excerpt,
+    encode_title,
+    image_thumb,
+    image_large,
+    image_title,
+    slug,
+    news,
+    video,
+    reporter,
+    reporter_image,
+    post_date,
+    publish_date,
+    category_name,
+    category,
+    time_stamp,
+    tags,
+    relatedPost,
+    is_on_print_media,
+  },
+]);
   useEffect(() => {
     const currentUrl = window.location.href;
     const hostUrl = window.location.host;
@@ -186,7 +206,12 @@ const SingleNewsDetails = ({
     { label: <FaHome />, href: "/" },
     { label: category_name, href: `/${category?.toLowerCase()}` },
   ];
-
+  // Reinitialize AddToAny when data changes
+  useEffect(() => {
+    if (typeof window !== "undefined" && window.a2a) {
+      window.a2a.init_all(); // Reinitialize AddToAny with new data
+    }
+  }, [data.id, data.title, data.category, data.excerpt, data.stitle]);
   return (
     <div className={clss}>
       <div className='container px-4 mx-auto print:px-0'>
@@ -563,9 +588,42 @@ const SingleNewsDetails = ({
 
             <div className='container mx-auto print:hidden'>
               <div className='relative mt-6 mb-6 before:absolute before:bg-[var(--border-color)] before:w-full before:h-[1px] before:left-0 before:-top-3 after:bg-[var(--border-color)] after:absolute after:w-full after:h-[1px] after:left-0 after:-bottom-2 print:hidden dark:before:bg-[var(--border-color)] dark:after:bg-[var(--border-dark)]'>
-                <p className='text-[var(--primary)] text-xl md:text-2xl dark:text-white'>
-                  এই বিভাগের আরও সংবাদ
-                </p>
+                <div className='flex items-center justify-between'>
+                  <p className='text-[var(--primary)] text-xl md:text-2xl dark:text-white'>
+                    এই বিভাগের আরও সংবাদ
+                  </p>
+                  <Link
+                    href={`/${category}`}
+                    className='text-[var(--primary)] dark:text-white'
+                  >
+                    {" "}
+                    <p className='text-[var(--text-primary)] hover:text-[var(--primary)] duration-300 text-xl md:text-2xl dark:text-white flex gap-2 items-center cursor-pointer'>
+                      আরও পড়ুন{" "}
+                      <svg
+                        className='w-3 h-3 text-gray-500 mx-1'
+                        aria-hidden='true'
+                        xmlns='http://www.w3.org/2000/svg'
+                        fill='none'
+                        viewBox='0 0 12 10'
+                      >
+                        <path
+                          stroke='currentColor'
+                          strokeLinecap='round'
+                          strokeLinejoin='round'
+                          strokeWidth='1.5'
+                          d='m2 9 4-4-4-4'
+                        />
+                        <path
+                          stroke='currentColor'
+                          strokeLinecap='round'
+                          strokeLinejoin='round'
+                          strokeWidth='1.5'
+                          d='m6 9 4-4-4-4'
+                        />
+                      </svg>
+                    </p>
+                  </Link>
+                </div>
               </div>
 
               <div className='grid grid-cols-1 md:grid-cols-12 gap-6 md:after:[&>*:nth-last-child(-n+2)]:h-0 lg:after:[&>*:nth-last-child(-n+2)]:h-full lg:after:[&>*:nth-child(3)]:w-0 lg:after:[&>*]:w-[1px] after:[&>*:last-child]:w-0 after:[&>*]:h-[1px] lg:after:[&>*]:h-full print:hidden dark:after:[&>*]:bg-[var(--border-color)]'>
@@ -616,61 +674,21 @@ const SingleNewsDetails = ({
             <div className='xl:sticky xl:top-[4rem]'>
               <TopNewsForNewsDetails count={10} />
               <div className='mb-3'>
-                <div className='mt-3 mb-3 border-[var(--border-color)] border-t-[1px] border-b-[1px] dark:border-[var(--border-dark)]'>
-                  <h4 className='text-[var(--primary)] text-xl md:text-2xl py-2 dark:text-[var(--primary)]'>
-                    এ সম্পর্কিত আরও খবর
-                  </h4>
-                </div>
+                <div className='mt-3 mb-3 border-[var(--border-color)] border-t-[1px] border-b-[1px] dark:border-[var(--border-dark)]'></div>
                 <div className='last:[&>*]:mb-0 after:last:[&>*]:h-0'>
-                  {relatedPost.map((post) => {
-                    const {
-                      news_id,
-                      post_title,
-                      image_thumb,
-                      image_alt,
-                      category,
-                      encode_titl,
-                    } = post;
-                    return (
-                      <div
-                        key={news_id}
-                        className='after:bg-[var(--border-color)] after:absolute after:w-full after:h-[1px] after:-bottom-3 after:right-0 dark:after:bg-[var(--border-dark)] group relative'
-                      >
-                        <div className='flex mb-6'>
-                          <div className='mb-6 last:mb-0 relative after:bg-[var(--border-color)] after:absolute after:w-full after:h-[1px] after:-bottom-3 after:last:h-0 dark:after:bg-[var(--border-dark)] w-full'>
-                            <Link
-                              className='group'
-                              href={`/${category.toLocaleLowerCase()}/${encode_titl}`}
-                            >
-                              <div className='md:hidden ml-2 md:ml-0 lg:ml-2 mb-2 overflow-hidden float-right relative'>
-                                <div>
-                                  <Image
-                                    alt={image_alt}
-                                    width={330}
-                                    height={186}
-                                    decoding='async'
-                                    className='w-[124px] h-auto lg:w-[110px] lg:h-[75px] object-cover group-hover:scale-105 duration-700 ease-out'
-                                    src={image_thumb}
-                                  />
-                                </div>
-                              </div>
-                              <h3 className='text-lg text-[var(--dark)] group- dark:text-white'>
-                                {post_title}
-                              </h3>
-                            </Link>
-                          </div>
-                        </div>
-                      </div>
-                    );
-                  })}
-                  <div className='mb-6 relative after:bg-[var(--border-color)] after:absolute after:w-full after:h-[1px] after:-bottom-3 after:right-0 dark:after:bg-[var(--border-dark)] before:h-px before:-top-3 before:bg-[var(--border-color)] dark:before:bg-[var(--border-color)] before:absolute before:w-full'>
+                  <AddCard
+                    imgPath={`<a target=\"_blank\" href=\"https://dailyniropekkho.com/\"><img width=\"100%\" src=\"https://tpc.googlesyndication.com/simgad/16713525573530791060\" alt=\"\"></a>`}
+                  />
+                  <div className='mb-6 relative after:bg-[var(--border-color)] after:absolute after:w-full after:h-[1px] after:-bottom-3 after:right-0 dark:after:bg-[var(--border-dark)] before:h-px before:-top-3 before:bg-[var(--border-color)] dark:before:bg-[var(--border-color)] before:absolute before:w-full mt-5'>
                     <div className='w-full flex items-center justify-center'>
                       <div
                         className={`${
                           data.ads.news_view_32 ? "" : "h-[250px]"
                         }`}
                       >
-                        <AddCard imgPath={data.ads.news_view_32} />
+                        <AddCard
+                          imgPath={`<a target=\"_blank\" href=\"https://dailyniropekkho.com/\"><img width=\"100%\" src=\"https://tpc.googlesyndication.com/simgad/16713525573530791060\" alt=\"\"></a>`}
+                        />
                       </div>
                     </div>
                   </div>
@@ -679,9 +697,12 @@ const SingleNewsDetails = ({
             </div>
           </div>
         </div>
+        <AddCard
+          imgPath={`<a target=\"_blank\" href=\"https://dailyniropekkho.com/\"><img width=\"100%\" src=\"https://admin.dailyniropekkho.com/storage/ad_image/1734943198418.png\" alt=\"\"></a>`}
+        />
       </div>
       <Script
-        src='https://static.addtoany.com/menu/page.js'
+        src='https://static.addtoany.com/menu/page.js1'
         strategy='lazyOnload'
         onLoad={() => {
           if (typeof window !== "undefined" && window.a2a) {

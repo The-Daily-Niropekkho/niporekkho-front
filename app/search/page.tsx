@@ -116,7 +116,7 @@ export default function SearchPage() {
     // return <ThreeDotsLoader clss={"h-[300px] sm:h-[600px]"} color="51c27c" />;
 
     return (
-        <section className="py-[60px]">
+        <section className="py-[calc(100vh/6)]">
             <div className="container px-4 mx-auto">
                 <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
                     <div className="col-span-12 lg:col-start-2 lg:col-span-10 xl:col-start-2 xl:col-span-10">

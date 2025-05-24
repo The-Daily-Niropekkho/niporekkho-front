@@ -1,7 +1,6 @@
 "use client"
 import Script from "next/script";
 
-// Extend the Window interface to include a2a
 declare global {
   interface Window {
     a2a?: {
@@ -19,7 +18,7 @@ function AnyShare() {
         strategy='lazyOnload'
         onLoad={() => {
           if (typeof window !== "undefined" && window.a2a) {
-            window.a2a.init_all(); // Initialize AddToAny
+            window.a2a.init_all(); 
           }
         }}
       />
