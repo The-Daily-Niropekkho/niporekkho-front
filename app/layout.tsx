@@ -7,6 +7,7 @@ import WebSettingProvider from "@/context/webSettingContext";
 import instance from "@/utils/instance";
 import { Metadata } from "next";
 import "react-loading-skeleton/dist/skeleton.css";
+import ReduxProvider from "@/provider/redux-provider";
 
 // react-datepicker css
 import "react-datepicker/dist/react-datepicker.css";
@@ -20,37 +21,37 @@ import DynamicFavicon from "@/components/dynamicFavicon/DynamicFavicon";
 import TopBar from "@/components/home/TopBar";
 import BreakingNewsMarquee from "@/components/common/breaking-news/breaking-news";
 import ScrollPreserver from "./ScrollPreserver";
-export async function generateMetadata(): Promise<Metadata> {
-  const { data } = await instance.get("/metadata");
+// export async function generateMetadata(): Promise<Metadata> {
+//   const { data } = await instance.get("/metadata");
 
-  const { title, image, meta_keyword, meta_description, site_name, favicon } =
-    data?.data;
+//   const { title, image, meta_keyword, meta_description, site_name, favicon } =
+//     data?.data;
 
-  const faviconWithCacheBuster = `${favicon}?v=${new Date().getTime()}`;
-  return {
-    title: title,
-    description: meta_description !== "" ? meta_description : title,
-    keywords: [meta_keyword],
-    openGraph: {
-      title: title,
-      description: meta_description !== "" ? meta_description : title,
-      url: site_name,
-      siteName: site_name,
-      images: [
-        {
-          url: image,
-          secureUrl: image,
-          width: 800,
-          height: 600,
-        },
-      ],
-      type: "website",
-    },
-    icons: {
-      icon: faviconWithCacheBuster, // Adding the favicon dynamically
-    },
-  };
-}
+//   const faviconWithCacheBuster = `${favicon}?v=${new Date().getTime()}`;
+//   return {
+//     title: title,
+//     description: meta_description !== "" ? meta_description : title,
+//     keywords: [meta_keyword],
+//     openGraph: {
+//       title: title,
+//       description: meta_description !== "" ? meta_description : title,
+//       url: site_name,
+//       siteName: site_name,
+//       images: [
+//         {
+//           url: image,
+//           secureUrl: image,
+//           width: 800,
+//           height: 600,
+//         },
+//       ],
+//       type: "website",
+//     },
+//     icons: {
+//       icon: faviconWithCacheBuster, // Adding the favicon dynamically
+//     },
+//   };
+// }
 
 export default function RootLayout({
   children,
@@ -61,6 +62,7 @@ export default function RootLayout({
     <html lang='en'>
       <head></head>
       <body>
+      <ReduxProvider>
         <ThemeWrapper>
           <ScrollPreserver />
           <WebSettingProvider>
@@ -77,7 +79,8 @@ export default function RootLayout({
             <DynamicFavicon />
             <BreakingNewsMarquee />
           </WebSettingProvider>
-        </ThemeWrapper>
+          </ThemeWrapper>
+          </ReduxProvider>
       </body>
     </html>
   );

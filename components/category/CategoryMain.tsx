@@ -27,7 +27,19 @@ interface TopicType {
   topic_name: string;
   slug: string;
 }
-
+interface FeaturedNewsItem {
+  post_title: string;
+  post_date: string;
+  image_large: string;
+  image_thumb: string;
+  stitle?: string;
+  excerpt?: string;
+  category_name?: string;
+  news_id: string | number;
+  category: string;
+  encode_titl: string;
+  video?: string;
+}
 const CategoryMain = () => {
   // const { theme } = useTheme();
   const [pageNumber, setPageNumber] = useState(0);
@@ -63,7 +75,7 @@ const CategoryMain = () => {
         }
       })();
     }
-  }, [pageNumber, param.categoryName]);
+  }, [pageNumber, param.categoryName, limit]);
 
   // decide what to render
   //@TODO: When the error occurred
@@ -137,7 +149,7 @@ const CategoryMain = () => {
               <div className='col-span-12 flex flex-col lg:flex-row gap-3 relative after:bg-[var(--border-color)] after:absolute after:w-full after:h-[1px] last:after:h-0 after:-bottom-3 dark:after:bg-[var(--border-dark)]'>
                 {/* Left Section: Featured News Item */}
                 <div className='w-full lg:w-3/5 lg:border-r border-[var(--border-color)] dark:border-[var(--border-dark)]'>
-                  {data?.posts.slice(0, 1)?.map((itm, i) => {
+                  {data?.posts.slice(0, 1)?.map((itm: FeaturedNewsItem, i: number) => {
                     const {
                       post_title,
                       post_date,
@@ -197,6 +209,8 @@ const CategoryMain = () => {
                       </div>
                     );
                   })}
+
+
                 </div>
 
                 {/* Right Section: List of News Items */}
@@ -210,55 +224,57 @@ const CategoryMain = () => {
 
                       return (
                         <>
-                          {data.posts.slice(1, sliceEnd).map((itm, i) => {
-                            const {
-                              encode_titl,
-                              post_title,
-                              news_id,
-                              image_thumb,
-                              category,
-                              excerpt,
-                              stitle,
-                            } = itm || {};
-                            return (
-                              <li
-                                key={news_id}
-                                className={`relative flex group lg:flex-row items-start gap-4 ${
-                                  i < 3
-                                    ? "after:content-[''] after:absolute after:left-0 after:-bottom-3 after:h-[1px] after:w-full after:bg-[#eff2f0] after:border-[#eff2f0]"
-                                    : ""
-                                }`}
-                              >
-                                <div className='w-full lg:w-2/3 group'>
-                                  <Link
-                                    href={`/${category.toLocaleLowerCase()}/${encode_titl}`}
-                                  >
-                                    <h1 className='text-base lg:text-lg font-semibold text-[var(--dark)] dark:text-white group-hover:text-[var(--text-primary)] line-clamp-2'>
-                                      {post_title}
-                                    </h1>
-                                    <span className='text-[var(--gray-2)] dark:text-[var(--gray-3)] mt-1 text-base line-clamp-2'>
-                                      {excerpt || stitle}
-                                    </span>
-                                  </Link>
-                                </div>
-                                <div className='w-full lg:w-1/3 relative overflow-hidden'>
-                                  <Link
-                                    href={`/${category.toLocaleLowerCase()}/${encode_titl}`}
-                                  >
-                                    <Image
-                                      alt={post_title}
-                                      width={120}
-                                      height={80}
-                                      decoding='async'
-                                      className='w-full h-full md:h-[100px] lg:h-[100px] object-cover group-hover:scale-105 duration-700 ease-out'
-                                      src={image_thumb}
-                                    />
-                                    <div className='absolute inset-0 bg-gradient-to-t from-black/30 to-transparent pointer-events-none' />
-                                  </Link>
-                                </div>
-                              </li>
-                            );
-                          })}
+                          {data.posts
+                            .slice(1, sliceEnd)
+                            .map((itm: FeaturedNewsItem, i: number) => {
+                              const {
+                                encode_titl,
+                                post_title,
+                                news_id,
+                                image_thumb,
+                                category,
+                                excerpt,
+                                stitle,
+                              } = itm || {};
+                              return (
+                                <li
+                                  key={news_id}
+                                  className={`relative flex group lg:flex-row items-start gap-4 ${
+                                    i < 3
+                                      ? "after:content-[''] after:absolute after:left-0 after:-bottom-3 after:h-[1px] after:w-full after:bg-[#eff2f0] after:border-[#eff2f0]"
+                                      : ""
+                                  }`}
+                                >
+                                  <div className='w-full lg:w-2/3 group'>
+                                    <Link
+                                      href={`/${category.toLocaleLowerCase()}/${encode_titl}`}
+                                    >
+                                      <h1 className='text-base lg:text-lg font-semibold text-[var(--dark)] dark:text-white group-hover:text-[var(--text-primary)] line-clamp-2'>
+                                        {post_title}
+                                      </h1>
+                                      <span className='text-[var(--gray-2)] dark:text-[var(--gray-3)] mt-1 text-base line-clamp-2'>
+                                        {excerpt || stitle}
+                                      </span>
+                                    </Link>
+                                  </div>
+                                  <div className='w-full lg:w-1/3 relative overflow-hidden'>
+                                    <Link
+                                      href={`/${category.toLocaleLowerCase()}/${encode_titl}`}
+                                    >
+                                      <Image
+                                        alt={post_title}
+                                        width={120}
+                                        height={80}
+                                        decoding='async'
+                                        className='w-full h-full md:h-[100px] lg:h-[100px] object-cover group-hover:scale-105 duration-700 ease-out'
+                                        src={image_thumb}
+                                      />
+                                      <div className='absolute inset-0 bg-gradient-to-t from-black/30 to-transparent pointer-events-none' />
+                                    </Link>
+                                  </div>
+                                </li>
+                              );
+                            })}
                           {hasValidAddCard && (
                             <li>
                               <AddCard

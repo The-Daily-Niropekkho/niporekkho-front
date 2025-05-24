@@ -19,17 +19,27 @@ import NavbarSkeleton from "../skeleton/NavbarSkeleton";
 import { FaChevronDown } from "react-icons/fa";
 import { AnimatePresence, motion } from "framer-motion";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useGetAllCategoriesQuery } from "@/redux/features/category/categoryApi";
 
 const NavBar = () => {
+  const { data, error, isLoading } = useGetAllCategoriesQuery(
+    { sortBy: "position", sortOrder: "", limit: 500 },
+    { skip: false },
+  );
+  console.log(data)
+  
   const { theme, setTheme } = useTheme();
   const [showSidebar, setShowSidebar] = useState(false);
   const [enabled, setEnabled] = useState(false);
   const [showSearch, setShowSearch] = useState(false);
   const [searchText, setSearchText] = useState("");
-  const { data, isLoading } = useContext(WebSettingContext);
+  // const { data, isLoading } = useContext(WebSettingContext);
   const [activeMenu, setActiveMenu] = useState<string | undefined>("");
-  const logo = data?.logo;
+  const logo =
+    "https://www.dailyniropekkho.com/_next/image?url=https%3A%2F%2Fadmin.dailyniropekkho.com%2Fstorage%2Fapplication%2F1734496289logo.png&w=256&q=75";
   const router = useRouter();
+
+  
 
   /**
    * Handle search form submission and navigate to search results.
@@ -64,10 +74,10 @@ const NavBar = () => {
    * or hiding it if it's visible.
    */
   const handleSidebar = () => {
-    // Toggle the value of `showSidebar` to show or hide the sidebar
+    //chng: Log sidebar state for debugging
+    console.log("Sidebar toggled, new state:", !showSidebar);
     setShowSidebar(!showSidebar);
   };
-
   /**
    * Toggle the application theme between dark and light modes.
    *
@@ -110,6 +120,12 @@ const NavBar = () => {
 
             {/* Nav item here */}
             <NavItems
+              data={data?.data?.map((cat: any) => ({
+                ...cat,
+                image_id: cat.image_id === null ? undefined : cat.image_id,
+              }))}
+              isLoading={isLoading}
+              error={error}
               setActiveMenu={setActiveMenu}
               activeMenu={activeMenu || ""}
             />
@@ -117,7 +133,7 @@ const NavBar = () => {
             <div className='flex items-center justify-center print:hidden'>
               <div className='p-3 last:pr-0 hidden md:block'>
                 <button
-                  className='flex hidden'
+                  className='flex '
                   aria-label='theme'
                   onClick={handleTheme}
                 >
@@ -184,7 +200,6 @@ const NavBar = () => {
                 >
                   <SearchIcon clss='stroke-white' />
                 </button>
-                
               </motion.form>
             </div>
           </motion.div>
@@ -195,6 +210,12 @@ const NavBar = () => {
           handleSidebar={handleSidebar}
           handleTheme={handleTheme}
           theme={`${theme}`}
+          categories={data?.data?.map((cat: any) => ({
+            ...cat,
+            image_id: cat.image_id === null ? undefined : cat.image_id,
+          }))}
+          isLoading={isLoading}
+          error={error}
         />
       )}
     </Fragment>
