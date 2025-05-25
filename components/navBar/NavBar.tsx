@@ -26,7 +26,7 @@ const NavBar = () => {
     { sortBy: "position", sortOrder: "", limit: 500 },
     { skip: false },
   );
-  console.log(data)
+  // console.log(data)
   
   const { theme, setTheme } = useTheme();
   const [showSidebar, setShowSidebar] = useState(false);
