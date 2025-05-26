@@ -154,10 +154,18 @@ const dummyYouTubeData = [
 
 const HomeMain = () => {
   const { data, error, isLoading } = useGetAllCategoriesQuery(
-    { sortBy: "position", sortOrder: "asc", limit: 500 },
+    { sortBy: "position", sortOrder: "asc", limit: 500, is_news: true },
     { skip: false },
   );
-
+  const topNewsData = useGetAllCategoriesQuery(
+    { sortBy: "position", sortOrder: "asc", limit: 500 },
+    {
+      selectFromResult: ({ data, isLoading, isFetching }) => ({
+        data: data?.data?.[0],
+        isLoading: isLoading || (isFetching && !data?.data?.[0]?.news?.length),
+      }),
+    },
+  );
   // chng: Debug data
   console.log("HomeMain - Categories Data:", data?.data);
 

@@ -44,7 +44,11 @@ const NavItems = ({
   if (isLoading || !menuData.length) {
     return (
       <ul className='lg:flex items-center gap-5 hidden'>
-        {/* render your loading skeleton here if you like */}
+        {[1, 2, 3, 4, 5, 6, 7, 8].map((item) => (
+          <li key={item} className='py-[11px] px-5 text-md'>
+            <div className='h-5 w-20 bg-gray-200 rounded-md animate-pulse'></div>
+          </li>
+        ))}
       </ul>
     );
   }
@@ -58,12 +62,12 @@ const NavItems = ({
   }
 
   return (
-    <ul className='lg:flex items-center gap-5 hidden'>
+    <ul className='lg:flex items-center gap- hidden'>
       {menuData.slice(0, 9).map((item) => (
         <li key={item.title}>
           <Link
             href={`/${item.slug}`}
-            className='py-[11px] px-5 text-md text-[var(--dark)] dark:text-white hover:text-red-500 capitalize border-r-2'
+            className='whitespace-nowrap py-[11px] px-5 text-md text-[var(--dark)] dark:text-white hover:text-red-500 capitalize border-r-2'
           >
             {item.title}
           </Link>

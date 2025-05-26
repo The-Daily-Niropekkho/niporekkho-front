@@ -19,7 +19,7 @@ export default function fileObjectToLink(src: TFileDocument | string | null) {
     imageSrc =
       "https://img.freepik.com/free-vector/illustration-gallery-icon_53876-27002.jpg?t=st=1720180742~exp=1720184342~hmac=45367258d48f919941fdf6a910f0fbf3e86f0385c7ad53ec92ecc7b3e7e3c641&w=300";
     }
-    console.log(imageSrc);
+    // console.log(imageSrc);
 
   return imageSrc as string;
 }
