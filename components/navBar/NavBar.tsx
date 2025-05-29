@@ -194,7 +194,7 @@ const NavBar = () => {
                   onClick={() => setActiveMenu("")}
                 >
                   <Image
-                    src={logo}
+                    src={"/images/logo.png"}
                     alt='Daily Niropekkho'
                     width={180}
                     height={100}

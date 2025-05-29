@@ -11,7 +11,7 @@ import instance from "@/utils/instance";
 import timestampToBangleDateWithTime from "@/utils/timestampToBangleDateWithTime";
 import Image from "next/image";
 import Link from "next/link";
-import {useSearchParams} from "next/navigation";
+// import {useSearchParams} from "next/navigation";
 import {useEffect, useState} from "react";
 import {
     FacebookShareButton,
@@ -31,8 +31,9 @@ export default function SearchPage() {
     const [noData, setNoData] = useState(false);
 
     // Get the Search parameters
-    const searchParams = useSearchParams();
-    const searchSlug = searchParams.get("search_slug");
+    // const searchParams = useSearchParams();
+    // const searchSlug = searchParams.get("search_slug");
+    const searchSlug = "";
 
     useEffect(() => {
         if (pageNumber > 0) {
@@ -128,7 +129,7 @@ export default function SearchPage() {
                                     অনুসন্ধানকৃত ফলাফল
                                 </h1>
                                 <div
-                                    className="hidden w-auto flex items-center whitespace-nowrap justify-start min-h-[40px] md:min-h-[48px] print:hidden select-none">
+                                    className="hidden w-auto  items-center whitespace-nowrap justify-start min-h-[40px] md:min-h-[48px] print:hidden select-none">
                                     <div className="flex items-center">
                                         <FacebookShareButton
                                             url={currentUrl}

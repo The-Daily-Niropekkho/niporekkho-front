@@ -1,5 +1,5 @@
 "use client";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState, useCallback } from "react"; // Add useCallback import
 
 export default function ScrollPreserver() {
@@ -28,6 +28,13 @@ export default function ScrollPreserver() {
   useEffect(() => {
     // toggleScroll can be passed to a parent via context or ref if required
   }, [toggleScroll]);
+
+  const pathname = usePathname();
+
+  useEffect(() => {
+    // Scroll to top on route change
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, [pathname]);
 
   return null;
 }

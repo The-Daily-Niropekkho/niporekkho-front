@@ -9,6 +9,7 @@ import { INews } from "@/types/news";
 // chng: Use dummy news data
 const dummyNews: INews[] = [
   {
+    id: "1",
     headline: "ঢাকায় ভারী বৃষ্টিপাত, জনজীবন বিপর্যস্ত",
     short_headline: "ঢাকায় বৃষ্টি",
     details: "রাজধানী ঢাকায় গতকাল রাত থেকে ভারী বৃষ্টিপাত চলছে।",
@@ -37,6 +38,7 @@ const dummyNews: INews[] = [
     },
   },
   {
+    id: "2",
     headline: "বাংলাদেশের অর্থনীতি: নতুন সম্ভাবনা",
     short_headline: "অর্থনীতির উন্নতি",
     details: "বাংলাদেশের অর্থনীতি নতুন উচ্চতায় পৌঁছেছে।",
@@ -65,6 +67,7 @@ const dummyNews: INews[] = [
     },
   },
   {
+    id: "3",
     headline: "ক্রিকেট: বাংলাদেশের জয়",
     short_headline: "টাইগারদের জয়",
     details: "বাংলাদেশ ক্রিকেট দল নিউজিল্যান্ডকে হারিয়েছে।",
@@ -93,6 +96,7 @@ const dummyNews: INews[] = [
     },
   },
   {
+    id: "4",
     headline: "শিক্ষা সংস্কারে নতুন উদ্যোগ",
     short_headline: "শিক্ষা সংস্কার",
     details: "সরকার শিক্ষা খাতে নতুন সংস্কার চালু করেছে।",
@@ -121,6 +125,7 @@ const dummyNews: INews[] = [
     },
   },
   {
+    id: "5",
     headline: "পরিবেশ দূষণে উদ্বেগ",
     short_headline: "পরিবেশ দূষণ",
     details: "ঢাকার বায়ু দূষণ নিয়ন্ত্রণে জরুরি পদক্ষেপ প্রয়োজন।",
@@ -148,90 +153,7 @@ const dummyNews: INews[] = [
       fileType: "jpg",
     },
   },
-  {
-    headline: "চট্টগ্রামে বন্দর উন্নয়ন",
-    short_headline: "বন্দর উন্নয়ন",
-    details: "চট্টগ্রাম বন্দরে নতুন উন্নয়ন প্রকল্প চালু।",
-    slug: "port-development",
-    createdAt: "2025-05-25T07:30:00.000Z",
-    updatedAt: "2025-05-25T07:30:00.000Z",
-    banner_image: {
-      id: "img-6",
-      url: "https://via.placeholder.com/330x186",
-      originalUrl: "https://via.placeholder.com/330x186",
-      mimetype: "image/jpeg",
-      filename: "port.jpg",
-      modifyFileName: "port-modified.jpg",
-      path: "/uploads/port.jpg",
-      cdn: "https://via.placeholder.com",
-      fileUniqueId: "unique-6",
-      size: 88000,
-      platform: "cloud",
-      createdAt: "2025-05-25T07:30:00.000Z",
-      updatedAt: "2025-05-25T07:30:00.000Z",
-      is_deleted: false,
-      status: "active",
-      type: "image",
-      created_by_id: "user-1",
-      fileType: "jpg",
-    },
-  },
-  {
-    headline: "স্বাস্থ্য খাতে নতুন বাজেট",
-    short_headline: "স্বাস্থ্য বাজেট",
-    details: "স্বাস্থ্য খাতে বাজেট বৃদ্ধির ঘোষণা।",
-    slug: "health-budget",
-    createdAt: "2025-05-25T07:00:00.000Z",
-    updatedAt: "2025-05-25T07:00:00.000Z",
-    banner_image: {
-      id: "img-7",
-      url: "https://via.placeholder.com/330x186",
-      originalUrl: "https://via.placeholder.com/330x186",
-      mimetype: "image/jpeg",
-      filename: "health.jpg",
-      modifyFileName: "health-modified.jpg",
-      path: "/uploads/health.jpg",
-      cdn: "https://via.placeholder.com",
-      fileUniqueId: "unique-7",
-      size: 86000,
-      platform: "cloud",
-      createdAt: "2025-05-25T07:00:00.000Z",
-      updatedAt: "2025-05-25T07:00:00.000Z",
-      is_deleted: false,
-      status: "active",
-      type: "image",
-      created_by_id: "user-1",
-      fileType: "jpg",
-    },
-  },
-  {
-    headline: "প্রযুক্তি খাতে বিনিয়োগ",
-    short_headline: "প্রযুক্তি বিনিয়োগ",
-    details: "প্রযুক্তি খাতে বিদেশি বিনিয়োগ বৃদ্ধি।",
-    slug: "tech-investment",
-    createdAt: "2025-05-25T06:30:00.000Z",
-    updatedAt: "2025-05-25T06:30:00.000Z",
-    banner_image: {
-      id: "img-8",
-      url: "https://via.placeholder.com/330x186",
-      originalUrl: "https://via.placeholder.com/330x186",
-      mimetype: "image/jpeg",
-      filename: "tech.jpg",
-      modifyFileName: "tech-modified.jpg",
-      path: "/uploads/tech.jpg",
-      cdn: "https://via.placeholder.com",
-      fileUniqueId: "unique-8",
-      size: 89000,
-      platform: "cloud",
-      createdAt: "2025-05-25T06:30:00.000Z",
-      updatedAt: "2025-05-25T06:30:00.000Z",
-      is_deleted: false,
-      status: "active",
-      type: "image",
-      created_by_id: "user-1",
-      fileType: "jpg",
-    },
-  },
+ 
 ];
 
 type NewsProps = {
@@ -303,14 +225,14 @@ function TopNews({ count }: { count: number }) {
     image_thumb: fileObjectToLink(item.banner_image),
     image_alt: item.headline || "News Image",
     category: "news", // chng: Default category
-    encode_titl: item.slug,
+    encode_titl: item.slug ?? "",
   }));
 
   return (
     <div className='widget-tab-container md:block hidden w-full shadow-md rounded-lg overflow-hidden'>
       <div className='relative flex w-full bg-gray-100'>
         <div
-          className={`flex-1 text-center py-4 px-2 relative z-10 transition-all duration-300 ${
+          className={`flex-1 text-center py-4 px-2 relative z-1 transition-all duration-300 ${
             tab1Active
               ? "text-[#A90303] font-extrabold bg-gradient-to-r from-[#A90303]/10 to-transparent"
               : "text-gray-700"
@@ -333,7 +255,7 @@ function TopNews({ count }: { count: number }) {
           </label>
         </div>
         <div
-          className={`flex-1 text-center py-4 px-2 relative z-10 transition-all duration-300 ${
+          className={`flex-1 text-center py-4 px-2 relative z-1 transition-all duration-300 ${
             !tab1Active
               ? "text-[#A90303] font-extrabold bg-gradient-to-l from-[#A90303]/10 to-transparent"
               : "text-gray-700"

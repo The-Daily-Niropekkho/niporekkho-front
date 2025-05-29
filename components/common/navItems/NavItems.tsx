@@ -65,11 +65,11 @@ const NavItems = ({
 
   return (
     <ul className='lg:flex items-center gap- hidden'>
-      {menuData.slice(0, 11).map((item) => (
+      {menuData.slice(0, 12).map((item) => (
         <li key={item.title}>
           <Link
             href={`/${item.slug}?id=${item.id}`}
-            className={`whitespace-nowrap py-[11px] px-4 text-md text-[var(--dark)] dark:text-white hover:text-red-500 capitalize border-r-2 ${className}`}
+            className={`whitespace-nowrap py-[11px] px-3 text-md text-[var(--dark)] dark:text-white hover:text-red-500 capitalize border-r-2 ${className}`}
           >
             {item.title}
           </Link>
@@ -88,16 +88,16 @@ const NavItems = ({
           className='absolute left-0 z-50 w-screen bg-white dark:bg-gray-900 shadow-lg border border-gray-200 dark:border-gray-700 rounded-b-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 transform -translate-y-2 group-hover:translate-y-0'
           style={{
             width: "100vw",
-            left: "50%",
+            left: "80%",
             transform: "translateX(-90%)",
             maxWidth: "1200px",
           }}
         >
-          <div className='grid grid-cols-5 gap-10 p-6 md:p-6'>
+          <div className='grid grid-cols-4 gap-10 p-6 md:p-6'>
             {/* Column 1 */}
             <div>
               <ul className='space-y-2'>
-                {menuData.slice(9, 14).map((item) => (
+                {menuData.slice(12, 17).map((item) => (
                   <li key={item.title}>
                     <Link
                       href={`/${item.slug}?id=${item.id}`}
@@ -113,7 +113,7 @@ const NavItems = ({
             {/* Column 2 */}
             <div>
               <ul className='space-y-2'>
-                {menuData.slice(14, 18).map((item) => (
+                {menuData.slice(17, 21).map((item) => (
                   <li key={item.title}>
                     <Link
                       href={`/${item.slug}?id=${item.id}`}
@@ -129,7 +129,7 @@ const NavItems = ({
             {/* Column 3 */}
             <div>
               <ul className='space-y-2'>
-                {menuData.slice(18, 22).map((item) => (
+                {menuData.slice(21, 25).map((item) => (
                   <li key={item.title}>
                     <Link
                       href={`/${item.slug}?id=${item.id}`}
@@ -145,7 +145,7 @@ const NavItems = ({
             {/* Column 4 */}
             <div>
               <ul className='space-y-2'>
-                {menuData.slice(22, 26).map((item) => (
+                {menuData.slice(25, 29).map((item) => (
                   <li key={item.title}>
                     <Link
                       href={`/${item.slug}?id=${item.id}`}
@@ -158,10 +158,10 @@ const NavItems = ({
               </ul>
             </div>
 
-            {/* Column 5 */}
+            {/* Column 5
             <div>
               <ul className='space-y-2'>
-                {menuData.slice(26, 31).map((item) => (
+                {menuData.slice(39, 43).map((item) => (
                   <li key={item.title}>
                     <Link
                       href={`/${item.slug}?id=${item.id}`}
@@ -172,7 +172,7 @@ const NavItems = ({
                   </li>
                 ))}
               </ul>
-            </div>
+            </div> */}
           </div>
         </div>
       </li>

@@ -1,8 +1,8 @@
-import SinglePostMain from "@/components/singlePost/SinglePostMain";
 import instance from "@/utils/instance";
 import { Metadata } from "next";
 import rtrimSlash from "@/utils/utils";
-import { useParams } from "next/navigation";
+// import { useParams } from "next/navigation";
+import SinglePostMain from "../../../../components/singlePost/SinglePostMain";
 
 type Props = {
   params: { categoryName: string; slug: string };

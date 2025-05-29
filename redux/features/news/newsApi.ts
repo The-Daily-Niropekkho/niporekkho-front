@@ -9,6 +9,7 @@ const newsApi = baseApi.injectEndpoints({
         url: `/news?limit=${limit}&category_id=${category_id}`,
         method: "GET",
       }),
+      
       transformResponse: (response: TResponseRedux<NewsDetails[]>) => {
         return { data: response.data, meta: response.meta };
       },

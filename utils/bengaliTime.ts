@@ -97,6 +97,7 @@ export function formatBanglaAndHijri() {
   let hijriBn = now
     .setLocale("bn")
     .reconfigure({ outputCalendar: "islamic-umalqura" })
+    .minus({ days: 1 })
     .toLocaleString({
       day: "numeric",
       month: "long",
@@ -108,3 +109,4 @@ export function formatBanglaAndHijri() {
   return `${banglaStr}, ${hijriBn}`;
 }
 // console.log(formatBanglaAndHijri());
+
