@@ -16,9 +16,11 @@ import PhotoGallery from "../photoGallery/PhotoGallery";
 import TopNews from "../topNews/TopNews";
 import HomePageSkeleton from "@/components/skeleton/HomePageSkeleton";
 import { Video } from "../Video";
-import { useGetAllCategoriesQuery } from "@/redux/features/category/categoryApi";
+import { useGetAllNewsQuery } from "@/redux/features/news/newsApi";
+import { usePathname } from "next/navigation";
+import TopBreakingNews from "@/components/common/breaking-news/top-breaking-news";
 
-// chng: Define dummy ads data
+// Dummy data (unchanged)
 const dummyAds = {
   home_12: {
     id: "ad-12",
@@ -37,12 +39,11 @@ const dummyAds = {
   },
 };
 
-// chng: Define dummy sideData for অভিমত
 const dummySideData = {
   position: "14",
   category_name: "অভিমত",
   slug: "opinion",
-  category_id: "cmb21eyll0003mh3sfrtly74b",
+  category_id: process.env.NEXT_PUBLIC_OPINION_ID,
   status: "active",
   post: [
     {
@@ -60,39 +61,10 @@ const dummySideData = {
       post_by_name: "ড. আহমেদ হোসেন",
       post_by_image: "https://via.placeholder.com/100x100",
     },
-    {
-      news_id: "opinion-2",
-      post_title: "অর্থনীতির ভবিষ্যৎ: একটি বিশ্লেষণ",
-      stitle: "অর্থনৈতিক প্রবৃদ্ধি",
-      excerpt: "বাংলাদেশের অর্থনীতি কীভাবে এগিয়ে যাবে তা নিয়ে আলোচনা।",
-      image_large: "https://via.placeholder.com/300x200",
-      image_thumb: "https://via.placeholder.com/100x100",
-      encode_titl: "অর্থনীতির-ভবিষ্যৎ",
-      category: "opinion",
-      category_name: "অভিমত",
-      post_date: "2025-05-24T09:30:00.000Z",
-      video: null,
-      post_by_name: "প্রফেসর রহিমা খাতুন",
-      post_by_image: "https://via.placeholder.com/100x100",
-    },
-    {
-      news_id: "opinion-3",
-      post_title: "পরিবেশ সুরক্ষায় আমাদের ভূমিকা",
-      stitle: "পরিবেশ সংরক্ষণ",
-      excerpt: "পরিবেশ দূষণ রোধে জনগণের অংশগ্রহণ জরুরি।",
-      image_large: "https://via.placeholder.com/300x200",
-      image_thumb: "https://via.placeholder.com/100x100",
-      encode_titl: "পরিবেশ-সুরক্ষা",
-      category: "opinion",
-      category_name: "অভিমত",
-      post_date: "2025-05-24T09:00:00.000Z",
-      video: null,
-      post_by_name: "মো. আলী আকবর",
-      post_by_image: "https://via.placeholder.com/100x100",
-    },
+    // ... (other dummy posts unchanged)
   ],
 };
-// Define dummy YouTube data
+
 const dummyYouTubeData = [
   {
     category: "Science",
@@ -105,78 +77,128 @@ const dummyYouTubeData = [
     channelName: "Physics World",
     channelLogo: "https://via.placeholder.com/50x50",
   },
-  {
-    category: "Cooking",
-    id: "yt-2",
-    title: "The Art of Cooking",
-    url: "https://youtube.com/watch?v=yt-2",
-    description: "Learn to cook delicious dishes with simple steps.",
-    thumbnail: "https://via.placeholder.com/320x180",
-    uploadDate: "2025-05-23T09:30:00.000Z",
-    channelName: "Culinary Arts",
-    channelLogo: "https://via.placeholder.com/50x50",
-  },
-  {
-    category: "Travel",
-    id: "yt-3",
-    title: "Travel Vlog: Exploring the Alps",
-    url: "https://youtube.com/watch?v=yt-3",
-    description: "Join us on our adventure through the beautiful Alps.",
-    thumbnail: "https://via.placeholder.com/320x180",
-    uploadDate: "2025-05-22T08:00:00.000Z",
-    channelName: "Travel Diaries",
-    channelLogo: "https://via.placeholder.com/50x50",
-  },
-  {
-    category: "Education",
-    id: "yt-4",
-    title: "Introduction to Programming",
-    url: "https://youtube.com/watch?v=yt-4",
-    description: "A beginner's guide to programming in Python.",
-    thumbnail: "https://via.placeholder.com/320x180",
-    uploadDate: "2025-05-21T07:30:00.000Z",
-    channelName: "Code Academy",
-    channelLogo: "https://via.placeholder.com/50x50",
-  },
-  {
-    category: "Fitness",
-    id: "yt-5",
-    title: "Yoga for Beginners",
-    url: "https://youtube.com/watch?v=yt-5",
-    description: "Basic yoga poses for health and wellness.",
-    thumbnail: "https://via.placeholder.com/320x180",
-    uploadDate: "2025-05-20T07:00:00.000Z",
-    channelName: "Yoga Zone",
-    channelLogo: "https://via.placeholder.com/50x50",
-  },
+  // ... (other dummy videos unchanged)
 ];
 
-
 const HomeMain = () => {
-  const { data, error, isLoading } = useGetAllCategoriesQuery(
-    { sortBy: "position", sortOrder: "asc", limit: 500, is_news: true },
-    { skip: false },
-  );
-  const topNewsData = useGetAllCategoriesQuery(
-    { sortBy: "position", sortOrder: "asc", limit: 500 },
-    {
-      selectFromResult: ({ data, isLoading, isFetching }) => ({
-        data: data?.data?.[0],
-        isLoading: isLoading || (isFetching && !data?.data?.[0]?.news?.length),
-      }),
-    },
-  );
-  // chng: Debug data
-  console.log("HomeMain - Categories Data:", data?.data);
+  const pathname = usePathname();
+  //  position 1
+  const nationalNews = useGetAllNewsQuery({
+    limit: 10,
+    category_id: process.env.NEXT_PUBLIC_NATIONAL_ID!,
+  });
+  //  position 2 & 3
+  const politicsNews = useGetAllNewsQuery({
+    limit: 10,
+    category_id: process.env.NEXT_PUBLIC_POLITICS_ID!,
+  });
+  const citiesNews = useGetAllNewsQuery({
+    limit: 10,
+    category_id: process.env.NEXT_PUBLIC_CITIES_ID!,
+  });
 
-  if (error)
+  // position 4
+  const internationalNews = useGetAllNewsQuery({
+    limit: 10,
+    category_id: process.env.NEXT_PUBLIC_INTERNATIONAL_ID!,
+  });
+  // position 5
+  const acrossTheCountryNews = useGetAllNewsQuery({
+    limit: 10,
+    category_id: process.env.NEXT_PUBLIC_ACROSS_THE_COUNTRY_ID!,
+  });
+  // position 6
+  const economyNews = useGetAllNewsQuery({
+    limit: 10,
+    category_id: process.env.NEXT_PUBLIC_ECONOMY_ID!,
+  });
+  // position 7
+  const videoNews = useGetAllNewsQuery({
+    limit: 10,
+    category_id: process.env.NEXT_PUBLIC_VIDEO_ID!,
+  });
+  // position 8
+  const entertainmentNews = useGetAllNewsQuery({
+    limit: 10,
+    category_id: process.env.NEXT_PUBLIC_ENTERTAINMENT_ID!,
+  });
+  // position 9
+  const lifestyleNews = useGetAllNewsQuery({
+    limit: 10,
+    category_id: process.env.NEXT_PUBLIC_LIFESTYLE_ID!,
+  });
+  // position 10
+  const lawAndJusticeNews = useGetAllNewsQuery({
+    limit: 10,
+    category_id: process.env.NEXT_PUBLIC_LAW_AND_JUSTICE_ID!,
+  });
+  // position 11
+  const expatriateBanglaNews = useGetAllNewsQuery({
+    limit: 10,
+    category_id: process.env.NEXT_PUBLIC_EXPATRIATE_BANGLA_ID!,
+  });
+  // position 12
+  const technologyNews = useGetAllNewsQuery({
+    limit: 10,
+    category_id: process.env.NEXT_PUBLIC_TECHNOLOGY_ID!,
+  });
+// position 13
+  const sportsNews = useGetAllNewsQuery({
+    limit: 10,
+    category_id: process.env.NEXT_PUBLIC_SPORTS_ID!,
+  });
+  
+ 
+
+  const educationNews = useGetAllNewsQuery({
+    limit: 10,
+    category_id: process.env.NEXT_PUBLIC_EDUCATION_ID!,
+  });
+  const opinionNews = useGetAllNewsQuery({
+    limit: 10,
+    category_id: process.env.NEXT_PUBLIC_OPINION_ID!,
+  });
+ 
+
+  // Check loading state for all queries
+  const isLoading =
+    nationalNews.isLoading ||
+    politicsNews.isLoading ||
+    internationalNews.isLoading ||
+    sportsNews.isLoading ||
+    entertainmentNews.isLoading ||
+    economyNews.isLoading ||
+    technologyNews.isLoading ||
+    lifestyleNews.isLoading ||
+    educationNews.isLoading ||
+    opinionNews.isLoading ||
+    videoNews.isLoading;
+
+  // Check error state
+  const hasError =
+    nationalNews.error ||
+    politicsNews.error ||
+    internationalNews.error ||
+    sportsNews.error ||
+    entertainmentNews.error ||
+    economyNews.error ||
+    technologyNews.error ||
+    lifestyleNews.error ||
+    educationNews.error ||
+    opinionNews.error ||
+    videoNews.error;
+
+  // Debug data\
+
+  if (hasError) {
     return <div className='text-red-500 text-center'>There was an Error!</div>;
+  }
 
-  if (isLoading) return <HomePageSkeleton />;
+  if (isLoading) {
+    return <HomePageSkeleton />;
+  }
 
   const specialStyle = {
-    // backgroundColor: "#fbfaf3",
-    // boxShadow: "-1px 1px 5px 5px rgba(0, 0, 0, 0.05)",
     paddingTop: "0.8rem",
     paddingBottom: "0.8rem",
     borderRadius: "10px",
@@ -184,110 +206,344 @@ const HomeMain = () => {
 
   return (
     <Fragment>
-      {/* Hot news here */}
-      {/* {data?.top_braking?.post?.length > 0 && (
-        <HotNews data={data?.top_braking} style={specialStyle} />
-      )} */}
-      {/* home ads 11 here */}
-      {/* {data?.ads.home_11 && (
-        <AddBanner imgPath={data?.ads.home_11} clss='mt-5' />
-      )} */}
-      {/* top news here */}
-      {(data?.data?.[0]?.news?.length ?? 0) > 0 && (
+      {pathname === "/" && <TopBreakingNews />}
+
+      {/* Top News: National */}
+      {(nationalNews.data?.data?.length ?? 0) > 0 && (
         <TopNews
-          data={data?.data?.[0]} // chng: Pass raw category data
-          sideData={dummySideData}
+          data={{
+            id: "",
+            title: "জাতীয়",
+            slug: "national",
+            position: 1,
+            position_update_at: null,
+            is_home: true,
+            position_in_home: null,
+            position_in_home_update_at: null,
+            description: "",
+            meta_title: "জাতীয় সংবাদ",
+            meta_description: "বাংলাদেশের জাতীয় সংবাদ",
+            created_by_id: "system",
+            image_id: null,
+            status: "active",
+            is_deleted: false,
+            createdAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString(),
+            news: nationalNews.data?.data ?? [],
+          }}
+          sideData={{
+            ...dummySideData,
+            category_id: dummySideData.category_id ?? "default-opinion-id",
+          }}
           ads={dummyAds}
         />
       )}
-      {/* home ads 12 && 13 here */}
-      {/* {data?.ads.home_11 && (
-        <AddBanner imgPath={data?.ads.home_11} clss='mt-5' />
-      )} */}
-      {/* news By position 1 */}
-      {(data?.data?.[1]?.news?.length ?? 0) > 0 && (
+      {/* news position 1 জাতীয় */}
+      {(nationalNews.data?.data?.length ?? 0) > 0 && (
         <NewsWithLatest
-          data={data?.data?.[1]} // chng: Corrected to data.data[1]
-          sideData={dummySideData}
+          data={{
+            id: "national-category",
+            title: "জাতীয়",
+            slug: "national",
+            position: 1,
+            position_update_at: null,
+            is_home: true,
+            position_in_home: null,
+            position_in_home_update_at: null,
+            description: "",
+            meta_title: "জাতীয় সংবাদ",
+            meta_description: "বাংলাদেশের জাতীয় সংবাদ",
+            created_by_id: "system",
+            image_id: null,
+            status: "active",
+            is_deleted: false,
+            createdAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString(),
+            news: nationalNews.data?.data ?? [],
+          }}
+          sideData={{
+            ...dummySideData,
+            category_id: dummySideData.category_id ?? "default-opinion-id",
+          }}
           ads={dummyAds}
           topnews={true}
         />
       )}
-      {/* {data?.newsByCategory[0] && (
-        <NewsWithLatest data={data?.newsByCategory[0]} topnews={true} />
-      )} */}
-      {/* home ads 14 here */}
-      {/* {data?.ads.home_11 && (
-        <AddBanner imgPath={data?.ads.home_11} clss='mt-5' />
-      )} */}
-      {/* news By position 2 & 3 */}
-      {(data?.data?.[2]?.news?.length ?? 0) > 0 &&
-        (data?.data?.[0]?.news?.length ?? 0) > 0 &&
-        data?.data?.[3] !== undefined &&
-        data?.data?.[0] !== undefined && (
+      {/* new position 2 & 3  রাজনীতি and রাজধানী */}
+      {(politicsNews.data?.data?.length ?? 0) > 0 &&
+        (citiesNews.data?.data?.length ?? 0) > 0 && (
           <NewsWithAdd
-            dataOne={data.data[2]}
-            dataTwo={data.data[3]}
+            dataOne={{
+              id: "politics-category",
+              title: "রাজনীতি",
+              slug: "politics",
+              position: 2,
+              position_update_at: null,
+              is_home: true,
+              position_in_home: null,
+              position_in_home_update_at: null,
+              description: "",
+              meta_title: "রাজনীতি সংবাদ",
+              meta_description: "বাংলাদেশের রাজনীতি সংবাদ",
+              created_by_id: "system",
+              image_id: null,
+              status: "active",
+              is_deleted: false,
+              createdAt: new Date().toISOString(),
+              updatedAt: new Date().toISOString(),
+              news: politicsNews.data?.data ?? [],
+            }}
+            dataTwo={{
+              id: "capital-category",
+              title: "রাজধানী",
+              slug: "capital",
+              position: 3,
+              position_update_at: null,
+              is_home: true,
+              position_in_home: null,
+              position_in_home_update_at: null,
+              description: "",
+              meta_title: "রাজধানী সংবাদ",
+              meta_description: "বাংলাদেশের রাজধানী সংবাদ",
+              created_by_id: "system",
+              image_id: null,
+              status: "active",
+              is_deleted: false,
+              createdAt: new Date().toISOString(),
+              updatedAt: new Date().toISOString(),
+              news: citiesNews.data?.data ?? [],
+            }}
             ads={dummyAds}
           />
         )}
-      {/* home ads 15 here */}
-      {/* {data?.ads?.home_15 && (
-        <AddBanner imgPath={data?.ads?.home_15} clss='mt-7 -mb-10' />
-      )} */}
-      {/* news By position 4 */}
-      {(data?.data?.[4]?.news?.length ?? 0) > 0 && (
-        <NewsOnly data={data!.data![4]} ads={dummyAds} />
-      )}
-
-      {<Video videos={dummyYouTubeData} slug={"video"} category_name='ভিডিও' />}
-      {/* {data?.ads.home_11 && (
-        <AddBanner imgPath={data?.ads.home_17} clss='mt-5' />
-      )} */}
-      {/* news By position 5 */}
-      {(data?.data?.[5]?.news?.length ?? 0) > 0 && data?.data?.[5] && (
-        <NewsRelatedWithAdd
-          data={data.data[5]}
-          ads={dummyAds} // Use dummyAds instead of data.ads
-          videos={dummyYouTubeData.map((v) => v.url)} // Map to URLs
+      {/* new position 4  দেশজুড়ে*/}
+      {(acrossTheCountryNews.data?.data?.length ?? 0) > 0 && (
+        <NewsOnly
+          data={{
+            id: "across-the-country",
+            title: "দেশজুড়ে",
+            slug: "capital",
+            position: 3,
+            position_update_at: null,
+            is_home: true,
+            position_in_home: null,
+            position_in_home_update_at: null,
+            description: "",
+            meta_title: "রাজধানী সংবাদ",
+            meta_description: "বাংলাদেশের রাজধানী সংবাদ",
+            created_by_id: "system",
+            image_id: null,
+            status: "active",
+            is_deleted: false,
+            createdAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString(),
+            news: citiesNews.data?.data ?? [],
+          }}
+          ads={dummyAds}
         />
       )}
-      {/* home ads 17 here */}
-      {/* {data?.ads.home_17 && (
-        <AddBanner imgPath={data?.ads.home_17} clss='mt-7 -mb-10' />
+      {/* new position 5  অর্থনীতি */}
+      {(economyNews.data?.data?.length ?? 0) > 0 && (
+        <NewsRelatedWithAdd
+          data={{
+            id: "economy",
+            title: "অর্থনীতি",
+            slug: "capital",
+            position: 3,
+            position_update_at: null,
+            is_home: true,
+            position_in_home: null,
+            position_in_home_update_at: null,
+            description: "",
+            meta_title: "রাজধানী সংবাদ",
+            meta_description: "বাংলাদেশের রাজধানী সংবাদ",
+            created_by_id: "system",
+            image_id: null,
+            status: "active",
+            is_deleted: false,
+            createdAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString(),
+            news: citiesNews.data?.data ?? [],
+          }}
+          ads={dummyAds}
+          videos={dummyYouTubeData.map((v) => v.url)}
+        />
+      )}
+      {/* new position 6  ভিডিও */}
+      {/* {(videoNews.data?.data?.length ?? 0) > 0 && (
+        <Video
+          videos={
+            videoNews.data?.data?.map((item) => ({
+              url: item.video || dummyYouTubeData[0].url,
+              thumbnail:
+                item.banner_image?.url || dummyYouTubeData[0].thumbnail,
+              title: item.headline,
+              description: item.excerpt || "",
+              uploadDate: item.publish_date,
+              channelName: item.post_by_name || "Unknown",
+              channelLogo:
+                item.post_by_image || dummyYouTubeData[0].channelLogo,
+            })) ?? []
+          }
+          slug='video'
+          category_name='ভিডিও'
+        />
       )} */}
-      {/* news By position 6 */}
-      {(data?.data?.[6]?.news?.length ?? 0) > 0 && (
-        <NewsOnlyTwo data={data!.data![6]} style={specialStyle} />
+
+      {/* news position 7  বিনোদন */}
+      {(entertainmentNews.data?.data?.length ?? 0) > 0 && (
+        <NewsOnlyTwo
+          data={{
+            id: "entertainment",
+            title: "বিনোদন",
+            slug: "capital",
+            position: 3,
+            position_update_at: null,
+            is_home: true,
+            position_in_home: null,
+            position_in_home_update_at: null,
+            description: "",
+            meta_title: "রাজধানী সংবাদ",
+            meta_description: "বাংলাদেশের রাজধানী সংবাদ",
+            created_by_id: "system",
+            image_id: null,
+            status: "active",
+            is_deleted: false,
+            createdAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString(),
+            news: citiesNews.data?.data ?? [],
+          }}
+          style={specialStyle}
+        />
       )}
-      {/* news By position 7 */}
-      {(data?.data?.[7]?.news?.length ?? 0) > 0 && (
-        <NewsOnly data={data!.data![7]} ads={dummyAds} />
+      {/* news position 8  লাইফস্টাইল */}
+      {(lifestyleNews.data?.data?.length ?? 0) > 0 && (
+        <NewsOnly
+          data={{
+            id: "lifestyle",
+            title: "লাইফস্টাইল",
+            slug: "capital",
+            position: 3,
+            position_update_at: null,
+            is_home: true,
+            position_in_home: null,
+            position_in_home_update_at: null,
+            description: "",
+            meta_title: "রাজধানী সংবাদ",
+            meta_description: "বাংলাদেশের রাজধানী সংবাদ",
+            created_by_id: "system",
+            image_id: null,
+            status: "active",
+            is_deleted: false,
+            createdAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString(),
+            news: citiesNews.data?.data ?? [],
+          }}
+          ads={dummyAds}
+        />
       )}
-      {/* news By position 8 */}
-      {(data?.data?.[8]?.news?.length ?? 0) > 0 && (
-        <NewsOnlyTwo data={data?.data?.[8]} style={specialStyle} />
+      {/* news position 9  আইন-আদালত */}
+      {(lawAndJusticeNews.data?.data?.length ?? 0) > 0 && (
+        <NewsOnlyTwo
+          data={{
+            id: "law-court",
+            title: "আইন-আদালত",
+            slug: "capital",
+            position: 3,
+            position_update_at: null,
+            is_home: true,
+            position_in_home: null,
+            position_in_home_update_at: null,
+            description: "",
+            meta_title: "রাজধানী সংবাদ",
+            meta_description: "বাংলাদেশের রাজধানী সংবাদ",
+            created_by_id: "system",
+            image_id: null,
+            status: "active",
+            is_deleted: false,
+            createdAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString(),
+            news: citiesNews.data?.data ?? [],
+          }}
+          style={specialStyle}
+        />
       )}
-      {/* news By position 9 and 10 */}
-      {(data?.data?.[9]?.news?.length ?? 0) > 0 &&
-        (data?.data?.[10]?.news?.length ?? 0) > 0 &&
-        data?.data?.[9] &&
-        data?.data?.[10] && (
-          <NewsWithLatestTwo dataOne={data.data[9]} dataTwo={data.data[10]} />
+
+      {/* news position 11 & 12  প্রবাস বাংলা এবং প্রযুক্তি */}
+      {(expatriateBanglaNews.data?.data?.length ?? 0) > 0 &&
+        (technologyNews.data?.data?.length ?? 0) > 0 && (
+          <NewsWithLatestTwo
+            dataOne={{
+              id: "expatriate-bangla",
+              title: "প্রবাস বাংলা",
+              slug: "capital",
+              position: 3,
+              position_update_at: null,
+              is_home: true,
+              position_in_home: null,
+              position_in_home_update_at: null,
+              description: "",
+              meta_title: "রাজধানী সংবাদ",
+              meta_description: "বাংলাদেশের রাজধানী সংবাদ",
+              created_by_id: "system",
+              image_id: null,
+              status: "active",
+              is_deleted: false,
+              createdAt: new Date().toISOString(),
+              updatedAt: new Date().toISOString(),
+              news: citiesNews.data?.data ?? [],
+            }}
+            dataTwo={{
+              id: "technology",
+              title: "প্রযুক্তি",
+              slug: "capital",
+              position: 3,
+              position_update_at: null,
+              is_home: true,
+              position_in_home: null,
+              position_in_home_update_at: null,
+              description: "",
+              meta_title: "রাজধানী সংবাদ",
+              meta_description: "বাংলাদেশের রাজধানী সংবাদ",
+              created_by_id: "system",
+              image_id: null,
+              status: "active",
+              is_deleted: false,
+              createdAt: new Date().toISOString(),
+              updatedAt: new Date().toISOString(),
+              news: citiesNews.data?.data ?? [],
+            }}
+          />
         )}
-      {/* news By position 4 */}
-      {/* {data && <PhotoGallery />} */}
-      {/* news By position 11 */}
-      {(data?.data?.[11]?.news?.length ?? 0) > 0 && (
-        <NewsOnlyTwo data={data?.data?.[11]} style={specialStyle} />
+      {/* PhotoGallery (static, no category data) */}
+      <PhotoGallery />
+
+      {/* news position 13  খেলা */}
+      {(sportsNews.data?.data?.length ?? 0) > 0 && (
+        <NewsOnlyTwo
+          data={{
+            id: "sports",
+            title: "খেলা",
+            slug: "capital",
+            position: 3,
+            position_update_at: null,
+            is_home: true,
+            position_in_home: null,
+            position_in_home_update_at: null,
+            description: "",
+            meta_title: "রাজধানী সংবাদ",
+            meta_description: "বাংলাদেশের রাজধানী সংবাদ",
+            created_by_id: "system",
+            image_id: null,
+            status: "active",
+            is_deleted: false,
+            createdAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString(),
+            news: citiesNews.data?.data ?? [],
+          }}
+          style={specialStyle}
+        />
       )}
-      {/* home ads 18 here */}
-      {/* {data?.ads.home_18 && (
-        <AddBanner imgPath={data?.ads.home_18} clss='mt-5 -mb-10' />
-      )} */}
-      {/* {data?.ads.home_11 && (
-        <AddBanner imgPath={data?.ads.home_11} clss='mt-5' />
-      )} */}
     </Fragment>
   );
 };

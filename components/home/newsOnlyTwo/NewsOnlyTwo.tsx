@@ -33,8 +33,12 @@ const NewsOnlyTwo = ({ data, style }: NewsOnlyTwoProps) => {
                 className='-mx-4 md:px-4'
               >
                 <Link
-                  className='group flex flex-col gap-0 md:flex-row md:gap-3 lg:flex-col lg:gap-0'
-                  href={`/${slug}/${item.slug}`}
+                  className='group '
+                  href={`/${slug}/${item.id}/${
+                    item.slug ||
+                    item.headline?.replace(/%/g, "-").replace(/\s/g, "-") ||
+                    item.headline
+                  }`}
                 >
                   <div className='overflow-hidden w-full md:w-1/2 lg:w-full relative'>
                     <Image
@@ -57,7 +61,7 @@ const NewsOnlyTwo = ({ data, style }: NewsOnlyTwoProps) => {
                       {item.headline}
                     </h3>
                     <p className='hidden xl:block text-base text-[var(--gray-2)] dark:text-[var(--gray-3)]'>
-                      {item.details || item.short_headline}
+                      {item.details}
                     </p>
                     <TimeBefore title={item.createdAt} clss='ml-4 md:ml-0' />
                   </div>
@@ -72,7 +76,14 @@ const NewsOnlyTwo = ({ data, style }: NewsOnlyTwoProps) => {
                   key={item.banner_image?.id || `news-${i}`}
                   className='mb-6 last:mb-0 relative after:bg-[var(--border-color)] after:absolute after:w-full after:h-[1px] after:-bottom-3 after:last:h-0 dark:after:bg-[var(--border-dark)]'
                 >
-                  <Link className='group' href={`/${slug}/${item.slug}`}>
+                  <Link
+                    className='group '
+                    href={`/${slug}/${item.id}/${
+                      item.slug ||
+                      item.headline?.replace(/%/g, "-").replace(/\s/g, "-") ||
+                      item.headline
+                    }`}
+                  >
                     <div className='ml-2 md:ml-0 lg:ml-2 mb-2 xl:mb-0 overflow-hidden float-right relative'>
                       <Image
                         alt={item.headline}
@@ -93,7 +104,7 @@ const NewsOnlyTwo = ({ data, style }: NewsOnlyTwoProps) => {
                       {item.headline}
                     </h3>
                     <span className='text-[var(--gray-2)] dark:text-[var(--gray-3)] mt-2 text-base line-clamp-2'>
-                      {item.details || item.short_headline}
+                      {item.details }
                     </span>
                     <TimeBefore title={item.createdAt} />
                   </Link>
@@ -108,7 +119,14 @@ const NewsOnlyTwo = ({ data, style }: NewsOnlyTwoProps) => {
                   key={item.banner_image?.id || `news-${i}`}
                   className='mb-6 last:mb-0 relative after:bg-[var(--border-color)] after:absolute after:w-full after:h-[1px] after:-bottom-3 after:last:h-0 dark:after:bg-[var(--border-dark)]'
                 >
-                  <Link className='group' href={`/${slug}/${item.slug}`}>
+                  <Link
+                    className='group'
+                    href={`/${slug}/${item.id}/${
+                      item.slug ||
+                      item.headline?.replace(/%/g, "-").replace(/\s/g, "-") ||
+                      item.headline
+                    }`}
+                  >
                     <div className='ml-2 md:ml-0 lg:ml-2 mb-2 xl:mb-0 overflow-hidden float-right relative'>
                       <Image
                         alt={item.headline}
@@ -129,7 +147,7 @@ const NewsOnlyTwo = ({ data, style }: NewsOnlyTwoProps) => {
                       {item.headline}
                     </h3>
                     <span className='text-[var(--gray-2)] dark:text-[var(--gray-3)] mt-2 text-base line-clamp-2'>
-                      {item.details || item.short_headline}
+                      {item.details }
                     </span>
                     <TimeBefore title={item.createdAt} />
                   </Link>

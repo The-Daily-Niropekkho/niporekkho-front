@@ -48,7 +48,11 @@ const NewsWithAdd = ({ dataOne, dataTwo, ads }: NewsWithAddProps) => {
                   >
                     <Link
                       className='group flex flex-col gap-3'
-                      href={`/${slug_one}/${item.slug}`}
+                      href={`/${slug_one}/${item.id}/${
+                        item.slug ||
+                        item.headline?.replace(/%/g, "-").replace(/\s/g, "-") ||
+                        item.headline
+                      }`}
                     >
                       <div className='w-full'>
                         <div className='overflow-hidden relative'>
@@ -69,7 +73,7 @@ const NewsWithAdd = ({ dataOne, dataTwo, ads }: NewsWithAddProps) => {
                         </h3>
                         <p className='hidden lg:block text-base text-[var(--gray-2)] dark:text-[var(--gray-3)] mx-4 md:mx-0'>
                           <span className='line-clamp-3'>
-                            {item.details || item.short_headline}
+                            {item.details}
                           </span>
                         </p>
                         <TimeBefore
@@ -90,7 +94,11 @@ const NewsWithAdd = ({ dataOne, dataTwo, ads }: NewsWithAddProps) => {
                   >
                     <Link
                       className='group flex items-start gap-3'
-                      href={`/${slug_one}/${item.slug}`}
+                      href={`/${slug_one}/${item.id}/${
+                        item.slug ||
+                        item.headline?.replace(/%/g, "-").replace(/\s/g, "-") ||
+                        item.headline
+                      }`}
                     >
                       <div className='ml-2 md:ml-0 lg:ml-2 mb-2 overflow-hidden relative w-[124px] lg:w-[110px]'>
                         <Image
@@ -139,7 +147,11 @@ const NewsWithAdd = ({ dataOne, dataTwo, ads }: NewsWithAddProps) => {
                   >
                     <Link
                       className='group flex flex-col gap-3'
-                      href={`/${slug_two}/${item.slug}`}
+                      href={`/${slug_two}/${item.id}/${
+                        item.slug ||
+                        item.headline?.replace(/%/g, "-").replace(/\s/g, "-") ||
+                        item.headline
+                      }`}
                     >
                       <div className='w-full'>
                         <div className='overflow-hidden relative'>
@@ -160,7 +172,7 @@ const NewsWithAdd = ({ dataOne, dataTwo, ads }: NewsWithAddProps) => {
                         </h3>
                         <p className='hidden lg:block text-base text-[var(--gray-2)] dark:text-[var(--gray-3)] mx-4 md:mx-0'>
                           <span className='line-clamp-3'>
-                            {item.details || item.short_headline}
+                            {item.details}
                           </span>
                         </p>
                         <TimeBefore
@@ -181,7 +193,11 @@ const NewsWithAdd = ({ dataOne, dataTwo, ads }: NewsWithAddProps) => {
                   >
                     <Link
                       className='group flex items-start gap-3'
-                      href={`/${slug_two}/${item.slug}`}
+                      href={`/${slug_two}/${item.id}/${
+                        item.slug ||
+                        item.headline?.replace(/%/g, "-").replace(/\s/g, "-") ||
+                        item.headline
+                      }`}
                     >
                       <div className='ml-2 md:ml-0 lg:ml-2 mb-2 overflow-hidden relative w-[124px] lg:w-[110px]'>
                         <Image

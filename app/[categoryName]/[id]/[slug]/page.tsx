@@ -121,6 +121,7 @@ function getDefaultMetadata(params: Props['params']): Metadata {
   };
 }
 
-export default function SinglePost({ params, searchParams }: any) {
-  return <SinglePostMain />;
+export default function SinglePost({ params }: any) {
+  
+  return <SinglePostMain news_id={params.id} />;
 }

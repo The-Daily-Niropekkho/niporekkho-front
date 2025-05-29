@@ -36,7 +36,11 @@ const NewsWithLatestTwo = ({ dataOne, dataTwo }: NewsWithLatestTwoProps) => {
                 >
                   <Link
                     className='flex flex-col md:flex-row gap-3 group mb-6'
-                    href={`/${slug}/${item.slug}`}
+                    href={`/${slug}/${item.id}/${
+                      item.slug ||
+                      item.headline?.replace(/%/g, "-").replace(/\s/g, "-") ||
+                      item.headline
+                    }`}
                   >
                     <div className='w-full md:w-1/2'>
                       <div className='overflow-hidden relative'>
@@ -62,7 +66,7 @@ const NewsWithLatestTwo = ({ dataOne, dataTwo }: NewsWithLatestTwoProps) => {
                       </h3>
                       <p className='hidden md:block text-base text-[var(--gray-2)] dark:text-[var(--gray-3)]'>
                         <span className='line-clamp-2'>
-                          {item.details || item.short_headline}
+                          {item.details }
                         </span>
                       </p>
                       <TimeBefore
@@ -82,7 +86,11 @@ const NewsWithLatestTwo = ({ dataOne, dataTwo }: NewsWithLatestTwoProps) => {
                 >
                   <Link
                     className='md:flex md:flex-col group'
-                    href={`/${slug}/${item.slug}`}
+                    href={`/${slug}/${item.id}/${
+                      item.slug ||
+                      item.headline?.replace(/%/g, "-").replace(/\s/g, "-") ||
+                      item.headline
+                    }`}
                   >
                     <div className='overflow-hidden relative ml-2 md:ml-0 mb-2 float-right md:float-none'>
                       <Image
@@ -104,7 +112,7 @@ const NewsWithLatestTwo = ({ dataOne, dataTwo }: NewsWithLatestTwoProps) => {
                       {item.headline}
                     </h3>
                     <span className='text-[var(--gray-2)] dark:text-[var(--gray-3)] mt-1 text-base line-clamp-2'>
-                      {item.details || item.short_headline}
+                      {item.details }
                     </span>
                     <TimeBefore title={item.createdAt} />
                   </Link>

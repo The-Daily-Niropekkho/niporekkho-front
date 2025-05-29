@@ -21,6 +21,7 @@ import DynamicFavicon from "@/components/dynamicFavicon/DynamicFavicon";
 import TopBar from "@/components/home/TopBar";
 import BreakingNewsMarquee from "@/components/common/breaking-news/breaking-news";
 import ScrollPreserver from "./ScrollPreserver";
+import TopBreakingNews from "@/components/common/breaking-news/top-breaking-news";
 // export async function generateMetadata(): Promise<Metadata> {
 //   const { data } = await instance.get("/metadata");
 
@@ -62,25 +63,24 @@ export default function RootLayout({
     <html lang='en'>
       <head></head>
       <body>
-      <ReduxProvider>
-        <ThemeWrapper>
-          <ScrollPreserver />
-          <WebSettingProvider>
-            <TopBar />
+        <ReduxProvider>
+          <ThemeWrapper>
+            <ScrollPreserver />
+            <WebSettingProvider>
+              <TopBar />
 
-            <NavBar />
+              <NavBar />
+              {/* <BreakingNews /> */}
+              {children}
 
-            <BreakingNews />
-            {children}
+              <Footer />
 
-            <Footer />
-
-            {/* <ScrollToTop /> */}
-            <DynamicFavicon />
-            <BreakingNewsMarquee />
-          </WebSettingProvider>
+              {/* <ScrollToTop /> */}
+              <DynamicFavicon />
+              <BreakingNewsMarquee />
+            </WebSettingProvider>
           </ThemeWrapper>
-          </ReduxProvider>
+        </ReduxProvider>
       </body>
     </html>
   );

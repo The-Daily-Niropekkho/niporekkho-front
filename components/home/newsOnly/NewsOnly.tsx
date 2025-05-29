@@ -37,7 +37,11 @@ const NewsOnly = ({ data, ads }: NewsOnlyProps) => {
                 >
                   <Link
                     className='group flex flex-col gap-0 md:flex-row md:gap-3 lg:flex-col lg:gap-0'
-                    href={`/${slug}/${item.slug}`}
+                    href={`/${slug}/${item.id}/${
+                      item.slug ||
+                      item.headline?.replace(/%/g, "-").replace(/\s/g, "-") ||
+                      item.headline
+                    }`}
                   >
                     <div className='overflow-hidden w-full md:w-1/2 lg:w-full relative'>
                       <Image
@@ -61,7 +65,7 @@ const NewsOnly = ({ data, ads }: NewsOnlyProps) => {
                       </h3>
                       <p className='hidden md:block text-base text-[var(--gray-2)] dark:text-[var(--gray-3)] mx-4 md:mx-0'>
                         <span className='line-clamp-3'>
-                          {item.details || item.short_headline}
+                          {item.details}
                         </span>
                       </p>
                       <TimeBefore title={item.createdAt} clss='ml-4 md:ml-0' />
@@ -78,7 +82,14 @@ const NewsOnly = ({ data, ads }: NewsOnlyProps) => {
                     key={item.banner_image?.id || `news-${i}`}
                     className='mb-6 last:mb-0 relative after:bg-[var(--border-color)] after:absolute after:w-full after:h-[1px] after:-bottom-3 after:last:h-0 dark:after:bg-[var(--border-dark)]'
                   >
-                    <Link className='group' href={`/${slug}/${item.slug}`}>
+                    <Link
+                      className='group'
+                      href={`/${slug}/${item.id}/${
+                        item.slug ||
+                        item.headline?.replace(/%/g, "-").replace(/\s/g, "-") ||
+                        item.headline
+                      }`}
+                    >
                       <div className='ml-2 mb-2 xl:mb-0 overflow-hidden float-right relative'>
                         <Image
                           alt={item.headline || "News Thumbnail"}
@@ -99,7 +110,7 @@ const NewsOnly = ({ data, ads }: NewsOnlyProps) => {
                         {item.headline}
                       </h3>
                       <span className='text-[var(--gray-2)] dark:text-[var(--gray-3)] mt-2 text-base line-clamp-2'>
-                        {item.details || item.short_headline}
+                        {item.details}
                       </span>
                       <TimeBefore
                         title={item.createdAt}
@@ -118,7 +129,14 @@ const NewsOnly = ({ data, ads }: NewsOnlyProps) => {
                     key={item.banner_image?.id || `news-${i}`}
                     className='mb-6 last:mb-0 relative after:bg-[var(--border-color)] after:absolute after:w-full after:h-[1px] after:-bottom-3 after:last:h-0 dark:after:bg-[var(--border-dark)]'
                   >
-                    <Link className='group' href={`/${slug}/${item.slug}`}>
+                    <Link
+                      className='group'
+                      href={`/${slug}/${item.id}/${
+                        item.slug ||
+                        item.headline?.replace(/%/g, "-").replace(/\s/g, "-") ||
+                        item.headline
+                      }`}
+                    >
                       <div className='ml-2 mb-2 xl:mb-0 overflow-hidden float-right relative'>
                         <Image
                           alt={item.headline || "News Thumbnail"}
@@ -139,7 +157,7 @@ const NewsOnly = ({ data, ads }: NewsOnlyProps) => {
                         {item.headline}
                       </h3>
                       <span className='text-[var(--gray-2)] dark:text-[var(--gray-3)] mt-2 text-base line-clamp-2'>
-                        {item.details || item.short_headline}
+                        {item.details}
                       </span>
                       <TimeBefore
                         title={item.createdAt}

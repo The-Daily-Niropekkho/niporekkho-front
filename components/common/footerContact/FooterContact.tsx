@@ -16,34 +16,44 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 type ContactInformation = {
   content: string;
-  editor: string;
+  editor_name: string;
   address: string;
   phone: string;
-  phone_two: string;
+  phoneTwo: string;
   email: string;
   website: string;
   latitude: string;
   longitude: string;
+  map: any;
+  rights: string;
+  is_deleted: boolean;
+  status: string;
 };
 
 const FooterContact = ({
-  data,
+  // data,
   socialMediaLinks,
 }: {
-  data: ContactInformation;
+  // data: ContactInformation;
   socialMediaLinks?: any;
 }) => {
-  const {
-    address,
-    content,
-    email,
-    latitude,
-    longitude,
-    phone,
-    phone_two,
-    website,
-    editor,
-  } = data;
+  // const {
+  //   address,
+  //   content,
+  //   email,
+  //   latitude,
+  //   longitude,
+  //   phone,
+  //   phoneTwo,
+  //   website,
+  //   editor_name,
+  //   rights,
+  //   is_deleted,
+  //   status,
+  //   map,
+
+    
+  // } = data;
   const topRightSideLink = [
     {
       label: "",
@@ -164,9 +174,9 @@ const FooterContact = ({
                         ইমেইল: {email}
                     </Link>
                 </p> */}
-        <p className='hidden print:inline-block'>
-          স্বত্ব &copy; {editor} <span>{new Date().getFullYear()}</span>
-        </p>
+        {/* <p className='hidden print:inline-block'>
+          স্বত্ব &copy; {editor_name} <span>{new Date().getFullYear()}</span>
+        </p> */}
         <div className='print:hidden'>
           {/* <div className="mb-3 flex gap-3 justify-left">
                         <Socials socialMediaLinks={socialMediaLinks} />

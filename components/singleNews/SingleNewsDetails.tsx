@@ -1,31 +1,23 @@
 "use client";
 
-import CopyIcon from "@/public/icons/CopyIcon";
-import FacebookIcon from "@/public/icons/FacebookIcon";
-import WhatsAppIcon from "@/public/icons/WhatsAppIcon";
-import timestampToBangleDateWithTime from "@/utils/timestampToBangleDateWithTime";
+import VideoEmbed from "@/components/VideoEmbed";
+import PrintIcon from "@/public/icons/PrintIcon";
+import { NewsDetails } from "@/types/newsDetails";
+import Breadcrumb from "@/ui/Breadcrumb";
+import date_output_bn from "@/utils/datetime";
+import fileObjectToLink, { getReporter } from "@/utils/fileObjectToLink";
 import Image from "next/image";
 import Link from "next/link";
+import Script from "next/script";
 import { useEffect, useRef, useState } from "react";
-import {
-  FacebookShareButton,
-  TwitterShareButton,
-  WhatsappShareButton,
-} from "react-share";
+import { FaHome } from "react-icons/fa";
 import AddCard from "../common/addCard/AddCard";
 import TopNewsForNewsDetails from "./top-news-for-news-details";
-import VideoEmbed from "@/components/VideoEmbed";
-import date_output_bn from "@/utils/datetime";
-import PrintIcon from "@/public/icons/PrintIcon";
-import Breadcrumb from "@/ui/Breadcrumb";
-import { FaHome } from "react-icons/fa";
-import Script from "next/script";
-import fileObjectToLink from "@/utils/fileObjectToLink";
-import { NewsDetails } from "@/types/newsDetails";
 
 interface SingleNewsDetailsProps {
-  data: NewsDetails & { relatedPost: NewsDetails[] }; 
+  data: NewsDetails & { relatedPost: NewsDetails[] };
   clss?: string;
+  news_id: string;
 }
 
 const SingleNewsDetails = ({ data, clss }: SingleNewsDetailsProps) => {
@@ -64,7 +56,10 @@ const SingleNewsDetails = ({ data, clss }: SingleNewsDetailsProps) => {
 
   const breadcrumbItems = [
     { label: <FaHome />, href: "/" },
-    { label: data.category?.title, href: `/${data.category?.slug}` },
+    {
+      label: data.category?.title,
+      href: `/${data.category?.slug}?id=${data.category?.id}`,
+    },
   ];
 
   // Reinitialize AddToAny when data changes
@@ -80,12 +75,21 @@ const SingleNewsDetails = ({ data, clss }: SingleNewsDetailsProps) => {
     data.short_headline,
   ]);
 
+  const repo = getReporter(data);
+  const title =
+    repo.type === "reporter"
+      ? `${repo.data.first_name} ${repo.data.last_name}`
+      : repo.type === "generic_reporter"
+      ? repo.data.name
+      : "Unknown Reporter";
+  const image =
+    repo.type === "reporter" ? repo?.data?.profile_image : repo?.data?.photo;
   return (
     <div className={clss}>
       <div className='container px-4 mx-auto print:px-0'>
-        <div className={`${data.ads?.news_view_31 ? "mb-" : ""} print:hidden`}>
+        {/* <div className={`${data.ads?.news_view_31 ? "mb-" : ""} print:hidden`}>
           <AddCard imgPath={data.ads?.news_view_31} />
-        </div>
+        </div> */}
 
         <div className='grid grid-cols-1 md:grid-cols-12 gap-6 print:!block'>
           <div className='col-span-12 lg:col-span-8 xl:col-span-9 relative after:bg-[var(--border-color)] after:absolute after:w-full after:h-[1px] after:right-0 after:-bottom-3 lg:after:top-0 lg:after:-right-3 lg:after:w-[1px] lg:after:h-full dark:after:bg-[var(--border-dark)] print:!col-span-12 print:after:bg-transparent'>
@@ -111,17 +115,11 @@ const SingleNewsDetails = ({ data, clss }: SingleNewsDetailsProps) => {
                         height={192}
                         decoding='async'
                         className='w-9 h-9 rounded-full author-image print:hidden'
-                        src={
-                          data.reporter?.writer?.profile_image?.url ||
-                          "/images/no_user.png"
-                        }
+                        src={fileObjectToLink(image)}
                       />
                       <div className='flex flex-col'>
                         <div>
-                          <span>
-                            {data.reporter?.writer?.first_name}{" "}
-                            {data.reporter?.writer?.last_name}
-                          </span>
+                          <span>{title}</span>
                           <span className='ml-1'>|</span>
                           <span className='ml-1'>
                             {data.media_type === "print"
@@ -130,9 +128,11 @@ const SingleNewsDetails = ({ data, clss }: SingleNewsDetailsProps) => {
                           </span>
                         </div>
                         <div className='whitespace-nowrap'>
-                          প্রকাশ: {date_output_bn(data.publish_date)} 
+                          প্রকাশ: {date_output_bn(data.publish_date)}
                           {data.updateContentAt
-                            ? ` | আপডেট: ${date_output_bn(data.updateContentAt)}`
+                            ? ` | আপডেট: ${date_output_bn(
+                                data.updateContentAt,
+                              )}`
                             : ""}
                         </div>
                       </div>
@@ -144,12 +144,12 @@ const SingleNewsDetails = ({ data, clss }: SingleNewsDetailsProps) => {
                 </div>
               </div>
 
-              {/* <div className='clss'>
-                {data.video ? (
+              <div className='clss'>
+                {/* {data.video ? (
                   <div className='print:hidden'>
                     <VideoEmbed videoUrl={data.video} title={data.headline} />
                   </div>
-                ) : (
+                ) : ( */}
                   <figure>
                     <Image
                       alt={data.headline}
@@ -161,11 +161,11 @@ const SingleNewsDetails = ({ data, clss }: SingleNewsDetailsProps) => {
                       loading='lazy'
                     />
                     <div className='text-center post_image_title bg_lite border_bottom py-1 mb-1 print:hidden'>
-                      {data.banner_image?.filename}
+                      {data.banner_image?.caption_title}
                     </div>
                   </figure>
-                )}
-              </div> */}
+                {/* )} */}
+              </div>
 
               <div className='flex flex-col md:flex-row gap-3 items-center justify-end relative after:bg-[var(--border-color)] after:absolute after:w-full after:h-[1px] after:right-0 after:-top-3 dark:after:bg-[var(--border-dark)] print:after:bg-transparent'>
                 <div className='w-full md:w-1/2 print:hidden flex items-center whitespace-nowrap justify-start md:justify-end min-h-[40px] md:min-h-[48px] select-none mt-4'>
@@ -306,7 +306,7 @@ const SingleNewsDetails = ({ data, clss }: SingleNewsDetailsProps) => {
                     এই বিভাগের আরও সংবাদ
                   </p>
                   <Link
-                    href={`/${data.category?.slug}`}
+                    href={`/${data.category?.slug}?id=${data.category?.id}`}
                     className='text-[var(--primary)] dark:text-white'
                   >
                     <p className='text-[var(--text-primary)] hover:text-[var(--primary)] duration-300 text-xl md:text-2xl dark:text-white flex gap-2 items-center cursor-pointer'>
@@ -346,7 +346,7 @@ const SingleNewsDetails = ({ data, clss }: SingleNewsDetailsProps) => {
                   >
                     <Link
                       className='group'
-                      href={`/${data.category?.slug}/${post.slug}`}
+                      href={`/${data.category?.slug}/${post.id}/${post.slug}`}
                     >
                       <div className='ml-2 lg:ml-0 mb-2 overflow-hidden float-right relative'>
                         <div>
@@ -381,7 +381,7 @@ const SingleNewsDetails = ({ data, clss }: SingleNewsDetailsProps) => {
                     imgPath={`<a target="_blank" href="https://dailyniropekkho.com/"><img width="100%" src="https://tpc.googlesyndication.com/simgad/16713525573530791060" alt=""></a>`}
                   />
                   <div className='mb-6 relative after:bg-[var(--border-color)] after:absolute after:w-full after:h-[1px] after:-bottom-3 after:right-0 dark:after:bg-[var(--border-dark)] before:h-px before:-top-3 before:bg-[var(--border-color)] dark:before:bg-[var(--border-color)] before:absolute before:w-full mt-5'>
-                    <div className='w-full flex items-center justify-center'>
+                    {/* <div className='w-full flex items-center justify-center'>
                       <div
                         className={`${
                           data.ads?.news_view_32 ? "" : "h-[250px]"
@@ -391,7 +391,7 @@ const SingleNewsDetails = ({ data, clss }: SingleNewsDetailsProps) => {
                           imgPath={`<a target="_blank" href="https://dailyniropekkho.com/"><img width="100%" src="https://tpc.googlesyndication.com/simgad/16713525573530791060" alt=""></a>`}
                         />
                       </div>
-                    </div>
+                    </div> */}
                   </div>
                 </div>
               </div>

@@ -4,15 +4,8 @@ import { ICategory } from "@/types/news";
 
 const categoryApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
-    // check category slug existence
-    checkSlug: builder.query({
-      query: (slug) => ({
-        url: `/category/check-slug?slug=${slug}`,
-        method: "GET",
-      }),
-    }),
     getAllCategories: builder.query({
-      query: ({ sortBy, sortOrder, limit,is_news }: { sortBy: string; sortOrder: string; limit: number, is_news?: boolean }) => ({
+      query: ({ sortBy = "position,position_update_at", sortOrder = "asc", limit = 500, is_news = true }: { sortBy?: string; sortOrder?: string; limit?: number, is_news?: boolean }) => ({
         url: `/category?sortBy=${sortBy}&sortOrder=${sortOrder}&limit=${limit}&is_news=${is_news}`,
         method: "GET",
       }),
@@ -32,7 +25,7 @@ const categoryApi = baseApi.injectEndpoints({
 });
 
 export const {
-  useCheckSlugQuery,
+  
   useGetAllCategoriesQuery,
   useUpdateCategoryMutation,
 } = categoryApi;

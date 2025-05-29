@@ -26,6 +26,7 @@ interface NavItemsProps {
   error: any;
   activeMenu: string;
   setActiveMenu: (menu: string) => void;
+  className?: string;
 }
 const NavItems = ({
   data,
@@ -33,6 +34,7 @@ const NavItems = ({
   error,
   activeMenu,
   setActiveMenu,
+  className,
 }: NavItemsProps) => {
   // keep menuData in sync with incoming data
   const [menuData, setMenuData] = useState<Category[]>([]);
@@ -63,11 +65,11 @@ const NavItems = ({
 
   return (
     <ul className='lg:flex items-center gap- hidden'>
-      {menuData.slice(0, 9).map((item) => (
+      {menuData.slice(0, 11).map((item) => (
         <li key={item.title}>
           <Link
-            href={`/${item.slug}`}
-            className='whitespace-nowrap py-[11px] px-5 text-md text-[var(--dark)] dark:text-white hover:text-red-500 capitalize border-r-2'
+            href={`/${item.slug}?id=${item.id}`}
+            className={`whitespace-nowrap py-[11px] px-4 text-md text-[var(--dark)] dark:text-white hover:text-red-500 capitalize border-r-2 ${className}`}
           >
             {item.title}
           </Link>
@@ -75,7 +77,7 @@ const NavItems = ({
       ))}
       <li className='group relative text-black dark:text-white'>
         <div className='flex items-center gap-1 py-[11px] px-5 text-md text-[var(--dark)] dark:text-white hover:text-red-500 capitalize border-r-2'>
-          <p className='flex items-center gap-1'>
+          <p className={`flex items-center gap-1 ${className}`}>
             অন্যান্য
             <FaChevronDown className='group-hover:rotate-180 transition-transform duration-200' />
           </p>
@@ -98,7 +100,7 @@ const NavItems = ({
                 {menuData.slice(9, 14).map((item) => (
                   <li key={item.title}>
                     <Link
-                      href={`/${item.slug}`}
+                      href={`/${item.slug}?id=${item.id}`}
                       className='block text-gray-700 dark:text-gray-300 hover:text-red-500 dark:hover:text-red-500 transition-colors duration-200'
                     >
                       {item.title}
@@ -114,7 +116,7 @@ const NavItems = ({
                 {menuData.slice(14, 18).map((item) => (
                   <li key={item.title}>
                     <Link
-                      href={`/${item.slug}`}
+                      href={`/${item.slug}?id=${item.id}`}
                       className='block text-gray-700 dark:text-gray-300 hover:text-red-500 dark:hover:text-red-500 transition-colors duration-200'
                     >
                       {item.title}
@@ -130,7 +132,7 @@ const NavItems = ({
                 {menuData.slice(18, 22).map((item) => (
                   <li key={item.title}>
                     <Link
-                      href={`/${item.slug}`}
+                      href={`/${item.slug}?id=${item.id}`}
                       className='block text-gray-700 dark:text-gray-300 hover:text-red-500 dark:hover:text-red-500 transition-colors duration-200'
                     >
                       {item.title}
@@ -146,7 +148,7 @@ const NavItems = ({
                 {menuData.slice(22, 26).map((item) => (
                   <li key={item.title}>
                     <Link
-                      href={`/${item.slug}`}
+                      href={`/${item.slug}?id=${item.id}`}
                       className='block text-gray-700 dark:text-gray-300 hover:text-red-500 dark:hover:text-red-500 transition-colors duration-200'
                     >
                       {item.title}
@@ -162,7 +164,7 @@ const NavItems = ({
                 {menuData.slice(26, 31).map((item) => (
                   <li key={item.title}>
                     <Link
-                      href={`/${item.slug}`}
+                      href={`/${item.slug}?id=${item.id}`}
                       className='block text-gray-700 dark:text-gray-300 hover:text-red-500 dark:hover:text-red-500 transition-colors duration-200'
                     >
                       {item.title}

@@ -10,7 +10,7 @@ import { useTheme } from "next-themes";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { Fragment, useContext, useEffect, useState } from "react";
+import { Fragment, useContext, useEffect, useRef, useState } from "react";
 import NavItems from "../common/navItems/NavItems";
 import SideBar from "../sideBar/SideBar";
 import bdtask from "../../public/images/Bdtask-Logo-blk.png";
@@ -23,10 +23,27 @@ import { useGetAllCategoriesQuery } from "@/redux/features/category/categoryApi"
 
 const NavBar = () => {
   const { data, error, isLoading } = useGetAllCategoriesQuery(
-    { sortBy: "position", sortOrder: "", limit: 500 },
+    { sortBy: "position,position_update_at", sortOrder: "asc", limit: 500 },
     { skip: false },
   );
-  // console.log(data)
+  console.log(data);
+  const [isSticky, setIsSticky] = useState(false);
+  const firstNavbarRef = useRef<HTMLElement>(null);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      // Assume the content section is the first element after the navbar
+      const contentSection = document.querySelector("main") || document.body; // Adjust selector as needed
+      if (contentSection && firstNavbarRef.current) {
+        const navbarHeight = firstNavbarRef.current.offsetHeight;
+        const sectionHeight = contentSection.offsetTop + navbarHeight; // Top of content + navbar height
+        setIsSticky(window.scrollY > sectionHeight); // Sticky after section is out of view
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
   
   const { theme, setTheme } = useTheme();
   const [showSidebar, setShowSidebar] = useState(false);
@@ -39,30 +56,11 @@ const NavBar = () => {
     "https://www.dailyniropekkho.com/_next/image?url=https%3A%2F%2Fadmin.dailyniropekkho.com%2Fstorage%2Fapplication%2F1734496289logo.png&w=256&q=75";
   const router = useRouter();
 
-  
 
-  /**
-   * Handle search form submission and navigate to search results.
-   *
-   * This function is an event handler used for processing search form submissions.
-   * It prevents the default form submission behavior, constructs a search query URL
-   * based on the provided search text, and navigates the user to the search results
-   * page with the constructed query. This function is typically associated with search
-   * input fields and is triggered when the user submits a search query.
-   *
-   * @param {Event} e - The event object representing the form submission.
-   */
   const handleSearchItem = (e: any) => {
-    // Prevent the default form submission behavior
     e.preventDefault();
-
-    // Construct the search query URL based on the provided search text
     const searchQuery = `/search?search_slug=${searchText}`;
-
-    // Use the router to navigate the user to the search results page with the constructed query
     router.replace(searchQuery);
-
-    // set the search showing false
     setShowSearch(false);
   };
 
@@ -97,26 +95,36 @@ const NavBar = () => {
 
   return (
     <Fragment>
-      <header className='sticky top-0 z-10 bg-[var(--bg)] dark:bg-[#191c20] shadow-[0px_1px_2px_rgba(0,0,0,0.2)] hidden md:block'>
-        <div className='container px-4 py-0 mx-auto'>
-          <div className='flex items-center justify-between'>
-            {/* <div className="">
-              {!isLoading ? (
-                <Link
-                  href="/"
-                  aria-label="logo"
-                  onClick={() => setActiveMenu("")}
+      <header
+        ref={firstNavbarRef}
+        className=' border-b-[1px] border-[var(--border-color)] dark:border-[var(--border-dark)] top-0 z-10 bg-[var(--bg)] dark:bg-[#191c20] shadow-[0px_1px_2px_rgba(0,0,0,0.2)] hidden md:block'
+      >
+        <div className='container py-0 mx-auto'>
+          <div className='flex items-center'>
+            <AnimatePresence>
+              {isSticky && !isLoading && (
+                <motion.div
+                  className=''
+                  initial={{ y: -100, opacity: 0 }}
+                  animate={{ y: 0, opacity: 1 }}
+                  // exit={{ y: -200, opacity: 0 }}
+                  transition={{ duration: 0.3, ease: "easeInOut" }}
                 >
-                  {theme === "light" ? (
-                    <Image src={logo} alt="logo" width={180} height={100} />
-                  ) : (
-                    <Image src={logo} alt="logo" width={180} height={100} />
-                  )}
-                </Link>
-              ) : (
-                ""
+                  <Link
+                    href='/'
+                    aria-label='logo'
+                    onClick={() => setActiveMenu("")}
+                  >
+                    {/* <Image
+                      src={logo}
+                      alt='Daily Niropekkho'
+                      width={180}
+                      height={100}
+                    /> */}
+                  </Link>
+                </motion.div>
               )}
-            </div> */}
+            </AnimatePresence>
 
             {/* Nav item here */}
             <NavItems
@@ -131,7 +139,7 @@ const NavBar = () => {
             />
 
             <div className='flex items-center justify-center print:hidden'>
-              <div className='p-3 last:pr-0 hidden md:block'>
+              {/* <div className='p-3 last:pr-0 hidden md:block'>
                 <button
                   className='flex '
                   aria-label='theme'
@@ -147,17 +155,17 @@ const NavBar = () => {
                     </div>
                   )}
                 </button>
-              </div>
+              </div> */}
 
               <button
-                className=' p-2 last:pr-0'
+                className='ml-4 p-2 last:pr-0'
                 aria-label='search'
                 onClick={() => setShowSearch(!showSearch)}
               >
                 {showSearch ? <XIcon clss='' /> : <SearchIcon clss='' />}
               </button>
               <button
-                className='p-2 last:pr-0 '
+                className='p-2 last:pr-0 lg:hidden md:block'
                 type='button'
                 aria-label='menu'
                 onClick={handleSidebar}
@@ -170,39 +178,59 @@ const NavBar = () => {
       </header>
 
       <AnimatePresence>
-        {showSearch && (
-          <motion.div
-            className='container mx-auto sticky top-0 z-50  '
-            initial={{ y: -100, opacity: 0 }} // Start off-screen above
-            animate={{ y: 0, opacity: 1 }} // Slide down and fade in
-            exit={{ y: -100, opacity: 0 }} // Slide up and fade out on exit
-            transition={{ duration: 0.3, ease: "easeInOut" }} // Smooth transition
+        {isSticky && (
+          <motion.header
+            className='fixed top-0 left-0 right-0 z-10 bg-[var(--bg)] dark:bg-[#191c20] shadow-[0px_1px_2px_rgba(0,0,0,0.2)] hidden md:block'
+            initial={{ y: -100, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            exit={{ y: -100, opacity: 0 }}
+            transition={{ duration: 0.3, ease: "easeInOut" }}
           >
-            <div className='relative'>
-              <motion.form
-                className='flex items-center justify-end p-4'
-                onSubmit={handleSearchItem}
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                transition={{ delay: 0.1, duration: 0.3 }}
-              >
-                <input
-                  type='text'
-                  className='w-80 py-2 px-4 text-[var(--dark)] dark:text-white focus:outline-none focus:border-[var(--primary)] rounded-l-md border-2 border-gray-300 transition-all duration-300 placeholder-gray-500'
-                  placeholder='আপনার অনুসন্ধানের বিষয়টি লিখুন'
-                  value={searchText}
-                  onChange={(e) => setSearchText(e.target.value)}
-                />
-                <button
-                  type='submit'
-                  className='px-4 py-2 bg-[var(--primary)] text-white rounded-r-md hover:bg-opacity-90 transition-all duration-300 flex items-center'
+            <div className='container py-0 mx-auto'>
+              <div className='flex items-center gap-4'>
+                <Link
+                  href='/'
+                  aria-label='logo'
+                  onClick={() => setActiveMenu("")}
                 >
-                  <SearchIcon clss='stroke-white' />
-                </button>
-              </motion.form>
+                  <Image
+                    src={logo}
+                    alt='Daily Niropekkho'
+                    width={180}
+                    height={100}
+                  />
+                </Link>
+                <NavItems
+                  data={data?.data?.map((cat: any) => ({
+                    ...cat,
+                    image_id: cat.image_id === null ? undefined : cat.image_id,
+                  }))}
+                  isLoading={isLoading}
+                  error={error}
+                  setActiveMenu={setActiveMenu}
+                  activeMenu={activeMenu || ""}
+                  className='text-base'
+                />
+                <div className='flex items-center justify-center print:hidden'>
+                  <button
+                    className='ml-2 p-2 last:pr-0'
+                    aria-label='search'
+                    onClick={() => setShowSearch(!showSearch)}
+                  >
+                    {showSearch ? <XIcon clss='' /> : <SearchIcon clss='' />}
+                  </button>
+                  <button
+                    className='p-2 last:pr-0 lg:hidden md:block'
+                    type='button'
+                    aria-label='menu'
+                    onClick={handleSidebar}
+                  >
+                    <MenuIcon />
+                  </button>
+                </div>
+              </div>
             </div>
-          </motion.div>
+          </motion.header>
         )}
       </AnimatePresence>
       {showSidebar && (

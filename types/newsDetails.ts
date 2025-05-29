@@ -126,9 +126,11 @@ export interface BannerImage extends TFileDocument {
   status: string;
   type: string;
   created_by_id: string;
+  caption_title: string;
 }
 
 export interface Category {
+  id: string;
   image: Image;
   slug: string;
   title: string;

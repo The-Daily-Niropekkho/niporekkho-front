@@ -10,7 +10,8 @@ import {
 import { useParams } from "next/navigation";
 import notFoundImg from "@/public/images/not-found.png";
 
-const SinglePostMain = () => {
+const SinglePostMain = ({ news_id }: { news_id: string }) => {
+  console.log(news_id)
   const param = useParams();
   const slug = Array.isArray(param.slug)
     ? param.slug[param.slug.length - 1]
@@ -18,14 +19,17 @@ const SinglePostMain = () => {
   const categorySlug = param.categoryName as string;
 
   // Fetch main news article
-  const { data: newsData, isLoading, error } = useGetNewsBySlugQuery(slug);
+  const { data: newsData, isLoading, error } = useGetNewsBySlugQuery(news_id);
 
   // Fetch related news (limit=4, same category)
   const { data: relatedNewsData } = useGetAllNewsQuery({
     limit: 4,
-    category_id: newsData?.category_id || "cmaxqech2000bmhaodnsm3yl8",
-  });
-
+    category_id: newsData?.category_id || "",
+    
+  }, {
+    skip: !newsData?.category_id
+  }
+  );
   // Combine main news and related news into items
   const items = newsData
     ? [{ ...newsData, relatedPost: relatedNewsData?.data || [] }]
@@ -44,7 +48,7 @@ const SinglePostMain = () => {
   return (
     <div>
       {items.map((item, i) => (
-        <SingleNewsDetails key={i} data={item} clss='mt-[15px]' />
+        <SingleNewsDetails news_id={news_id} key={i} data={item} clss='mt-[15px]' />
       ))}
     </div>
   );

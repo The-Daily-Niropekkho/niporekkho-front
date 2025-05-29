@@ -6,12 +6,13 @@ import Image from "next/image";
 import Link from "next/link";
 import fileObjectToLink from "@/utils/fileObjectToLink"; // chng: For banner_image
 import { NewsItem } from "@/interface/post"; // chng: Use types
-import { ICategory, INews } from "@/types/news";
+import { Ads, ICategory, INews, SideData } from "@/types/news";
 import TopNews from "@/components/singleNews/TopNews";
 
 // chng: Define dummy news data
 const dummyNews: INews[] = [
   {
+    id: "news-1",
     headline: "ঢাকায় ভারী বৃষ্টিপাত, জনজীবন বিপর্যস্ত",
     short_headline: "ঢাকায় বৃষ্টি",
     details: "রাজধানী ঢাকায় গতকাল রাত থেকে ভারী বৃষ্টিপাত চলছে।",
@@ -40,6 +41,7 @@ const dummyNews: INews[] = [
     },
   },
   {
+    id: "news-2",
     headline: "বাংলাদেশের অর্থনীতি: নতুন সম্ভাবনা",
     short_headline: "অর্থনীতির উন্নতি",
     details: "বাংলাদেশের অর্থনীতি নতুন উচ্চতায় পৌঁছেছে।",
@@ -68,6 +70,7 @@ const dummyNews: INews[] = [
     },
   },
   {
+    id: "news-3",
     headline: "ক্রিকেট: বাংলাদেশের জয়",
     short_headline: "টাইগারদের জয়",
     details: "বাংলাদেশ ক্রিকেট দল নিউজিল্যান্ডকে হারিয়েছে।",
@@ -95,163 +98,13 @@ const dummyNews: INews[] = [
       fileType: "jpg",
     },
   },
-  {
-    headline: "শিক্ষা সংস্কারে নতুন উদ্যোগ",
-    short_headline: "শিক্ষা সংস্কার",
-    details: "সরকার শিক্ষা খাতে নতুন সংস্কার চালু করেছে।",
-    slug: "education-reform",
-    createdAt: "2025-05-25T08:30:00.000Z",
-    updatedAt: "2025-05-25T08:30:00.000Z",
-    banner_image: {
-      id: "img-4",
-      url: "https://via.placeholder.com/330x186",
-      originalUrl: "https://via.placeholder.com/330x186",
-      mimetype: "image/jpeg",
-      filename: "education.jpg",
-      modifyFileName: "education-modified.jpg",
-      path: "/uploads/education.jpg",
-      cdn: "https://via.placeholder.com",
-      fileUniqueId: "unique-4",
-      size: 85000,
-      platform: "cloud",
-      createdAt: "2025-05-25T08:30:00.000Z",
-      updatedAt: "2025-05-25T08:30:00.000Z",
-      is_deleted: false,
-      status: "active",
-      type: "image",
-      created_by_id: "user-1",
-      fileType: "jpg",
-    },
-  },
-  {
-    headline: "পরিবেশ দূষণে উদ্বেগ",
-    short_headline: "পরিবেশ দূষণ",
-    details: "ঢাকার বায়ু দূষণ নিয়ন্ত্রণে জরুরি পদক্ষেপ প্রয়োজন।",
-    slug: "pollution-concern",
-    createdAt: "2025-05-25T08:00:00.000Z",
-    updatedAt: "2025-05-25T08:00:00.000Z",
-    banner_image: {
-      id: "img-5",
-      url: "https://via.placeholder.com/330x186",
-      originalUrl: "https://via.placeholder.com/330x186",
-      mimetype: "image/jpeg",
-      filename: "pollution.jpg",
-      modifyFileName: "pollution-modified.jpg",
-      path: "/uploads/pollution.jpg",
-      cdn: "https://via.placeholder.com",
-      fileUniqueId: "unique-5",
-      size: 87000,
-      platform: "cloud",
-      createdAt: "2025-05-25T08:00:00.000Z",
-      updatedAt: "2025-05-25T08:00:00.000Z",
-      is_deleted: false,
-      status: "active",
-      type: "image",
-      created_by_id: "user-1",
-      fileType: "jpg",
-    },
-  },
-  {
-    headline: "চট্টগ্রামে বন্দর উন্নয়ন",
-    short_headline: "বন্দর উন্নয়ন",
-    details: "চট্টগ্রাম বন্দরে নতুন উন্নয়ন প্রকল্প চালু।",
-    slug: "port-development",
-    createdAt: "2025-05-25T07:30:00.000Z",
-    updatedAt: "2025-05-25T07:30:00.000Z",
-    banner_image: {
-      id: "img-6",
-      url: "https://via.placeholder.com/330x186",
-      originalUrl: "https://via.placeholder.com/330x186",
-      mimetype: "image/jpeg",
-      filename: "port.jpg",
-      modifyFileName: "port-modified.jpg",
-      path: "/uploads/port.jpg",
-      cdn: "https://via.placeholder.com",
-      fileUniqueId: "unique-6",
-      size: 88000,
-      platform: "cloud",
-      createdAt: "2025-05-25T07:30:00.000Z",
-      updatedAt: "2025-05-25T07:30:00.000Z",
-      is_deleted: false,
-      status: "active",
-      type: "image",
-      created_by_id: "user-1",
-      fileType: "jpg",
-    },
-  },
-  {
-    headline: "স্বাস্থ্য খাতে নতুন বাজেট",
-    short_headline: "স্বাস্থ্য বাজেট",
-    details: "স্বাস্থ্য খাতে বাজেট বৃদ্ধির ঘোষণা।",
-    slug: "health-budget",
-    createdAt: "2025-05-25T07:00:00.000Z",
-    updatedAt: "2025-05-25T07:00:00.000Z",
-    banner_image: {
-      id: "img-7",
-      url: "https://via.placeholder.com/330x186",
-      originalUrl: "https://via.placeholder.com/330x186",
-      mimetype: "image/jpeg",
-      filename: "health.jpg",
-      modifyFileName: "health-modified.jpg",
-      path: "/uploads/health.jpg",
-      cdn: "https://via.placeholder.com",
-      fileUniqueId: "unique-7",
-      size: 86000,
-      platform: "cloud",
-      createdAt: "2025-05-25T07:00:00.000Z",
-      updatedAt: "2025-05-25T07:00:00.000Z",
-      is_deleted: false,
-      status: "active",
-      type: "image",
-      created_by_id: "user-1",
-      fileType: "jpg",
-    },
-  },
-  {
-    headline: "প্রযুক্তি খাতে বিনিয়োগ",
-    short_headline: "প্রযুক্তি বিনিয়োগ",
-    details: "প্রযুক্তি খাতে বিদেশি বিনিয়োগ বৃদ্ধি।",
-    slug: "tech-investment",
-    createdAt: "2025-05-25T06:30:00.000Z",
-    updatedAt: "2025-05-25T06:30:00.000Z",
-    banner_image: {
-      id: "img-8",
-      url: "https://via.placeholder.com/330x186",
-      originalUrl: "https://via.placeholder.com/330x186",
-      mimetype: "image/jpeg",
-      filename: "tech.jpg",
-      modifyFileName: "tech-modified.jpg",
-      path: "/uploads/tech.jpg",
-      cdn: "https://via.placeholder.com",
-      fileUniqueId: "unique-8",
-      size: 89000,
-      platform: "cloud",
-      createdAt: "2025-05-25T06:30:00.000Z",
-      updatedAt: "2025-05-25T06:30:00.000Z",
-      is_deleted: false,
-      status: "active",
-      type: "image",
-      created_by_id: "user-1",
-      fileType: "jpg",
-    },
-  },
+  
 ];
 
 type NewsWithLatestProps = {
   data: ICategory;
-  sideData?: {
-    position: string;
-    category_name: string;
-    slug: string;
-    category_id: string;
-    status: string;
-    post: NewsItem[];
-  };
-  ads?: {
-    home_12: { id: string; url: string; link: string };
-    home_13: { id: string; url: string; link: string };
-    home_14: { id: string; url: string; link: string };
-  };
+  sideData?: SideData;
+  ads?: Ads;
   topnews: boolean;
 };
 
@@ -287,7 +140,13 @@ const NewsWithLatest = ({
                     <div>
                       <Link
                         className='group flex flex-col gap-0 md:flex-row md:gap-3 lg:flex-col lg:gap-[16px]'
-                        href={`/${slug}/${item.slug}`}
+                        href={`/${slug}/${item.id}/${
+                          item.slug ||
+                          item.headline
+                            ?.replace(/%/g, "-")
+                            .replace(/\s/g, "-") ||
+                          item.headline
+                        }`}
                       >
                         <div className='overflow-hidden w-full md:w-1/2 lg:w-full relative'>
                           <div>
@@ -308,7 +167,7 @@ const NewsWithLatest = ({
                           </h3>
                           <p className='hidden md:block text-base text-[var(--gray-2)] dark:text-[var(--gray-3)]'>
                             <span className='line-clamp-2'>
-                              {item.short_headline || item.details}
+                              {item.details}
                             </span>
                           </p>
                           <TimeBefore
@@ -326,7 +185,13 @@ const NewsWithLatest = ({
                         >
                           <Link
                             className='group'
-                            href={`/${slug}/${item.slug}`}
+                            href={`/${slug}/${item.id}/${
+                              item.slug ||
+                              item.headline
+                                ?.replace(/%/g, "-")
+                                .replace(/\s/g, "-") ||
+                              item.headline
+                            }`}
                           >
                             <div className='ml-2 md:ml-0 lg:ml-2 mb-2 xl:mb-0 overflow-hidden float-right relative'>
                               <div>
@@ -346,7 +211,7 @@ const NewsWithLatest = ({
                             </h3>
                             <p className='hidden md:block text-base text-[var(--gray-2)] dark:text-[var(--gray-3)]'>
                               <span className='line-clamp-2'>
-                                {item.short_headline || item.details}
+                                {item.details}
                               </span>
                             </p>
                           </Link>
@@ -364,7 +229,16 @@ const NewsWithLatest = ({
                       key={item.banner_image?.id || `news-${i}`}
                       className='mb-6 last:mb-0 relative after:bg-[var(--border-color)] after:absolute after:w-full after:h-[1px] after:-bottom-3 after:last:h-0 dark:after:bg-[var(--border-dark)]'
                     >
-                      <Link className='group' href={`/${slug}/${item.slug}`}>
+                      <Link
+                        className='group'
+                        href={`/${slug}/${item.id}/${
+                          item.slug ||
+                          item.headline
+                            ?.replace(/%/g, "-")
+                            .replace(/\s/g, "-") ||
+                          item.headline
+                        }`}
+                      >
                         <div className='ml-2 md:ml-0 lg:ml-2 mb-2 xl:mb-0 overflow-hidden float-right relative'>
                           <div>
                             <Image
@@ -383,7 +257,7 @@ const NewsWithLatest = ({
                         </h3>
                         {i !== news?.slice(2, 6).length - 1 && (
                           <span className='text-[var(--gray-2)] dark:text-[var(--gray-3)] mt-1 text-base line-clamp-2'>
-                            {item.short_headline || item.details}
+                            {item.details}
                           </span>
                         )}
                       </Link>
@@ -397,8 +271,7 @@ const NewsWithLatest = ({
 
           <div className='col-span-12 lg:col-span-4 xl:col-span-4 relative after:bg-[var(--border-color)] after:absolute after:w-full after:h-[1px] after:-bottom-3 after:right-0 after:last:h-0 lg:after:w-[1px] lg:after:h-full lg:after:-right-3 lg:after:top-0 lg:after:last:w-0 dark:after:bg-[var(--border-dark)]'>
             {/* chng: Render ads */}
-            
-           
+
             {/* chng: Render TopNews with dummy data */}
             {topnews && <TopNews count={8} />}
           </div>
