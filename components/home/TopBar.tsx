@@ -268,11 +268,16 @@ const TopBar = () => {
         </div>
 
         {/* Logo */}
-        
-          <Link href='/' aria-label='logo'>
-            <Image src={'/images/logo.png'} alt='Daily Niropekkho' width={250} height={100} />
-          </Link>
-      
+
+        <Link href='/' aria-label='logo'>
+          <Image
+            src={"/images/logo.png"}
+            alt='Daily Niropekkho'
+            width={250}
+            height={100}
+            priority
+          />
+        </Link>
 
         {/* Right side */}
         <div>

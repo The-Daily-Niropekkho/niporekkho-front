@@ -6,7 +6,7 @@ const contactApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     getContacts: builder.query({
       query: () => ({
-        url: "/contact-settings",
+        url: "/contact-settings?status=active",
         method: "GET",
       }),
       transformResponse: (response: TResponseRedux<Contact[]>) => {

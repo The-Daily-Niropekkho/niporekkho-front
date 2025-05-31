@@ -97,7 +97,7 @@ const NavBar = () => {
     <Fragment>
       <header
         ref={firstNavbarRef}
-        className=' border-b-[1px] border-[var(--border-color)] dark:border-[var(--border-dark)] top-0 z-10 bg-[var(--bg)] dark:bg-[#191c20] shadow-[0px_1px_2px_rgba(0,0,0,0.2)] hidden md:block'
+        className=' border-b-[1px] border-[var(--border-color)] dark:border-[var(--border-dark)] top-0 z-10 bg-[var(--bg)] dark:bg-[#191c20] hidden md:block'
       >
         <div className='container py-0 mx-auto'>
           <div className='flex items-center'>
@@ -198,6 +198,7 @@ const NavBar = () => {
                     alt='Daily Niropekkho'
                     width={180}
                     height={100}
+                    loading='lazy'
                   />
                 </Link>
                 <NavItems

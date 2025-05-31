@@ -12,7 +12,7 @@ const breakingNewsApi = baseApi.injectEndpoints({
       void
     >({
       query: () => ({
-        url: "/breaking-news?sortBy=updatedAt&sortOrder=desc&limit=500",
+        url: "/breaking-news?sortBy=updatedAt&sortOrder=desc&limit=500&status=active",
         method: "GET",
       }),
       transformResponse: (response: TResponseRedux<BreakingNews[]>) => {
