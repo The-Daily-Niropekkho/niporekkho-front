@@ -8,6 +8,7 @@ import date_output_bn from "@/utils/datetime";
 import fileObjectToLink, { getReporter } from "@/utils/fileObjectToLink";
 import Image from "next/image";
 import Link from "next/link";
+
 import Script from "next/script";
 import { useEffect, useRef, useState } from "react";
 import { FaHome } from "react-icons/fa";
@@ -292,7 +293,7 @@ const SingleNewsDetails = ({ data, clss }: SingleNewsDetailsProps) => {
                 <Link
                   key={index}
                   className='bg-[var(--slate-2)] dark:bg-[var(--gray-2)] text-sm leading-none text-[var(--dark)] p-2 dark:text-white text-center flex items-center'
-                  href={`/topic/${topic.title}`}
+                  href={`/topic/${topic.title}?topic_id=${topic.id}`}
                 >
                   {topic.title}
                 </Link>
