@@ -133,7 +133,7 @@ const TopBreakingNews: React.FC = () => {
                 ) : (
                   <Link
                     key={`${item.id}-marquee-${idx}`}
-                    href={`/news/${item.news.slug || item.news.id}`}
+                    href={`/news/${item.news.id}/${item.news.slug}`}
                     className={`inline-flex items-center text-gray-800 dark:text-gray-100 mx-5 sm:mx-6 hover:text-red-600 dark:hover:text-red-400 transition-colors duration-150 ease-in-out font-medium ${
                       topBreakingNews.length === 1
                         ? "text-xl sm:text-2xl lg:text-2xl"
