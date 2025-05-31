@@ -95,7 +95,7 @@ const SingleNewsDetails = ({ data, clss }: SingleNewsDetailsProps) => {
             <article ref={printRef}>
               <div className="mb-3">
                 <Breadcrumb items={breadcrumbItems} />
-                <h2 style={{ fontSize: "1.2em" }} className="my-1 print:hidden">
+                <h2 style={{ fontSize: "1.2em" }} className="my-1 print:hidden text-blue-500">
                   {data.excerpt || data.short_headline}
                 </h2>
                 <h1
@@ -386,7 +386,7 @@ const SingleNewsDetails = ({ data, clss }: SingleNewsDetailsProps) => {
         />
       </div>
       <Script
-        src="https://static.addtoany.com/menu/page.mjs"
+        src="https://static.addtoany.com/menu/page.js"
         strategy="lazyOnload"
         onLoad={() => {
           if (typeof window !== "undefined" && window.a2a) {

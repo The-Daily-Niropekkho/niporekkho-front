@@ -69,12 +69,15 @@ const NewsWithAdd = ({ dataOne, dataTwo, ads }: NewsWithAddProps) => {
                       </div>
                       <div className='w-full'>
                         <h3 className='text-2xl mx-4 md:mx-0 mb-0 md:mb-2 text-[var(--dark)] dark:text-white font-semibold line-clamp-2 group-hover:text-[var(--text-primary)]'>
+                          {item.short_headline && (
+                            <span className='text-blue-800'>
+                              {item.short_headline} /{" "}
+                            </span>
+                          )}
                           {item.headline}
                         </h3>
                         <p className='hidden lg:block text-base text-[var(--gray-2)] dark:text-[var(--gray-3)] mx-4 md:mx-0'>
-                          <span className='line-clamp-3'>
-                            {item.details}
-                          </span>
+                          <span className='line-clamp-3'>{item.details}</span>
                         </p>
                         <TimeBefore
                           title={item.createdAt}
@@ -113,6 +116,11 @@ const NewsWithAdd = ({ dataOne, dataTwo, ads }: NewsWithAddProps) => {
                       </div>
                       <div className='flex-1'>
                         <h3 className='text-lg text-[var(--dark)] dark:text-white line-clamp-2 font-bold group-hover:text-[var(--text-primary)]'>
+                          {item.short_headline && (
+                            <span className='text-blue-800'>
+                              {item.short_headline} /{" "}
+                            </span>
+                          )}
                           {item.headline}
                         </h3>
                         <TimeBefore title={item.createdAt} />
@@ -168,12 +176,15 @@ const NewsWithAdd = ({ dataOne, dataTwo, ads }: NewsWithAddProps) => {
                       </div>
                       <div className='w-full'>
                         <h3 className='text-2xl mx-4 md:mx-0 mb-0 md:mb-2 text-[var(--dark)] dark:text-white font-semibold line-clamp-2 group-hover:text-[var(--text-primary)]'>
+                          {item.short_headline && (
+                            <span className='text-blue-800'>
+                              {item.short_headline} /{" "}
+                            </span>
+                          )}
                           {item.headline}
                         </h3>
                         <p className='hidden lg:block text-base text-[var(--gray-2)] dark:text-[var(--gray-3)] mx-4 md:mx-0'>
-                          <span className='line-clamp-3'>
-                            {item.details}
-                          </span>
+                          <span className='line-clamp-3'>{item.details}</span>
                         </p>
                         <TimeBefore
                           title={item.createdAt}
@@ -212,6 +223,11 @@ const NewsWithAdd = ({ dataOne, dataTwo, ads }: NewsWithAddProps) => {
                       </div>
                       <div className='flex-1'>
                         <h3 className='text-lg text-[var(--dark)] dark:text-white line-clamp-2 font-bold group-hover:text-[var(--text-primary)]'>
+                          {item.short_headline && (
+                            <span className='text-blue-800'>
+                              {item.short_headline} /{" "}
+                            </span>
+                          )}
                           {item.headline}
                         </h3>
                         <TimeBefore title={item.createdAt} />

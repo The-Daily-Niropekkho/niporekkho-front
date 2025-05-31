@@ -62,12 +62,15 @@ const NewsWithLatestTwo = ({ dataOne, dataTwo }: NewsWithLatestTwoProps) => {
                     </div>
                     <div className='w-full md:w-1/2'>
                       <h3 className='text-2xl left-9 mx-4 md:mx-0 text-[var(--dark)] mt-2 md:mt-0 lg:mt-2 mb-0 md:mb-2 dark:text-white group-hover:text-[var(--text-primary)] font-semibold'>
+                        {item.short_headline && (
+                          <span className='text-blue-800'>
+                            {item.short_headline} /{" "}
+                          </span>
+                        )}
                         {item.headline}
                       </h3>
                       <p className='hidden md:block text-base text-[var(--gray-2)] dark:text-[var(--gray-3)]'>
-                        <span className='line-clamp-2'>
-                          {item.details }
-                        </span>
+                        <span className='line-clamp-2'>{item.details}</span>
                       </p>
                       <TimeBefore
                         title={item.createdAt}
@@ -109,10 +112,15 @@ const NewsWithLatestTwo = ({ dataOne, dataTwo }: NewsWithLatestTwoProps) => {
                       )}
                     </div>
                     <h3 className='mt-0 md:mt-2 text-lg text-[var(--dark)] group-hover:text-[var(--text-primary)] dark:text-white font-bold line-clamp-1'>
+                      {item.short_headline && (
+                        <span className='text-blue-800'>
+                          {item.short_headline} /{" "}
+                        </span>
+                      )}
                       {item.headline}
                     </h3>
                     <span className='text-[var(--gray-2)] dark:text-[var(--gray-3)] mt-1 text-base line-clamp-2'>
-                      {item.details }
+                      {item.details}
                     </span>
                     <TimeBefore title={item.createdAt} />
                   </Link>

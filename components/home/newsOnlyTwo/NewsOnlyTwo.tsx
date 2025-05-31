@@ -58,6 +58,11 @@ const NewsOnlyTwo = ({ data, style }: NewsOnlyTwoProps) => {
                   </div>
                   <div className='w-full md:w-1/2 lg:w-full'>
                     <h3 className='text-2xl left-9 mx-4 md:mx-0 mt-2 md:mt-0 lg:mt-2 mb-0 md:mb-2 text-[var(--dark)] dark:text-white group-hover:text-[var(--text-primary)] font-semibold'>
+                      {item.short_headline && (
+                        <span className='text-blue-800'>
+                          {item.short_headline} /{" "}
+                        </span>
+                      )}
                       {item.headline}
                     </h3>
                     <p className='hidden xl:block text-base text-[var(--gray-2)] dark:text-[var(--gray-3)]'>
@@ -104,7 +109,7 @@ const NewsOnlyTwo = ({ data, style }: NewsOnlyTwoProps) => {
                       {item.headline}
                     </h3>
                     <span className='text-[var(--gray-2)] dark:text-[var(--gray-3)] mt-2 text-base line-clamp-2'>
-                      {item.details }
+                      {item.details}
                     </span>
                     <TimeBefore title={item.createdAt} />
                   </Link>
@@ -147,7 +152,7 @@ const NewsOnlyTwo = ({ data, style }: NewsOnlyTwoProps) => {
                       {item.headline}
                     </h3>
                     <span className='text-[var(--gray-2)] dark:text-[var(--gray-3)] mt-2 text-base line-clamp-2'>
-                      {item.details }
+                      {item.details}
                     </span>
                     <TimeBefore title={item.createdAt} />
                   </Link>

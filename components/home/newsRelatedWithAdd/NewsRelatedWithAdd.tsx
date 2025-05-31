@@ -74,12 +74,15 @@ const NewsRelatedWithAdd = ({ data, ads, videos }: NewsRelatedWithAddProps) => {
                     </div>
                     <div className='w-full md:w-1/2 lg:w-full'>
                       <h3 className='text-2xl left-9 mx-4 md:mx-0 mt-2 md:mt-0 lg:mt-2 mb-0 md:mb-2 text-[var(--dark)] group-hover:text-[var(--text-primary)] dark:text-white line-clamp-2 font-semibold'>
+                        {item.short_headline && (
+                          <span className='text-blue-800'>
+                            {item.short_headline} /{" "}
+                          </span>
+                        )}
                         {item.headline}
                       </h3>
                       <p className='hidden md:block text-base text-[var(--gray-2)] dark:text-[var(--gray-3)]'>
-                        <span className='line-clamp-2'>
-                          {item.details}
-                        </span>
+                        <span className='line-clamp-2'>{item.details}</span>
                       </p>
                       <TimeBefore title={item.createdAt} clss='ml-4 md:ml-0' />
                     </div>
@@ -119,12 +122,15 @@ const NewsRelatedWithAdd = ({ data, ads, videos }: NewsRelatedWithAddProps) => {
                         )}
                       </div>
                       <h3 className='text-lg text-[var(--dark)] group-hover:text-[var(--text-primary)] dark:text-white line-clamp-2 font-bold'>
+                        {item.short_headline && (
+                          <span className='text-blue-800'>
+                            {item.short_headline} /{" "}
+                          </span>
+                        )}
                         {item.headline}
                       </h3>
                       <p className='text-base text-[var(--gray-2)] dark:text-[var(--gray-3)]'>
-                        <span className='line-clamp-1'>
-                          {item.details}
-                        </span>
+                        <span className='line-clamp-1'>{item.details}</span>
                       </p>
                       <TimeBefore title={item.createdAt} />
                     </Link>
@@ -163,6 +169,11 @@ const NewsRelatedWithAdd = ({ data, ads, videos }: NewsRelatedWithAddProps) => {
                       />
                     </div>
                     <h3 className='text-lg text-[var(--dark)] line-clamp-3 dark:text-white font-bold'>
+                      {item.short_headline && (
+                        <span className='text-blue-800'>
+                          {item.short_headline} /{" "}
+                        </span>
+                      )}
                       {item.headline}
                     </h3>
                     <TimeBefore title={item.createdAt} />

@@ -163,12 +163,15 @@ const NewsWithLatest = ({
                         </div>
                         <div className='w-full md:w-1/2 lg:w-full'>
                           <h3 className='text-2xl left-9 mx-4 md:mx-0 text-[var(--dark)] mt-2 md:mt-0 lg:mt-2 mb-0 md:mb-2 dark:text-white font-semibold group-hover:text-[var(--text-primary)]'>
+                            {item.short_headline && (
+                              <span className='text-blue-800'>
+                                {item.short_headline} /{" "}
+                              </span>
+                            )}
                             {item.headline}
                           </h3>
                           <p className='hidden md:block text-base text-[var(--gray-2)] dark:text-[var(--gray-3)]'>
-                            <span className='line-clamp-2'>
-                              {item.details}
-                            </span>
+                            <span className='line-clamp-2'>{item.details}</span>
                           </p>
                           <TimeBefore
                             title={item.createdAt}
@@ -206,7 +209,12 @@ const NewsWithLatest = ({
                                 />
                               </div>
                             </div>
-                            <h3 className='text-lg text-[var(--dark)] dark:text-white font-bold group-hover:text-[var(--text-primary)]'>
+                            <h3 className='text-lg text-[var(--dark)] dark:text-white font-bold group-hover:text-[var(--text-primary)] line-clamp-2'>
+                              {item.short_headline && (
+                                <span className='text-blue-800'>
+                                  {item.short_headline} /{" "}
+                                </span>
+                              )}
                               {item.headline}
                             </h3>
                             <p className='hidden md:block text-base text-[var(--gray-2)] dark:text-[var(--gray-3)]'>
@@ -253,6 +261,11 @@ const NewsWithLatest = ({
                           </div>
                         </div>
                         <h3 className='text-lg text-[var(--dark)] dark:text-white font-bold group-hover:text-[var(--text-primary)] line-clamp-2'>
+                          {item.short_headline && (
+                            <span className='text-blue-800'>
+                              {item.short_headline} /{" "}
+                            </span>
+                          )}
                           {item.headline}
                         </h3>
                         {i !== news?.slice(2, 6).length - 1 && (

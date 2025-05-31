@@ -113,7 +113,10 @@ const CategoryMain = ({ categoryId }: CategoryMainProps) => {
                 <Skeleton width={200} height={30} />
               </h1>
             ) : (
-              <Link className='block w-fit' href={`/${categoryName}?id=${queryCategoryId}`}>
+              <Link
+                className='block w-fit'
+                href={`/${categoryName}?id=${queryCategoryId}`}
+              >
                 <h1 className='text-[var(--text-primary)] text-xl md:text-2xl dark:text-white font-bold'>
                   {categoryData.title}
                 </h1>
@@ -152,45 +155,50 @@ const CategoryMain = ({ categoryId }: CategoryMainProps) => {
                 <div className='col-span-12 flex flex-col lg:flex-row gap-3 relative after:bg-[var(--border-color)] after:absolute after:w-full after:h-[1px] last:after:h-0 after:-bottom-3 dark:after:bg-[var(--border-dark)]'>
                   {/* Left: Featured News */}
                   <div className='w-full lg:w-3/5 lg:border-r border-[var(--border-color)] dark:border-[var(--border-dark)]'>
-                    {posts.slice(0, 1).map((itm: NewsDetails, i: number) => (
+                    {posts.slice(0, 1).map((item: NewsDetails, i: number) => (
                       <div key={i} className='mx-0 h-full lg:px-2'>
                         <div className='relative group flex flex-col gap-3 h-full'>
                           <div className='w-full overflow-hidden relative h-[273px]'>
                             <Link
-                              href={`/${categoryName}/${itm.id}/${
-                                itm.slug ||
-                                itm.headline
+                              href={`/${categoryName}/${item.id}/${
+                                item.slug ||
+                                item.headline
                                   ?.replace(/%/g, "-")
                                   .replace(/\s/g, "-") ||
-                                itm.headline
+                                item.headline
                               }`}
                             >
                               <Image
-                                alt={itm.headline}
+                                alt={item.headline}
                                 width={560}
                                 height={380}
                                 decoding='async'
                                 className='group-hover:scale-105 duration-700 ease-out w-full h-full object-cover'
-                                src={fileObjectToLink(itm.banner_image)}
+                                src={fileObjectToLink(item.banner_image)}
                                 loading='lazy'
                               />
                             </Link>
                           </div>
                           <Link
-                            href={`/${categoryName}/${itm.id}/${
-                              itm.slug ||
-                              itm.headline
+                            href={`/${categoryName}/${item.id}/${
+                              item.slug ||
+                              item.headline
                                 ?.replace(/%/g, "-")
                                 .replace(/\s/g, "-") ||
-                              itm.headline
+                              item.headline
                             }`}
                           >
                             <div className='py-3 dark:bg-gray-800 border-[var(--border-color)] dark:border-[var(--border-dark)]'>
-                              <h1 className='text-xl md:text-2xl lg:text-3xl font-[600] text-[var(--dark)] dark:text-white mb-2 tracking-tight group-hover:text-[var(--text-primary)] cursor-pointer'>
-                                {itm.headline}
+                              <h1 className='text-xl md:text-2xl lg:text-3xl font-[600] text-[var(--dark)] dark:text-white mb-2 tracking-tight group-hover:text-[var(--text-primary)] cursor-pointer line-clamp-2'>
+                                {item.short_headline && (
+                                  <span className='text-blue-800'>
+                                    {item.short_headline} /{" "}
+                                  </span>
+                                )}
+                                {item.headline}
                               </h1>
                               <h2 className='text-lg font-[500] text-[var(--dark)] dark:text-white mb tracking-tight'>
-                                {itm.details || "শিরোনাম নেই"}
+                                {item.details || "শিরোনাম নেই"}
                               </h2>
                             </div>
                           </Link>
@@ -212,9 +220,9 @@ const CategoryMain = ({ categoryId }: CategoryMainProps) => {
                           <>
                             {posts
                               .slice(1, sliceEnd)
-                              .map((itm: NewsDetails, i: number) => (
+                              .map((item: NewsDetails, i: number) => (
                                 <li
-                                  key={itm.id}
+                                  key={item.id}
                                   className={`relative flex group lg:flex-row items-start gap-4 ${
                                     i < 3
                                       ? "after:content-[''] after:absolute after:left-0 after:-bottom-3 after:h-[1px] after:w-full after:bg-[#eff2f0] after:border-[#eff2f0]"
@@ -223,39 +231,46 @@ const CategoryMain = ({ categoryId }: CategoryMainProps) => {
                                 >
                                   <div className='w-full lg:w-2/3 group'>
                                     <Link
-                                      href={`/${categoryName}/${itm.id}/${
-                                        itm.slug ||
-                                        itm.headline
+                                      href={`/${categoryName}/${item.id}/${
+                                        item.slug ||
+                                        item.headline
                                           ?.replace(/%/g, "-")
                                           .replace(/\s/g, "-") ||
-                                        itm.headline
+                                        item.headline
                                       }`}
                                     >
                                       <h1 className='text-base lg:text-lg font-semibold text-[var(--dark)] dark:text-white group-hover:text-[var(--text-primary)] line-clamp-2'>
-                                        {itm.headline}
+                                        {item.short_headline && (
+                                          <span className='text-blue-800'>
+                                            {item.short_headline} /{" "}
+                                          </span>
+                                        )}
+                                        {item.headline}
                                       </h1>
                                       <span className='text-[var(--gray-2)] dark:text-[var(--gray-3)] mt-1 text-base line-clamp-2'>
-                                        {itm.details}
+                                        {item.details}
                                       </span>
                                     </Link>
                                   </div>
                                   <div className='w-full lg:w-1/3 relative overflow-hidden'>
                                     <Link
-                                      href={`/${categoryName}/${itm.id}/${
-                                        itm.slug ||
-                                        itm.headline
+                                      href={`/${categoryName}/${item.id}/${
+                                        item.slug ||
+                                        item.headline
                                           ?.replace(/%/g, "-")
                                           .replace(/\s/g, "-") ||
-                                        itm.headline
+                                        item.headline
                                       }`}
                                     >
                                       <Image
-                                        alt={itm.headline}
+                                        alt={item.headline}
                                         width={120}
                                         height={80}
                                         decoding='async'
                                         className='w-full h-full md:h-[100px] lg:h-[100px] object-cover group-hover:scale-105 duration-700 ease-out'
-                                        src={fileObjectToLink(itm.banner_image)}
+                                        src={fileObjectToLink(
+                                          item.banner_image,
+                                        )}
                                         loading='lazy'
                                       />
                                     </Link>
@@ -297,36 +312,41 @@ const CategoryMain = ({ categoryId }: CategoryMainProps) => {
               <NewsListSkeleton />
             ) : (
               <div className='grid grid-cols-1 md:grid-cols-12 gap-6 mb-6 after:[&>*]:absolute after:[&>*]:bg-[var(--border-color)] after:[&>*]:w-full after:[&>*]:h-[1px] after:[&>*]:-bottom-3 after:[&>*]:right-0 md:after:[&>*]:w-[1px] md:after:[&>*]:h-full md:after:[&>*]:top-0 md:after:[&>*]:-right-3 md:after:[&>*:nth-child(even)]:w-0 md:before:[&>*]:absolute md:before:[&>*]:bg-[var(--border-color)] md:before:[&>*]:w-full md:before:[&>*]:h-[1px] md:before:[&>*]:-bottom-3 md:before:[&>*]:right-0 dark:after:[&>*]:bg-[var(--border-dark)] dark:before:[&>*]:bg-[var(--border-dark)]'>
-                {pageData.slice(5).map((itm: NewsDetails) => (
+                {pageData.slice(5).map((item: NewsDetails) => (
                   <div
-                    key={itm.id}
+                    key={item.id}
                     className='col-span-12 md:col-span-6 relative'
                   >
                     <Link
-                      href={`/${categoryName}/${itm.id}/${
-                        itm.slug ||
-                        itm.headline?.replace(/%/g, "-").replace(/\s/g, "-") ||
-                        itm.headline
+                      href={`/${categoryName}/${item.id}/${
+                        item.slug ||
+                        item.headline?.replace(/%/g, "-").replace(/\s/g, "-") ||
+                        item.headline
                       }`}
                     >
                       <div className='ml-3 mb-2 xl:mb-0 overflow-hidden float-right relative'>
                         <Image
-                          alt={itm.headline}
+                          alt={item.headline}
                           width={330}
                           height={186}
                           decoding='async'
                           className='w-[124px] h-auto lg:w-[110px] lg:h-[75px] xl:w-[180px] xl:h-[120px] object-cover group-hover:scale-105 duration-700 ease-out'
-                          src={fileObjectToLink(itm.banner_image)}
+                          src={fileObjectToLink(item.banner_image)}
                           loading='lazy'
                         />
                       </div>
-                      <h2 className='text-lg text-[var(--dark)] dark:text-white font-bold'>
-                        {itm.headline}
+                      <h2 className='text-lg text-[var(--dark)] dark:text-white font-bold line-clamp-2'>
+                        {item.short_headline && (
+                          <span className='text-blue-800'>
+                            {item.short_headline} /{" "}
+                          </span>
+                        )}
+                        {item.headline}
                       </h2>
                       <span className='text-[var(--gray-2)] dark:text-[var(--gray-3)] mt-2 text-base line-clamp-2'>
-                        {itm.details}
+                        {item.details}
                       </span>
-                      <TimeBefore title={itm.publish_date} />
+                      <TimeBefore title={item.publish_date} />
                     </Link>
                   </div>
                 ))}
