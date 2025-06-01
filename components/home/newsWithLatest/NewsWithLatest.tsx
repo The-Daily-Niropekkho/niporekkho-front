@@ -112,7 +112,7 @@ const NewsWithLatest = ({
   topnews,
 }: NewsWithLatestProps) => {
   const { title: category_name, slug, news } = data || {};
-console.log(news, "news data");
+// console.log(news, "news data");
   const { post } = sideData || {};
 
   return (

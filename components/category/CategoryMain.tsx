@@ -32,7 +32,7 @@ interface CategoryMainProps {
 const CategoryMain = ({ categoryId }: CategoryMainProps) => {
   const [currentLimit, setCurrentLimit] = useState(11); // Start with 19 posts
   const [pageData, setPageData] = useState<NewsDetails[]>([]); // Store all posts
-  const initialLimit = 10; // Posts per page
+  const initialLimit = 3; // Posts per page
   const params = useParams();
   const searchParams = useSearchParams();
   const categoryName = params.categoryName as string;

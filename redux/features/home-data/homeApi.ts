@@ -1,6 +1,6 @@
 import { TResponseRedux } from "@/types";
 import { baseApi } from "../../api/baseApi";
-import { HomeData, HomeNews } from "@/types/homeData"; // Import HomeData and HomeNews
+import { HomeData, HomeNews } from "@/types/homeData";
 
 const homeApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({

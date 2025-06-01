@@ -1,5 +1,6 @@
 import AddCard from "@/components/common/addCard/AddCard";
 import VideoIcon from "@/public/icons/VideoIcon";
+import { HomeData } from "@/types/homeData";
 import { Ads, ICategory, SideData } from "@/types/news";
 import TimeBefore from "@/ui/TimeBefore";
 import fileObjectToLink from "@/utils/fileObjectToLink";
@@ -8,13 +9,14 @@ import Link from "next/link";
 import { FaRegPenToSquare } from "react-icons/fa6";
 
 interface TopNewsProps {
-  data: ICategory;
+  data: HomeData; 
   sideData?: SideData;
   ads?: Ads;
 }
 
 const TopNews = ({ data, ads, sideData }: TopNewsProps) => {
   const { category_name, slug, post } = sideData || {};
+  console.log(data, "TopNews Data");
 
   return (
     <section className='mt-5'>
@@ -27,7 +29,13 @@ const TopNews = ({ data, ads, sideData }: TopNewsProps) => {
                 <div className='w-full lg:w-3/5 lg:border-r border-[var(--border-color)] dark:border-[var(--border-dark)]'>
                   {data?.news?.slice(0, 1)?.map((item, i) => {
                     const imageUrl = item.banner_image
-                      ? fileObjectToLink(item.banner_image)
+                      ? fileObjectToLink(
+                          typeof item.banner_image === "string"
+                            ? item.banner_image
+                            : (item.banner_image as any)?.url ||
+                                (item.banner_image as any)?.originalUrl ||
+                                null,
+                        )
                       : "https://i.ibb.co/LdP2NKkp/Placeholder-Begrippenlijst.webp";
                     const newsSlug =
                       item.slug ||
@@ -41,7 +49,9 @@ const TopNews = ({ data, ads, sideData }: TopNewsProps) => {
                         <div className='relative group flex flex-col gap-3 h-full'>
                           <div className='w-full overflow-hidden relative h-[273px]'>
                             <Link
-                              href={`/${data.slug}/${item.id || i}/${newsSlug}`}
+                              href={`/${item.category?.slug}/${
+                                item.id || i
+                              }/${newsSlug}`}
                             >
                               <Image
                                 alt={item.headline || "News Image"}
@@ -51,15 +61,17 @@ const TopNews = ({ data, ads, sideData }: TopNewsProps) => {
                                 className='group-hover:scale-105 duration-700 ease-out w-full h-full object-cover'
                                 src={imageUrl}
                               />
-                              {item.video && (
+                              {/* {item.video && (
                                 <div className='absolute top-2 right-2'>
                                   <VideoIcon />
                                 </div>
-                              )}
+                              )} */}
                             </Link>
                           </div>
                           <Link
-                            href={`/${data.slug}/${item.id || i}/${newsSlug}`}
+                            href={`/${item.category?.slug}/${
+                              item.id || i
+                            }/${newsSlug}`}
                           >
                             <div className='py-3 dark:bg-gray-800 border-[var(--border-color)] dark:border-[var(--border-dark)]'>
                               <h1 className='text-xl md:text-2xl lg:text-3xl font-[600] text-[var(--dark)] dark:text-white mb-2 tracking-tight group-hover:text-[var(--text-primary)] cursor-pointer'>
@@ -95,9 +107,15 @@ const TopNews = ({ data, ads, sideData }: TopNewsProps) => {
                       return (
                         <>
                           {data?.news?.slice(1, sliceEnd).map((item, i) => {
-                            const imageUrl = item.banner_image
-                              ? fileObjectToLink(item.banner_image)
-                              : "https://i.ibb.co/LdP2NKkp/Placeholder-Begrippenlijst.webp";
+                          const imageUrl = item.banner_image
+                            ? fileObjectToLink(
+                                typeof item.banner_image === "string"
+                                  ? item.banner_image
+                                  : (item.banner_image as any)?.url ||
+                                      (item.banner_image as any)?.originalUrl ||
+                                      null,
+                              )
+                            : "https://i.ibb.co/LdP2NKkp/Placeholder-Begrippenlijst.webp";
                             const newsSlug =
                               item.slug ||
                               item.headline
@@ -115,9 +133,9 @@ const TopNews = ({ data, ads, sideData }: TopNewsProps) => {
                               >
                                 <div className='w-full lg:w-2/3 group'>
                                   <Link
-                                    href={`/${data.slug}/${
-                                      item.id || i
-                                    }/${newsSlug}`}
+                                    href={`/${
+                                      item.category?.slug
+                                    }/${item.id || i}/${newsSlug}`}
                                   >
                                     <h1 className='text-base lg:text-lg font-semibold text-[var(--dark)] dark:text-white group-hover:text-[var(--text-primary)] line-clamp-2'>
                                       {item.short_headline && (
@@ -134,9 +152,9 @@ const TopNews = ({ data, ads, sideData }: TopNewsProps) => {
                                 </div>
                                 <div className='w-full lg:w-1/3 relative overflow-hidden'>
                                   <Link
-                                    href={`/${data.slug}/${
-                                      item.id || i
-                                    }/${newsSlug}`}
+                                    href={`/${
+                                      item.category?.slug
+                                    }/${item.id || i}/${newsSlug}`}
                                   >
                                     <Image
                                       alt={item.headline || "News Thumbnail"}
@@ -172,9 +190,15 @@ const TopNews = ({ data, ads, sideData }: TopNewsProps) => {
               <div className='col-span-12'>
                 <div className='grid grid-cols-1 md:grid-cols-6 gap-6'>
                   {data?.news?.slice(5, 7)?.map((item, i) => {
-                    const imageUrl = item.banner_image
-                      ? fileObjectToLink(item.banner_image)
-                      : "https://i.ibb.co/LdP2NKkp/Placeholder-Begrippenlijst.webp";
+                   const imageUrl = item.banner_image
+                     ? fileObjectToLink(
+                         typeof item.banner_image === "string"
+                           ? item.banner_image
+                           : (item.banner_image as any)?.url ||
+                               (item.banner_image as any)?.originalUrl ||
+                               null,
+                       )
+                     : "https://i.ibb.co/LdP2NKkp/Placeholder-Begrippenlijst.webp";
                     const newsSlug =
                       item.slug ||
                       item.headline?.replace(/%/g, "-").replace(/\s/g, "-") ||
@@ -186,7 +210,9 @@ const TopNews = ({ data, ads, sideData }: TopNewsProps) => {
                       >
                         <Link
                           className='group'
-                          href={`/${data.slug}/${item.id || i}/${newsSlug}`}
+                          href={`/${item.category?.slug}/${
+                            item.id || i
+                          }/${newsSlug}`}
                         >
                           <div className='ml-3 mb-1 md:mb-0 overflow-hidden float-right relative'>
                             <Image
@@ -364,6 +390,15 @@ const TopNews = ({ data, ads, sideData }: TopNewsProps) => {
         <div className='hidden lg:block'>
           <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mt-6 relative after:bg-[var(--border-color)] after:absolute after:w-full after:h-[1px] after:right-0 after:left-0 after:-bottom-3 after:[&>*]:absolute after:[&>*]:bg-[var(--border-color)] after:[&>*]:w-full after:[&>*]:h-[1px] after:[&>*]:-bottom-3 after:[&>*]:left-0 md:after:[&>*]:w-[1px] md:after:[&>*]:h-full md:after:[&>*]:top-0 md:after:[&>*]:-left-3 md:after:[&>*:nth-child(3)]:w-0 md:after:[&>*:nth-child(4)]:w-0 md:after:[&>*:nth-child(6)]:w-0 md:after:first:[&>*]:w-0 lg:after:[&>*:nth-child(3)]:w-[1px] lg:after:[&>*:nth-child(4)]:w-[1px] lg:after:[&>*:nth-child(6)]:w-[1px] lg:after:[&>*:nth-child(5)]:w-0 dark:after:[&>*]:bg-[var(--border-dark)] md:before:[&>*]:absolute md:before:[&>*]:bg-[var(--border-color)] md:before:[&>*]:w-full md:before:[&>*]:h-[1px] md:before:[&>*]:-bottom-3 md:before:[&>*]:right-0 md:before:[&>*]:nth-child(4):h-0 lg:before:[&>*:nth-child(n+4)]:h-0 dark:before:[&>*]:bg-[var(--border-dark)] dark:after:bg-[var(--border-dark)] '>
             {data?.news?.slice(7, 10)?.map((item, i) => {
+              const imageUrl = item.banner_image
+                ? fileObjectToLink(
+                    typeof item.banner_image === "string"
+                      ? item.banner_image
+                      : (item.banner_image as any)?.url ||
+                          (item.banner_image as any)?.originalUrl ||
+                          null,
+                  )
+                : "https://i.ibb.co/LdP2NKkp/Placeholder-Begrippenlijst.webp";
               return (
                 <div
                   key={item.banner_image?.id || `news-${i}`}
@@ -371,7 +406,9 @@ const TopNews = ({ data, ads, sideData }: TopNewsProps) => {
                 >
                   <Link
                     className='group'
-                    href={`/${data.slug}/${item.id || i}/${
+                    href={`/${item.category?.slug}/${
+                      item.id || i
+                    }/${
                       item.slug ||
                       item.headline?.replace(/%/g, "-").replace(/\s/g, "-") ||
                       item.headline
@@ -384,7 +421,7 @@ const TopNews = ({ data, ads, sideData }: TopNewsProps) => {
                         height={90}
                         decoding='async'
                         className='w-[124px] h-auto lg:w-[110px] lg:h-[75px] object-cover group-hover:scale-105 duration-700 ease-out'
-                        src={fileObjectToLink(item.banner_image)}
+                        src={imageUrl}
                         loading='lazy'
                       />
                     </div>
@@ -410,6 +447,15 @@ const TopNews = ({ data, ads, sideData }: TopNewsProps) => {
             </div>
             <div className='hidden'>
               {data?.news?.slice(9, 12)?.map((item, i) => {
+                const imageUrl = item.banner_image
+                  ? fileObjectToLink(
+                      typeof item.banner_image === "string"
+                        ? item.banner_image
+                        : (item.banner_image as any)?.url ||
+                            (item.banner_image as any)?.originalUrl ||
+                            null,
+                    )
+                  : "https://i.ibb.co/LdP2NKkp/Placeholder-Begrippenlijst.webp";
                 return (
                   <div
                     key={item.banner_image?.id || `news-${i}`}
@@ -417,7 +463,9 @@ const TopNews = ({ data, ads, sideData }: TopNewsProps) => {
                   >
                     <Link
                       className='group'
-                      href={`/${data.slug}/${item.id || i}/${
+                      href={`/${item.category?.slug}/${
+                        item.id || i
+                      }/${
                         item.slug ||
                         item.headline?.replace(/%/g, "-").replace(/\s/g, "-") ||
                         item.headline
@@ -430,7 +478,7 @@ const TopNews = ({ data, ads, sideData }: TopNewsProps) => {
                           height={90}
                           decoding='async'
                           className='w-[124px] h-auto lg:w-[110px] lg:h-[75px] object-cover group-hover:scale-105 duration-700 ease-out'
-                          src={fileObjectToLink(item.banner_image)}
+                          src={imageUrl}
                           loading='lazy'
                         />
                       </div>

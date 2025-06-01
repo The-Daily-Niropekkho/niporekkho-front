@@ -2,7 +2,7 @@
 export interface HomeData {
   serial_number: number;
   serial_update_at: string;
-  news: HomeNews;
+  news: HomeNews[];
 }
 
 export interface HomeNews {
@@ -15,6 +15,13 @@ export interface HomeNews {
   details: string;
   createdAt: string;
   updateContentAt: string;
+  updatedAt: string;
+  category: Category;
+}
+export interface Category {
+  id: string;
+  title: string;
+  slug: string;
 }
 
 export interface BannerImage {
