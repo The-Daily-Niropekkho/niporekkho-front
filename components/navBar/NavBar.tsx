@@ -26,7 +26,7 @@ const NavBar = () => {
     { sortBy: "position,position_update_at", sortOrder: "asc", limit: 500 },
     { skip: false },
   );
-  console.log(data);
+  // console.log(data);
   const [isSticky, setIsSticky] = useState(false);
   const firstNavbarRef = useRef<HTMLElement>(null);
 

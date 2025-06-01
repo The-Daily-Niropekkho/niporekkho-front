@@ -157,5 +157,17 @@ export interface Image {
 }
 
 export interface AllTopic {
+  id: string;
   title: string;
+  slug: string;
+  position: number;
+  description: any;
+  meta_title: any;
+  meta_description: any;
+  created_by_id: string;
+  image_id: any;
+  status: string;
+  is_deleted: boolean;
+  createdAt: string;
+  updatedAt: string;
 }

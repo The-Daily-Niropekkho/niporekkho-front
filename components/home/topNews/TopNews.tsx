@@ -1,11 +1,11 @@
 import AddCard from "@/components/common/addCard/AddCard";
 import VideoIcon from "@/public/icons/VideoIcon";
+import { Ads, ICategory, SideData } from "@/types/news";
 import TimeBefore from "@/ui/TimeBefore";
+import fileObjectToLink from "@/utils/fileObjectToLink";
 import Image from "next/image";
 import Link from "next/link";
 import { FaRegPenToSquare } from "react-icons/fa6";
-import fileObjectToLink from "@/utils/fileObjectToLink";
-import { Ads, ICategory, SideData } from "@/types/news";
 
 interface TopNewsProps {
   data: ICategory;
@@ -32,7 +32,7 @@ const TopNews = ({ data, ads, sideData }: TopNewsProps) => {
                     const newsSlug =
                       item.slug ||
                       item.headline?.replace(/%/g, "-").replace(/\s/g, "-") ||
-                      `news-${item.id}`;
+                      `news-${item.id || i}`;
                     return (
                       <div
                         key={item.id || `news-${i}`}
@@ -40,7 +40,9 @@ const TopNews = ({ data, ads, sideData }: TopNewsProps) => {
                       >
                         <div className='relative group flex flex-col gap-3 h-full'>
                           <div className='w-full overflow-hidden relative h-[273px]'>
-                            <Link href={`/${data.slug}/${item.id}/${newsSlug}`}>
+                            <Link
+                              href={`/${data.slug}/${item.id || i}/${newsSlug}`}
+                            >
                               <Image
                                 alt={item.headline || "News Image"}
                                 width={560}
@@ -56,7 +58,9 @@ const TopNews = ({ data, ads, sideData }: TopNewsProps) => {
                               )}
                             </Link>
                           </div>
-                          <Link href={`/${data.slug}/${item.id}/${newsSlug}`}>
+                          <Link
+                            href={`/${data.slug}/${item.id || i}/${newsSlug}`}
+                          >
                             <div className='py-3 dark:bg-gray-800 border-[var(--border-color)] dark:border-[var(--border-dark)]'>
                               <h1 className='text-xl md:text-2xl lg:text-3xl font-[600] text-[var(--dark)] dark:text-white mb-2 tracking-tight group-hover:text-[var(--text-primary)] cursor-pointer'>
                                 {item.short_headline && (
@@ -99,7 +103,7 @@ const TopNews = ({ data, ads, sideData }: TopNewsProps) => {
                               item.headline
                                 ?.replace(/%/g, "-")
                                 .replace(/\s/g, "-") ||
-                              `news-${item.id}`;
+                              `news-${item.id || i}`;
                             return (
                               <li
                                 key={item.id || `news-${i}`}
@@ -111,7 +115,9 @@ const TopNews = ({ data, ads, sideData }: TopNewsProps) => {
                               >
                                 <div className='w-full lg:w-2/3 group'>
                                   <Link
-                                    href={`/${data.slug}/${item.id}/${newsSlug}`}
+                                    href={`/${data.slug}/${
+                                      item.id || i
+                                    }/${newsSlug}`}
                                   >
                                     <h1 className='text-base lg:text-lg font-semibold text-[var(--dark)] dark:text-white group-hover:text-[var(--text-primary)] line-clamp-2'>
                                       {item.short_headline && (
@@ -128,7 +134,9 @@ const TopNews = ({ data, ads, sideData }: TopNewsProps) => {
                                 </div>
                                 <div className='w-full lg:w-1/3 relative overflow-hidden'>
                                   <Link
-                                    href={`/${data.slug}/${item.id}/${newsSlug}`}
+                                    href={`/${data.slug}/${
+                                      item.id || i
+                                    }/${newsSlug}`}
                                   >
                                     <Image
                                       alt={item.headline || "News Thumbnail"}
@@ -170,7 +178,7 @@ const TopNews = ({ data, ads, sideData }: TopNewsProps) => {
                     const newsSlug =
                       item.slug ||
                       item.headline?.replace(/%/g, "-").replace(/\s/g, "-") ||
-                      `news-${item.id}`;
+                      `news-${item.id || i}`;
                     return (
                       <div
                         key={item.id || `news-${i}`}
@@ -178,7 +186,7 @@ const TopNews = ({ data, ads, sideData }: TopNewsProps) => {
                       >
                         <Link
                           className='group'
-                          href={`/${data.slug}/${item.id}/${newsSlug}`}
+                          href={`/${data.slug}/${item.id || i}/${newsSlug}`}
                         >
                           <div className='ml-3 mb-1 md:mb-0 overflow-hidden float-right relative'>
                             <Image
@@ -351,36 +359,11 @@ const TopNews = ({ data, ads, sideData }: TopNewsProps) => {
                 </div>
               </div>
             )}
-            {/* chng: Live TV section kept commented out */}
-            {/* <div className="md:mt-3 mb-7 md:mb-0">
-              <div className="border-[var(--border-color)] dark:border-[var(--border-dark)] border-b-[2px] mb-3 pb-1">
-                <div className="flex items-center justify-between">
-                  <Link href={`/${slug}`}>
-                    <h2 className="category-text">লাইভ টিভি</h2>
-                  </Link>
-                </div>
-              </div>
-              <Link href="/https://www.youtube-nocookie.com/embed/C55L2CanCgY?autoplay=1&mute=1">
-                <p className="w-full flex items-center justify-center mt-5 md:mt-0 relative group">
-                  <div className="w-full max-w-4xl rounded overflow-hidden shadow-2xl bg-gray-900/50 hover:shadow-blue-500/50 transition-shadow duration-300">
-                    <iframe
-                      width="100%"
-                      height="250"
-                      src="https://www.youtube-nocookie.com/embed/C55L2CanCgY?autoplay=1&mute=1"
-                      title="YouTube video player"
-                      frameBorder="0"
-                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                      className="w-full h-[197px]"
-                    ></iframe>
-                  </div>
-                </p>
-              </Link>
-            </div> */}
           </div>
         </div>
         <div className='hidden lg:block'>
           <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mt-6 relative after:bg-[var(--border-color)] after:absolute after:w-full after:h-[1px] after:right-0 after:left-0 after:-bottom-3 after:[&>*]:absolute after:[&>*]:bg-[var(--border-color)] after:[&>*]:w-full after:[&>*]:h-[1px] after:[&>*]:-bottom-3 after:[&>*]:left-0 md:after:[&>*]:w-[1px] md:after:[&>*]:h-full md:after:[&>*]:top-0 md:after:[&>*]:-left-3 md:after:[&>*:nth-child(3)]:w-0 md:after:[&>*:nth-child(4)]:w-0 md:after:[&>*:nth-child(6)]:w-0 md:after:first:[&>*]:w-0 lg:after:[&>*:nth-child(3)]:w-[1px] lg:after:[&>*:nth-child(4)]:w-[1px] lg:after:[&>*:nth-child(6)]:w-[1px] lg:after:[&>*:nth-child(5)]:w-0 dark:after:[&>*]:bg-[var(--border-dark)] md:before:[&>*]:absolute md:before:[&>*]:bg-[var(--border-color)] md:before:[&>*]:w-full md:before:[&>*]:h-[1px] md:before:[&>*]:-bottom-3 md:before:[&>*]:right-0 md:before:[&>*]:nth-child(4):h-0 lg:before:[&>*:nth-child(n+4)]:h-0 dark:before:[&>*]:bg-[var(--border-dark)] dark:after:bg-[var(--border-dark)] '>
-            {data?.news?.slice(5, 9)?.map((item, i) => {
+            {data?.news?.slice(7, 10)?.map((item, i) => {
               return (
                 <div
                   key={item.banner_image?.id || `news-${i}`}
@@ -388,7 +371,7 @@ const TopNews = ({ data, ads, sideData }: TopNewsProps) => {
                 >
                   <Link
                     className='group'
-                    href={`/${data.slug}/${item.id}/${
+                    href={`/${data.slug}/${item.id || i}/${
                       item.slug ||
                       item.headline?.replace(/%/g, "-").replace(/\s/g, "-") ||
                       item.headline
@@ -434,7 +417,7 @@ const TopNews = ({ data, ads, sideData }: TopNewsProps) => {
                   >
                     <Link
                       className='group'
-                      href={`/${data.slug}/${item.id}/${
+                      href={`/${data.slug}/${item.id || i}/${
                         item.slug ||
                         item.headline?.replace(/%/g, "-").replace(/\s/g, "-") ||
                         item.headline

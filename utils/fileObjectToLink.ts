@@ -23,6 +23,9 @@ export default function fileObjectToLink(src: TFileDocument | string | null) {
   return imageSrc as string;
 }
 
+
+
+//reporter
 export function getReporter(data: any): {
   type: "reporter" | "generic_reporter" | "unknown";
   data: any;

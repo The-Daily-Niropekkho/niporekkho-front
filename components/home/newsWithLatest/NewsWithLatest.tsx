@@ -1,13 +1,11 @@
 "use client";
 
-import AddCard from "@/components/common/addCard/AddCard"; // chng: For ads
+import TopNews from "@/components/singleNews/TopNews";
+import { Ads, ICategory, INews, SideData } from "@/types/news";
 import TimeBefore from "@/ui/TimeBefore";
+import fileObjectToLink from "@/utils/fileObjectToLink"; // chng: For banner_image
 import Image from "next/image";
 import Link from "next/link";
-import fileObjectToLink from "@/utils/fileObjectToLink"; // chng: For banner_image
-import { NewsItem } from "@/interface/post"; // chng: Use types
-import { Ads, ICategory, INews, SideData } from "@/types/news";
-import TopNews from "@/components/singleNews/TopNews";
 
 // chng: Define dummy news data
 const dummyNews: INews[] = [
@@ -98,7 +96,6 @@ const dummyNews: INews[] = [
       fileType: "jpg",
     },
   },
-  
 ];
 
 type NewsWithLatestProps = {
@@ -115,6 +112,7 @@ const NewsWithLatest = ({
   topnews,
 }: NewsWithLatestProps) => {
   const { title: category_name, slug, news } = data || {};
+console.log(news, "news data");
   const { post } = sideData || {};
 
   return (

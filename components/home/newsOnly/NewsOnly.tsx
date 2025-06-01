@@ -14,7 +14,7 @@ type NewsOnlyProps = {
 };
 
 const NewsOnly = ({ data, ads }: NewsOnlyProps) => {
-  const { title: category_name, slug, news } = data || {};
+  const { title: category_name, slug, news, id } = data || {};
 
   return (
     <>
@@ -22,7 +22,7 @@ const NewsOnly = ({ data, ads }: NewsOnlyProps) => {
         <div className='container px-4 mx-auto'>
           <div className='border-[var(--border-color)] dark:border-[var(--border-dark)] border-b-[2px] mb-3 pb-1'>
             <div className='flex items-center justify-between'>
-              <Link href={`/${slug}`}>
+              <Link href={`/${slug}?id=${id}`} className='flex items-center gap-2'>
                 <h2 className='category-text text-anchor'>{category_name}</h2>
               </Link>
             </div>
