@@ -67,7 +67,7 @@ const NavItems = ({
       {menuData.slice(0, 12).map((item) => (
         <li key={item.title} className='relative group'>
           <Link
-            href={`/category/category/${item.slug}?id=${item.id}`}
+            href={`/category/${item.slug}?id=${item.id}`}
             className={`whitespace-nowrap py-[11px] px-3 text-md text-[var(--dark)] dark:text-white hover:text-red-500 capitalize border-r-2 ${className}`}
           >
             {item.title}
