@@ -5,11 +5,28 @@ import { NewsDetails } from "@/types/newsDetails";
 const newsApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     getAllNews: builder.query({
-      query: ({ limit, category_id }: { limit?: number; category_id?: string }) => ({
+      query: ({
+        limit,
+        category_id,
+      }: {
+        limit?: number;
+        category_id?: string;
+      }) => ({
         url: `/news?limit=${limit}&category_id=${category_id}`,
         method: "GET",
       }),
-      
+
+      transformResponse: (response: TResponseRedux<NewsDetails[]>) => {
+        return { data: response.data, meta: response.meta };
+      },
+    }),
+
+    //latest news
+    getLatestNews: builder.query({
+      query: ({ limit = 20 }: { limit?: number }) => ({
+        url: `/news/get-latest-news?sortBy=createdAt&sortOrder=desc&limit=${limit}`,
+        method: "GET",
+      }),
       transformResponse: (response: TResponseRedux<NewsDetails[]>) => {
         return { data: response.data, meta: response.meta };
       },
@@ -42,12 +59,13 @@ const newsApi = baseApi.injectEndpoints({
       transformResponse: (response: TResponseRedux<NewsDetails[]>) => {
         return { data: response.data, meta: response.meta };
       },
-    })
+    }),
   }),
 });
 
 export const {
   useGetAllNewsQuery,
+  useGetLatestNewsQuery,
   useGetNewsBySlugQuery,
   useUpdateNewsMutation,
   useTropicwiseNewsQuery

@@ -3,166 +3,16 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
-import fileObjectToLink from "@/utils/fileObjectToLink"; // chng: For banner_image
-import { INews } from "@/types/news";
-
-// chng: Use dummy news data
-const dummyNews: INews[] = [
-  {
-    id: "1",
-    headline: "ঢাকায় ভারী বৃষ্টিপাত, জনজীবন বিপর্যস্ত",
-    short_headline: "ঢাকায় বৃষ্টি",
-    details: "রাজধানী ঢাকায় গতকাল রাত থেকে ভারী বৃষ্টিপাত চলছে।",
-    slug: "dhaka-heavy-rain",
-    createdAt: "2025-05-25T10:00:00.000Z",
-    updatedAt: "2025-05-25T10:00:00.000Z",
-    banner_image: {
-      id: "img-1",
-      url: "https://via.placeholder.com/560x315",
-      originalUrl: "https://via.placeholder.com/560x315",
-      mimetype: "image/jpeg",
-      filename: "rain.jpg",
-      modifyFileName: "rain-modified.jpg",
-      path: "/uploads/rain.jpg",
-      cdn: "https://via.placeholder.com",
-      fileUniqueId: "unique-1",
-      size: 100000,
-      platform: "cloud",
-      createdAt: "2025-05-25T10:00:00.000Z",
-      updatedAt: "2025-05-25T10:00:00.000Z",
-      is_deleted: false,
-      status: "active",
-      type: "image",
-      created_by_id: "user-1",
-      fileType: "jpg",
-    },
-  },
-  {
-    id: "2",
-    headline: "বাংলাদেশের অর্থনীতি: নতুন সম্ভাবনা",
-    short_headline: "অর্থনীতির উন্নতি",
-    details: "বাংলাদেশের অর্থনীতি নতুন উচ্চতায় পৌঁছেছে।",
-    slug: "economy-growth",
-    createdAt: "2025-05-25T09:30:00.000Z",
-    updatedAt: "2025-05-25T09:30:00.000Z",
-    banner_image: {
-      id: "img-2",
-      url: "https://via.placeholder.com/330x186",
-      originalUrl: "https://via.placeholder.com/330x186",
-      mimetype: "image/jpeg",
-      filename: "economy.jpg",
-      modifyFileName: "economy-modified.jpg",
-      path: "/uploads/economy.jpg",
-      cdn: "https://via.placeholder.com",
-      fileUniqueId: "unique-2",
-      size: 80000,
-      platform: "cloud",
-      createdAt: "2025-05-25T09:30:00.000Z",
-      updatedAt: "2025-05-25T09:30:00.000Z",
-      is_deleted: false,
-      status: "active",
-      type: "image",
-      created_by_id: "user-1",
-      fileType: "jpg",
-    },
-  },
-  {
-    id: "3",
-    headline: "ক্রিকেট: বাংলাদেশের জয়",
-    short_headline: "টাইগারদের জয়",
-    details: "বাংলাদেশ ক্রিকেট দল নিউজিল্যান্ডকে হারিয়েছে।",
-    slug: "cricket-victory",
-    createdAt: "2025-05-25T09:00:00.000Z",
-    updatedAt: "2025-05-25T09:00:00.000Z",
-    banner_image: {
-      id: "img-3",
-      url: "https://via.placeholder.com/330x186",
-      originalUrl: "https://via.placeholder.com/330x186",
-      mimetype: "image/jpeg",
-      filename: "cricket.jpg",
-      modifyFileName: "cricket-modified.jpg",
-      path: "/uploads/cricket.jpg",
-      cdn: "https://via.placeholder.com",
-      fileUniqueId: "unique-3",
-      size: 90000,
-      platform: "cloud",
-      createdAt: "2025-05-25T09:00:00.000Z",
-      updatedAt: "2025-05-25T09:00:00.000Z",
-      is_deleted: false,
-      status: "active",
-      type: "image",
-      created_by_id: "user-1",
-      fileType: "jpg",
-    },
-  },
-  {
-    id: "4",
-    headline: "শিক্ষা সংস্কারে নতুন উদ্যোগ",
-    short_headline: "শিক্ষা সংস্কার",
-    details: "সরকার শিক্ষা খাতে নতুন সংস্কার চালু করেছে।",
-    slug: "education-reform",
-    createdAt: "2025-05-25T08:30:00.000Z",
-    updatedAt: "2025-05-25T08:30:00.000Z",
-    banner_image: {
-      id: "img-4",
-      url: "https://via.placeholder.com/330x186",
-      originalUrl: "https://via.placeholder.com/330x186",
-      mimetype: "image/jpeg",
-      filename: "education.jpg",
-      modifyFileName: "education-modified.jpg",
-      path: "/uploads/education.jpg",
-      cdn: "https://via.placeholder.com",
-      fileUniqueId: "unique-4",
-      size: 85000,
-      platform: "cloud",
-      createdAt: "2025-05-25T08:30:00.000Z",
-      updatedAt: "2025-05-25T08:30:00.000Z",
-      is_deleted: false,
-      status: "active",
-      type: "image",
-      created_by_id: "user-1",
-      fileType: "jpg",
-    },
-  },
-  {
-    id: "5",
-    headline: "পরিবেশ দূষণে উদ্বেগ",
-    short_headline: "পরিবেশ দূষণ",
-    details: "ঢাকার বায়ু দূষণ নিয়ন্ত্রণে জরুরি পদক্ষেপ প্রয়োজন।",
-    slug: "pollution-concern",
-    createdAt: "2025-05-25T08:00:00.000Z",
-    updatedAt: "2025-05-25T08:00:00.000Z",
-    banner_image: {
-      id: "img-5",
-      url: "https://via.placeholder.com/330x186",
-      originalUrl: "https://via.placeholder.com/330x186",
-      mimetype: "image/jpeg",
-      filename: "pollution.jpg",
-      modifyFileName: "pollution-modified.jpg",
-      path: "/uploads/pollution.jpg",
-      cdn: "https://via.placeholder.com",
-      fileUniqueId: "unique-5",
-      size: 87000,
-      platform: "cloud",
-      createdAt: "2025-05-25T08:00:00.000Z",
-      updatedAt: "2025-05-25T08:00:00.000Z",
-      is_deleted: false,
-      status: "active",
-      type: "image",
-      created_by_id: "user-1",
-      fileType: "jpg",
-    },
-  },
- 
-];
+import { NewsDetails } from "@/types/newsDetails";
+import { useGetLatestNewsQuery } from "@/redux/features/news/newsApi";
 
 type NewsProps = {
-  news_id: string; // chng: Changed to string to match banner_image.id
+  news_id: string;
   post_title: string;
   image_thumb: string;
   image_alt: string;
   category: string;
-  encode_titl: string;
+  encode_titl: string | null;
 };
 
 function NewsList({ posts }: { posts: NewsProps[] }) {
@@ -180,9 +30,11 @@ function NewsList({ posts }: { posts: NewsProps[] }) {
             >
               <Link
                 className='group flex items-start gap-3'
-                href={`/${post.category.toLowerCase()}/${post.encode_titl}`}
+                href={`/${post.category.toLowerCase()}/${
+                  post.encode_titl || post.news_id
+                }`}
               >
-                <span className='number-circle inline-flex items-center justify-center w-6 h-6 rounded-full bg-[#A90303] text-white font-bold text-sm'>
+                <span className='number-circle inline-flex items-center justify-center size-6 lg:size-10 rounded-full bg-[#A90303] text-white font-bold text-sm lg:text-4xl'>
                   {`${index + 1}`.replace(
                     /\d/g,
                     (d: string) => "০১২৩৪৫৬৭৮৯"[parseInt(d, 10)],
@@ -215,18 +67,38 @@ function NewsList({ posts }: { posts: NewsProps[] }) {
   );
 }
 
+// TopNews component to fetch and display news
 function TopNews({ count }: { count: number }) {
   const [tab1Active, setTab1Active] = useState(true);
 
-  // chng: Map dummyNews to NewsProps
-  const mappedNews: NewsProps[] = dummyNews.slice(0, count).map((item, i) => ({
-    news_id: item.banner_image?.id || `news-${i}`,
-    post_title: item.headline,
-    image_thumb: fileObjectToLink(item.banner_image),
-    image_alt: item.headline || "News Image",
-    category: "news", // chng: Default category
-    encode_titl: item.slug ?? "",
-  }));
+  // Fetch the latest news using RTK Query
+  const {
+    data: newsResponse,
+    isLoading,
+    error,
+  } = useGetLatestNewsQuery({ limit: count });
+
+  // Map the API response to NewsProps
+  const mappedNews: NewsProps[] =
+    newsResponse?.data?.slice(0, count).map((item: NewsDetails) => ({
+      news_id: item.id,
+      post_title: item.headline,
+      image_thumb: "https://i.ibb.co/LdP2NKkp/Placeholder-Begrippenlijst.webp", // Placeholder since banner_image is missing
+      image_alt: item.headline || "News Image",
+      category: "news", // Default category (update if category slug is available)
+      encode_titl: item.slug || null,
+    })) || [];
+
+  // Handle loading and error states
+  if (isLoading) {
+    return <div className='text-center py-4'>Loading...</div>;
+  }
+
+  if (error) {
+    return (
+      <div className='text-center py-4 text-red-500'>Error loading news</div>
+    );
+  }
 
   return (
     <div className='widget-tab-container md:block hidden w-full shadow-md rounded-lg overflow-hidden'>

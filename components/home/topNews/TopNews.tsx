@@ -1,7 +1,7 @@
 import AddCard from "@/components/common/addCard/AddCard";
 import VideoIcon from "@/public/icons/VideoIcon";
 import { HomeData } from "@/types/homeData";
-import { Ads, ICategory, SideData } from "@/types/news";
+import { Ads, ICategory, SideData, OpinionItem } from "@/types/news";
 import TimeBefore from "@/ui/TimeBefore";
 import fileObjectToLink from "@/utils/fileObjectToLink";
 import Image from "next/image";
@@ -9,14 +9,15 @@ import Link from "next/link";
 import { FaRegPenToSquare } from "react-icons/fa6";
 
 interface TopNewsProps {
-  data: HomeData; 
+  data: HomeData;
   sideData?: SideData;
   ads?: Ads;
 }
 
 const TopNews = ({ data, ads, sideData }: TopNewsProps) => {
-  const { category_name, slug, post } = sideData || {};
-  console.log(data, "TopNews Data");
+  // Extract opinion data from sideData
+  const { opinion = [] } = sideData || {};
+  // console.log(sideData, "TopNews Side Data");
 
   return (
     <section className='mt-5'>
@@ -49,7 +50,7 @@ const TopNews = ({ data, ads, sideData }: TopNewsProps) => {
                         <div className='relative group flex flex-col gap-3 h-full'>
                           <div className='w-full overflow-hidden relative h-[273px]'>
                             <Link
-                              href={`/${item.category?.slug}/${
+                              href={`/${item.category?.slug || "category"}/${
                                 item.id || i
                               }/${newsSlug}`}
                             >
@@ -69,7 +70,7 @@ const TopNews = ({ data, ads, sideData }: TopNewsProps) => {
                             </Link>
                           </div>
                           <Link
-                            href={`/${item.category?.slug}/${
+                            href={`/${item.category?.slug || "category"}/${
                               item.id || i
                             }/${newsSlug}`}
                           >
@@ -107,15 +108,16 @@ const TopNews = ({ data, ads, sideData }: TopNewsProps) => {
                       return (
                         <>
                           {data?.news?.slice(1, sliceEnd).map((item, i) => {
-                          const imageUrl = item.banner_image
-                            ? fileObjectToLink(
-                                typeof item.banner_image === "string"
-                                  ? item.banner_image
-                                  : (item.banner_image as any)?.url ||
-                                      (item.banner_image as any)?.originalUrl ||
-                                      null,
-                              )
-                            : "https://i.ibb.co/LdP2NKkp/Placeholder-Begrippenlijst.webp";
+                            const imageUrl = item.banner_image
+                              ? fileObjectToLink(
+                                  typeof item.banner_image === "string"
+                                    ? item.banner_image
+                                    : (item.banner_image as any)?.url ||
+                                        (item.banner_image as any)
+                                          ?.originalUrl ||
+                                        null,
+                                )
+                              : "https://i.ibb.co/LdP2NKkp/Placeholder-Begrippenlijst.webp";
                             const newsSlug =
                               item.slug ||
                               item.headline
@@ -134,7 +136,7 @@ const TopNews = ({ data, ads, sideData }: TopNewsProps) => {
                                 <div className='w-full lg:w-2/3 group'>
                                   <Link
                                     href={`/${
-                                      item.category?.slug
+                                      item.category?.slug || "category"
                                     }/${item.id || i}/${newsSlug}`}
                                   >
                                     <h1 className='text-base lg:text-lg font-semibold text-[var(--dark)] dark:text-white group-hover:text-[var(--text-primary)] line-clamp-2'>
@@ -153,7 +155,7 @@ const TopNews = ({ data, ads, sideData }: TopNewsProps) => {
                                 <div className='w-full lg:w-1/3 relative overflow-hidden'>
                                   <Link
                                     href={`/${
-                                      item.category?.slug
+                                      item.category?.slug || "category"
                                     }/${item.id || i}/${newsSlug}`}
                                   >
                                     <Image
@@ -190,15 +192,15 @@ const TopNews = ({ data, ads, sideData }: TopNewsProps) => {
               <div className='col-span-12'>
                 <div className='grid grid-cols-1 md:grid-cols-6 gap-6'>
                   {data?.news?.slice(5, 7)?.map((item, i) => {
-                   const imageUrl = item.banner_image
-                     ? fileObjectToLink(
-                         typeof item.banner_image === "string"
-                           ? item.banner_image
-                           : (item.banner_image as any)?.url ||
-                               (item.banner_image as any)?.originalUrl ||
-                               null,
-                       )
-                     : "https://i.ibb.co/LdP2NKkp/Placeholder-Begrippenlijst.webp";
+                    const imageUrl = item.banner_image
+                      ? fileObjectToLink(
+                          typeof item.banner_image === "string"
+                            ? item.banner_image
+                            : (item.banner_image as any)?.url ||
+                                (item.banner_image as any)?.originalUrl ||
+                                null,
+                        )
+                      : "https://i.ibb.co/LdP2NKkp/Placeholder-Begrippenlijst.webp";
                     const newsSlug =
                       item.slug ||
                       item.headline?.replace(/%/g, "-").replace(/\s/g, "-") ||
@@ -210,7 +212,7 @@ const TopNews = ({ data, ads, sideData }: TopNewsProps) => {
                       >
                         <Link
                           className='group'
-                          href={`/${item.category?.slug}/${
+                          href={`/${item.category?.slug || "category"}/${
                             item.id || i
                           }/${newsSlug}`}
                         >
@@ -268,7 +270,8 @@ const TopNews = ({ data, ads, sideData }: TopNewsProps) => {
               </div>
             </div>
           </div>
-          {/* Section: Grid of Additional News Items */}
+
+          {/* Sidebar Section */}
           <div className='col-span-12 md:col-span-6 lg:col-span-4 xl:col-span-3'>
             <div className='w-full flex items-center justify-center'>
               <div className={`${ads?.home_12 ? "" : "h-[250px]"}`}>
@@ -277,118 +280,131 @@ const TopNews = ({ data, ads, sideData }: TopNewsProps) => {
                 />
               </div>
             </div>
+
             {/* Sidebar: সম্পাদকীয় ও মতামত */}
-            {sideData?.post && sideData.post.length > 0 && (
+            {opinion && opinion.length > 0 && (
               <div className='md:mt-3 mb-7 md:mb-0'>
                 <div className='border-[var(--border-color)] dark:border-[var(--border-dark)] border-b-[2px] mb-3 pb-1'>
                   <div className='flex items-center justify-between border-t-2 border-t-red-600'>
                     <Link
                       className='hover:text-[var(--secondary)]'
-                      href={`/${slug}`}
+                      href={`/${opinion[0]?.category?.slug || "opinion"}`}
                     >
                       <h2 className='category-text mt-2 text-anchor'>
-                        সম্পাদকীয় ও মতামত
+                        {opinion[0]?.category?.title || "সম্পাদকীয় ও মতামত"}
                       </h2>
                     </Link>
                   </div>
                 </div>
-                {post?.slice(0, 1)?.map((item) => {
-                  return (
-                    <div
-                      key={item.news_id}
-                      className="relative after:content-[''] after:absolute after:left-0 after:-bottom-1 after:h-[2px] after:w-full after:bg-[#eff2f0] after:border-[#eff2f0]"
+                {opinion.slice(0, 1)?.map((item) => (
+                  <div
+                    key={item.id}
+                    className="relative after:content-[''] after:absolute after:left-0 after:-bottom-1 after:h-[2px] after:w-full after:bg-[#eff2f0] after:border-[#eff2f0]"
+                  >
+                    <Link
+                      className='gap-3 group'
+                      href={`/${item.category?.slug || "opinion"}/${item.id}/${
+                        item.slug
+                      }`}
                     >
-                      <Link
-                        className='gap-3 group'
-                        href={`/${item.category}/${item.encode_titl}`}
-                      >
-                        <div>
-                          <Image
-                            alt={
-                              item.post_by_name ||
-                              item.post_title ||
-                              "Author Image"
-                            }
-                            width={100}
-                            height={100}
-                            decoding='async'
-                            className='w-24 md:w-36 lg:w-32 h-24 md:h-36 lg:h-32 object-cover'
-                            src={item.post_by_image || item.image_thumb}
-                            loading='lazy'
-                          />
-                        </div>
-                        <div>
-                          <p className='font-normal mt-2 text-green-600 hover:text-green-700 dark:text-gray-300 flex gap-2 items-center'>
-                            <FaRegPenToSquare />{" "}
-                            {item.post_by_name || "Unknown Author"}
-                          </p>
-                          <h2 className='text-base text-[var(--dark)] dark:text-white line-clamp-2'>
-                            <span className='text-red-500 font-bold'>
-                              {item.category_name}
-                            </span>{" "}
-                            /{" "}
-                            <span className='hover:font-bold'>
-                              {item.post_title}
-                            </span>
-                          </h2>
-                        </div>
-                      </Link>
-                    </div>
-                  );
-                })}
+                      <div>
+                        <Image
+                          alt={item.headline || "Author Image"}
+                          width={100}
+                          height={100}
+                          decoding='async'
+                          className='w-24 md:w-36 lg:w-32 h-24 md:h-36 lg:h-32 object-cover'
+                          src={fileObjectToLink(
+                            typeof item.reporter?.writer?.profile_image ===
+                              "string"
+                              ? item.reporter?.writer?.profile_image
+                              : (item.reporter?.writer?.profile_image as any)
+                                  ?.url ||
+                                  (item.reporter?.writer?.profile_image as any)
+                                    ?.originalUrl ||
+                                  null,
+                          )}
+                          loading='lazy'
+                        />
+                      </div>
+                      <div>
+                        <p className='font-normal mt-2 text-green-600 hover:text-green-700 dark:text-gray-300 flex gap-2 items-center'>
+                          <FaRegPenToSquare />{" "}
+                          {item.reporter?.writer?.first_name}{" "}
+                          {item.reporter?.writer?.last_name || "লেখক"}
+                        </p>
+                        <h2 className='text-base text-[var(--dark)] dark:text-white line-clamp-2'>
+                          <span className='text-red-500 font-bold'>
+                            {item.category?.title || "অভিমত"} /{" "}
+                          </span>{" "}
+                          <span className='hover:font-bold'>
+                            {item.headline}
+                          </span>
+                        </h2>
+                      </div>
+                    </Link>
+                  </div>
+                ))}
                 <div className='mt-3 space-y-4'>
-                  {post?.slice(1, 3)?.map((item, index) => {
-                    return (
-                      <Link
-                        key={item.news_id}
-                        className={`flex gap-3 group relative border-b-item ${
-                          index === 0
-                            ? "after:content-[''] after:absolute after:left-0 after:-bottom-1 after:h-[2px] after:w-full after:bg-[#eff2f0] after:border-[#eff2f0]"
-                            : ""
-                        }`}
-                        href={`/${item.category}/${item.encode_titl}`}
-                        scroll={false}
-                      >
-                        <div className='flex-shrink-0'>
-                          <Image
-                            alt={
-                              item.post_by_name ||
-                              item.post_title ||
-                              "Author Image"
-                            }
-                            width={100}
-                            height={100}
-                            decoding='async'
-                            className='w-24 h-24 object-cover rounded-sm'
-                            src={item.post_by_image || item.image_thumb}
-                            loading='lazy'
-                          />
-                        </div>
-                        <div className='flex-1 min-w-0'>
-                          <p className='font-normal text-green-600 hover:text-green-700 dark:text-gray-300 flex gap-2 items-center text-sm'>
-                            <FaRegPenToSquare className='text-sm' />{" "}
-                            {item.post_by_name || "Unknown Author"}
-                          </p>
-                          <h2 className='text-base text-[var(--dark)] dark:text-white font-semibold leading-tight'>
-                            <span className='text-red-600 font-bold'>
-                              {item.category_name}
-                            </span>{" "}
-                            /{" "}
-                            <span className='hover:font-bold inline-block max-w-full'>
-                              {item.post_title}
-                            </span>
-                          </h2>
-                        </div>
-                      </Link>
-                    );
-                  })}
+                  {opinion.slice(1, 3)?.map((item, index) => (
+                    <Link
+                      key={item.id}
+                      className={`flex gap-3 group relative border-b-item ${
+                        index === 0
+                          ? "after:content-[''] after:absolute after:left-0 after:-bottom-1 after:h-[2px] after:w-full after:bg-[#eff2f0] after:border-[#eff2f0]"
+                          : ""
+                      }`}
+                      href={`/${item.category?.slug || "opinion"}/${item.id}/${
+                        item.slug
+                      }`}
+                      scroll={false}
+                    >
+                      <div className='flex-shrink-0'>
+                        <Image
+                          alt={item.headline || "Author Image"}
+                          width={100}
+                          height={100}
+                          decoding='async'
+                          className='w-24 h-24 object-cover rounded-sm'
+                          src={fileObjectToLink(
+                            typeof item.reporter?.writer?.profile_image ===
+                              "string"
+                              ? item.reporter?.writer?.profile_image
+                              : (item.reporter?.writer?.profile_image as any)
+                                  ?.url ||
+                                  (item.reporter?.writer?.profile_image as any)
+                                    ?.originalUrl ||
+                                  null,
+                          )}
+                          loading='lazy'
+                        />
+                      </div>
+                      <div className='flex-1 min-w-0'>
+                        <p className='font-normal text-green-600 hover:text-green-700 dark:text-gray-300 flex gap-2 items-center text-sm'>
+                          <FaRegPenToSquare />{" "}
+                          {item.reporter?.writer?.first_name}{" "}
+                          {item.reporter?.writer?.last_name || "লেখক"}
+                        </p>
+                        <h2 className='text-base text-[var(--dark)] dark:text-white  leading-tight'>
+                          <span className='text-red-600 font-bold'>
+                            {item.category?.title || "অভিমত"} /{" "}
+                          </span>{" "}
+                          <span className='hover:font-bold'>
+                            {item.headline}
+                          </span>
+                        </h2>
+                      </div>
+                    </Link>
+                  ))}
                 </div>
               </div>
             )}
           </div>
         </div>
+
+        {/* Additional News Grid for Larger Screens */}
         <div className='hidden lg:block'>
-          <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mt-6 relative after:bg-[var(--border-color)] after:absolute after:w-full after:h-[1px] after:right-0 after:left-0 after:-bottom-3 after:[&>*]:absolute after:[&>*]:bg-[var(--border-color)] after:[&>*]:w-full after:[&>*]:h-[1px] after:[&>*]:-bottom-3 after:[&>*]:left-0 md:after:[&>*]:w-[1px] md:after:[&>*]:h-full md:after:[&>*]:top-0 md:after:[&>*]:-left-3 md:after:[&>*:nth-child(3)]:w-0 md:after:[&>*:nth-child(4)]:w-0 md:after:[&>*:nth-child(6)]:w-0 md:after:first:[&>*]:w-0 lg:after:[&>*:nth-child(3)]:w-[1px] lg:after:[&>*:nth-child(4)]:w-[1px] lg:after:[&>*:nth-child(6)]:w-[1px] lg:after:[&>*:nth-child(5)]:w-0 dark:after:[&>*]:bg-[var(--border-dark)] md:before:[&>*]:absolute md:before:[&>*]:bg-[var(--border-color)] md:before:[&>*]:w-full md:before:[&>*]:h-[1px] md:before:[&>*]:-bottom-3 md:before:[&>*]:right-0 md:before:[&>*]:nth-child(4):h-0 lg:before:[&>*:nth-child(n+4)]:h-0 dark:before:[&>*]:bg-[var(--border-dark)] dark:after:bg-[var(--border-dark)] '>
+          <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mt-6 relative after:bg-[var(--border-color)] after:absolute after:w-full after:h-[1px] after:right-0 after:left-0 after:-bottom-3 after:[&>*]:absolute after:[&>*]:bg-[var(--border-color)] after:[&>*]:w-full after:[&>*]:h-[1px] after:[&>*]:-bottom-3 after:[&>*]:left-0 md:after:[&>*]:w-[1px] md:after:[&>*]:h-full md:after:[&>*]:top-0 md:after:[&>*]:-left-3 md:after:[&>*:nth-child(3)]:w-0 md:after:[&>*:nth-child(4)]:w-0 md:after:[&>*:nth-child(6)]:w-0 md:after:first:[&>*]:w-0 lg:after:[&>*:nth-child(3)]:w-[1px] lg:after:[&>*:nth-child(4)]:w-[1px] lg:after:[&>*:nth-child(6)]:w-[1px] lg:after:[&>*:nth-child(5)]:w-0 dark:after:[&>*]:bg-[var(--border-dark)] md:before:[&>*]:absolute md:before:[&>*]:bg-[var(--border-color)] md:before:[&>*]:w-full md:before:[&>*]:h-[1px] md:before:[&>*]:-bottom-3 md:before:[&>*]:right-0 md:before:[&>*]:nth-child(4):h-0 lg:before:[&>*:nth-child(n+4)]:h-0 dark:before:[&>*]:bg-[var(--border-dark)] dark:after:bg-[var(--border-dark)]'>
             {data?.news?.slice(7, 10)?.map((item, i) => {
               const imageUrl = item.banner_image
                 ? fileObjectToLink(
@@ -399,20 +415,17 @@ const TopNews = ({ data, ads, sideData }: TopNewsProps) => {
                           null,
                   )
                 : "https://i.ibb.co/LdP2NKkp/Placeholder-Begrippenlijst.webp";
+              const newsSlug =
+                item.slug ||
+                item.headline?.replace(/%/g, "-").replace(/\s/g, "-") ||
+                `news-${item.id || i}`;
               return (
-                <div
-                  key={item.banner_image?.id || `news-${i}`}
-                  className='relative'
-                >
+                <div key={item.id || `news-${i}`} className='relative'>
                   <Link
                     className='group'
-                    href={`/${item.category?.slug}/${
+                    href={`/${item.category?.slug || "category"}/${
                       item.id || i
-                    }/${
-                      item.slug ||
-                      item.headline?.replace(/%/g, "-").replace(/\s/g, "-") ||
-                      item.headline
-                    }`}
+                    }/${newsSlug}`}
                   >
                     <div className='ml-2 md:ml-0 lg:ml-2 mb-2 overflow-hidden float-right relative'>
                       <Image
@@ -456,20 +469,17 @@ const TopNews = ({ data, ads, sideData }: TopNewsProps) => {
                             null,
                     )
                   : "https://i.ibb.co/LdP2NKkp/Placeholder-Begrippenlijst.webp";
+                const newsSlug =
+                  item.slug ||
+                  item.headline?.replace(/%/g, "-").replace(/\s/g, "-") ||
+                  `news-${item.id || i}`;
                 return (
-                  <div
-                    key={item.banner_image?.id || `news-${i}`}
-                    className='relative'
-                  >
+                  <div key={item.id || `news-${i}`} className='relative'>
                     <Link
                       className='group'
-                      href={`/${item.category?.slug}/${
+                      href={`/${item.category?.slug || "category"}/${
                         item.id || i
-                      }/${
-                        item.slug ||
-                        item.headline?.replace(/%/g, "-").replace(/\s/g, "-") ||
-                        item.headline
-                      }`}
+                      }/${newsSlug}`}
                     >
                       <div className='ml-2 md:ml-0 lg:ml-2 mb-2 overflow-hidden float-right relative'>
                         <Image

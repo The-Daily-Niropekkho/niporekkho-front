@@ -2,7 +2,7 @@
 
 import TopBreakingNews from "@/components/common/breaking-news/top-breaking-news";
 import HomePageSkeleton from "@/components/skeleton/HomePageSkeleton";
-import { useGetMultipleCategoryDataQuery, useGetTopHomeDataQuery } from "@/redux/features/home-data/homeApi";
+import { useGetAllPostsQuery, useGetMultipleCategoryDataQuery, useGetTopHomeDataQuery } from "@/redux/features/home-data/homeApi";
 import { usePathname } from "next/navigation";
 import { Fragment } from "react";
 import config from "../../../config";
@@ -15,6 +15,7 @@ import NewsWithLatestTwo from "../newsWithLatestTwo/NewsWithLatestTwo";
 import PhotoGallery from "../photoGallery/PhotoGallery";
 import TopNews from "../topNews/TopNews";
 import { HomeData, HomeNews } from "@/types/homeData";
+import { Video } from "../Video";
 
 // Dummy data (unchanged)
 const dummyAds = {
@@ -86,6 +87,13 @@ const HomeMain = () => {
     categoryIds: [
     
   ]});
+  const {
+    data: videos,
+    isLoading: isVideosLoading,
+    error: videosError,
+  } = useGetAllPostsQuery({
+  });
+  
   // Define category IDs from environment variables
   const categoryIds = [
     process.env.NEXT_PUBLIC_NATIONAL_ID!,
@@ -153,12 +161,11 @@ const HomeMain = () => {
             // createdAt: new Date().toISOString(),
             // updatedAt: new Date().toISOString(),
             serial_number: 0,
-            serial_update_at: '',
+            serial_update_at: "",
             news: topHomeData?.data.flat() ?? [],
           }}
           sideData={{
-            ...dummySideData,
-            category_id: dummySideData.category_id ?? "default-opinion-id",
+            opinion: mergedResult[config.allCategories.opinion_id] ?? [],
           }}
           ads={dummyAds}
         />
@@ -189,7 +196,7 @@ const HomeMain = () => {
             }}
             sideData={{
               ...dummySideData,
-              category_id: dummySideData.category_id ?? "default-opinion-id",
+              // category_id: dummySideData.category_id ?? "default-opinion-id",
             }}
             ads={dummyAds}
             topnews={true}
@@ -197,8 +204,8 @@ const HomeMain = () => {
         )}
       {/* News With Add: Politics and Cities */}
       {mergedResult &&
-        mergedResult[config.allCategories.politics_id]?.length > 0 &&
-        mergedResult[config.allCategories.cities_id]?.length > 0 && (
+        mergedResult[config.allCategories.cities_id]?.length > 0 &&
+        mergedResult[config.allCategories.politics_id]?.length > 0 && (
           <NewsWithAdd
             dataOne={{
               id: "politics-category",
@@ -243,6 +250,13 @@ const HomeMain = () => {
             ads={dummyAds}
           />
         )}
+
+      {/* videos section */}
+      <Video
+        videos={videos?.data.map((v) => v.url || v.file?.originalUrl) || []}
+        slug='video'
+        category_name='ভিডিও'
+      />
       {/* News Only: Across The Country */}
       {mergedResult &&
         mergedResult[config.allCategories.across_the_country_id]?.length >

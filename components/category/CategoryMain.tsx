@@ -19,6 +19,7 @@ import { useGetAllNewsQuery } from "@/redux/features/news/newsApi";
 import { NewsDetails } from "@/types/newsDetails";
 import fileObjectToLink from "@/utils/fileObjectToLink";
 import Skeleton from "react-loading-skeleton";
+import { ca } from "date-fns/locale";
 
 interface TopicType {
   topic_name: string;
@@ -27,15 +28,17 @@ interface TopicType {
 
 interface CategoryMainProps {
   categoryId?: string;
+  categoryName?: string;
 }
 
-const CategoryMain = ({ categoryId }: CategoryMainProps) => {
+const CategoryMain = ({ categoryId, categoryName }: CategoryMainProps) => {
+
   const [currentLimit, setCurrentLimit] = useState(11); // Start with 19 posts
   const [pageData, setPageData] = useState<NewsDetails[]>([]); // Store all posts
-  const initialLimit = 3; // Posts per page
+  const initialLimit = 10; // Posts per page
   const params = useParams();
   const searchParams = useSearchParams();
-  const categoryName = params.categoryName as string;
+  // const categoryName = params.categoryName as string;
   const queryCategoryId =
     searchParams.get("id") || categoryId || "";
 
@@ -353,7 +356,7 @@ const CategoryMain = ({ categoryId }: CategoryMainProps) => {
               </div>
             )}
 
-            {/* {totalPosts > pageData.length && (
+            {totalPosts > pageData.length && (
               <div className='flex justify-center'>
                 <button
                   className='flex items-center justify-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed text-white text-lg bg-[var(--primary)] px-4 py-2 hover:bg-[var(--primary)] rounded-sm'
@@ -363,7 +366,7 @@ const CategoryMain = ({ categoryId }: CategoryMainProps) => {
                   আরও দেখুন {isLoading && <Spin clss='w-7 h-7' />}
                 </button>
               </div>
-            )} */}
+            )}
           </div>
 
           <div className='col-span-12 lg:col-span-4 xl:col-span-3 relative after:bg-[var(--border-color)] after:absolute after:w-full after:h-[1px] after:-bottom-3 after:right-0 after:last:h-0 lg:after:w-[1px] lg:after:h-full lg:after:-right-3 lg:after:top-0 lg:after:last:w-0 dark:after:bg-[var(--border-dark)]'>

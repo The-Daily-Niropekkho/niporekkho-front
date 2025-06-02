@@ -68,7 +68,7 @@ const NavItems = ({
       {menuData.slice(0, 12).map((item) => (
         <li key={item.title}>
           <Link
-            href={`/${item.slug}?id=${item.id}`}
+            href={`/category/${item.slug}?id=${item.id}`}
             className={`whitespace-nowrap py-[11px] px-3 text-md text-[var(--dark)] dark:text-white hover:text-red-500 capitalize border-r-2 ${className}`}
           >
             {item.title}
@@ -100,7 +100,7 @@ const NavItems = ({
                 {menuData.slice(12, 17).map((item) => (
                   <li key={item.title}>
                     <Link
-                      href={`/${item.slug}?id=${item.id}`}
+                      href={`/category/${item.slug}?id=${item.id}`}
                       className='block text-gray-700 dark:text-gray-300 hover:text-red-500 dark:hover:text-red-500 transition-colors duration-200'
                     >
                       {item.title}
@@ -116,7 +116,7 @@ const NavItems = ({
                 {menuData.slice(17, 21).map((item) => (
                   <li key={item.title}>
                     <Link
-                      href={`/${item.slug}?id=${item.id}`}
+                      href={`/category/${item.slug}?id=${item.id}`}
                       className='block text-gray-700 dark:text-gray-300 hover:text-red-500 dark:hover:text-red-500 transition-colors duration-200'
                     >
                       {item.title}
@@ -132,7 +132,7 @@ const NavItems = ({
                 {menuData.slice(21, 25).map((item) => (
                   <li key={item.title}>
                     <Link
-                      href={`/${item.slug}?id=${item.id}`}
+                      href={`/category/${item.slug}?id=${item.id}`}
                       className='block text-gray-700 dark:text-gray-300 hover:text-red-500 dark:hover:text-red-500 transition-colors duration-200'
                     >
                       {item.title}
@@ -148,7 +148,7 @@ const NavItems = ({
                 {menuData.slice(25, 29).map((item) => (
                   <li key={item.title}>
                     <Link
-                      href={`/${item.slug}?id=${item.id}`}
+                      href={`/category/${item.slug}?id=${item.id}`}
                       className='block text-gray-700 dark:text-gray-300 hover:text-red-500 dark:hover:text-red-500 transition-colors duration-200'
                     >
                       {item.title}
@@ -164,7 +164,7 @@ const NavItems = ({
                 {menuData.slice(39, 43).map((item) => (
                   <li key={item.title}>
                     <Link
-                      href={`/${item.slug}?id=${item.id}`}
+                      href={`/category/${item.slug}?id=${item.id}`}
                       className='block text-gray-700 dark:text-gray-300 hover:text-red-500 dark:hover:text-red-500 transition-colors duration-200'
                     >
                       {item.title}
