@@ -14,7 +14,7 @@ const geoUrl = "/bangladesh_geojson_adm2_64_districts_zillas.json";
 
 const divisionColors: Record<string, string> = {
   "Dhaka": "#f44336",
-  "Chattogram": "#3ac993", // Correct color for Chattogram
+  "Chattogram": "#3ac993",
   "Khulna": "#ff9800",
   "Rajshahi": "#009688",
   "Barisal": "#00bcd4",
@@ -25,7 +25,7 @@ const divisionColors: Record<string, string> = {
 
 const divisions = [
   { id: "BDC", bengali: "ঢাকা", color: "#f44336" },
-  { id: "BCH", bengali: "চট্টগ্রাম", color: "#3ac993" }, // Matching color
+  { id: "BCH", bengali: "চট্টগ্রাম", color: "#3ac993" },
   { id: "BKH", bengali: "খুলনা", color: "#ff9800" },
   { id: "BRJ", bengali: "রাজশাহী", color: "#009688" },
   { id: "BBR", bengali: "বরিশাল", color: "#00bcd4" },
@@ -91,85 +91,85 @@ const DropdownForm = () => {
 
   return (
     <div className="max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6">
-      <div className="text-center  mb-3">
+      <div className="text-center mb-3">
         <h1 className="text-2xl font-bold text-gray-800">জেলার খবর</h1>
       </div>
-<div className="grid ml-[215px] justify-center items-center w-[65%] grid-cols-1 md:grid-cols-4 gap-4 mb-6">
-  {/* Division Dropdown */}
-  <div className="relative">
-    <select
-      id="division"
-      className="w-full p-3 pr-10 border border-gray-300 rounded-lg bg-white text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 appearance-none"
-      value={selectedDivision}
-      onChange={handleDivisionChange}
-    >
-      <option value="">বিভাগ</option>
-      {divisionData?.data?.map((division: any) => (
-        <option key={division.id} value={division.id}>{division.bn_name}</option>
-      ))}
-    </select>
-    <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
-      <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-      </svg>
-    </div>
-  </div>
+      <div className="grid ml-[215px] justify-center items-center w-[65%] grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+        {/* Division Dropdown */}
+        <div className="relative">
+          <select
+            id="division"
+            className="w-full p-3 pr-10 border border-gray-300 rounded-lg bg-white text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 appearance-none"
+            value={selectedDivision}
+            onChange={handleDivisionChange}
+          >
+            <option value="">বিভাগ</option>
+            {divisionData?.data?.map((division: any) => (
+              <option key={division.id} value={division.id}>{division.bn_name}</option>
+            ))}
+          </select>
+          <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+            <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+            </svg>
+          </div>
+        </div>
 
-  {/* District Dropdown */}
-  <div className="relative">
-    <select
-      id="district"
-      className="w-full p-3 pr-10 border border-gray-300 rounded-lg bg-white text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 appearance-none disabled:opacity-50"
-      value={selectedDistrict}
-      onChange={handleDistrictChange}
-      disabled={!selectedDivision}
-    >
-      <option value="">জেলা</option>
-      {districtData?.data?.map((district: any) => (
-        <option key={district.id} value={district.id}>{district.bn_name}</option>
-      ))}
-    </select>
-    <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
-      <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-      </svg>
-    </div>
-  </div>
+        {/* District Dropdown */}
+        <div className="relative">
+          <select
+            id="district"
+            className="w-full p-3 pr-10 border border-gray-300 rounded-lg bg-white text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 appearance-none disabled:opacity-50"
+            value={selectedDistrict}
+            onChange={handleDistrictChange}
+            disabled={!selectedDivision}
+          >
+            <option value="">জেলা</option>
+            {districtData?.data?.map((district: any) => (
+              <option key={district.id} value={district.id}>{district.bn_name}</option>
+            ))}
+          </select>
+          <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+            <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+            </svg>
+          </div>
+        </div>
 
-  {/* Upazilla Dropdown */}
-  <div className="relative">
-    <select
-      id="upazilla"
-      className="w-full p-3 pr-10 border border-gray-300 rounded-lg bg-white text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 appearance-none disabled:opacity-50"
-      value={selectedUpazilla}
-      onChange={handleUpazillaChange}
-      disabled={!selectedDistrict}
-    >
-      <option value="">উপজেলা</option>
-      {upazillaData?.data?.map((upazilla: any) => (
-        <option key={upazilla.id} value={upazilla.id}>{upazilla.bn_name}</option>
-      ))}
-    </select>
-    <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
-      <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-      </svg>
-    </div>
-  </div>
+        {/* Upazilla Dropdown */}
+        <div className="relative">
+          <select
+            id="upazilla"
+            className="w-full p-3 pr-10 border border-gray-300 rounded-lg bg-white text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 appearance-none disabled:opacity-50"
+            value={selectedUpazilla}
+            onChange={handleUpazillaChange}
+            disabled={!selectedDistrict}
+          >
+            <option value="">উপজেলা</option>
+            {upazillaData?.data?.map((upazilla: any) => (
+              <option key={upazilla.id} value={upazilla.id}>{upazilla.bn_name}</option>
+            ))}
+          </select>
+          <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+            <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+            </svg>
+          </div>
+        </div>
 
-  {/* Search Button */}
-  <div className="flex items-end">
-    <button
-      onClick={handleSearch}
-      disabled={!selectedDivision && !selectedDistrict && !selectedUpazilla}
-      className={`w-full flex items-center justify-center p-3 rounded-lg text-white transition-colors ${
-        (!selectedDivision && !selectedDistrict && !selectedUpazilla) ? 'bg-gray-400 cursor-not-allowed' : 'bg-blue-600 hover:bg-blue-700'
-      }`}
-    >
-      <IoIosSearch className="mr-2 text-lg" /> খুঁজুন
-    </button>
-  </div>
-</div>
+        {/* Search Button */}
+        <div className="flex items-end">
+          <button
+            onClick={handleSearch}
+            disabled={!selectedDivision && !selectedDistrict && !selectedUpazilla}
+            className={`w-full flex items-center justify-center p-3 rounded-lg text-white transition-colors ${
+              (!selectedDivision && !selectedDistrict && !selectedUpazilla) ? 'bg-gray-400 cursor-not-allowed' : 'bg-blue-600 hover:bg-blue-700'
+            }`}
+          >
+            <IoIosSearch className="mr-2 text-lg" /> খুঁজুন
+          </button>
+        </div>
+      </div>
 
       <div className="flex flex-col lg:flex-row gap-8">
         <div className="w-full lg:w-[100%] rounded-lg">
@@ -186,12 +186,12 @@ const DropdownForm = () => {
               }}
             >
               <Geographies geography={geoUrl}>
-                {({ geographies }) => 
+                {({ geographies }) =>
                   geographies.map((geo) => {
-                    const districtName = geo.properties.NAME_2;
+                    const districtName ="Dhaka";
                     const divisionName = geo.properties.ADM1_EN;
                     const fillColor = divisionColors[divisionName] || "#ccc";
-
+                    
                     return (
                       <Geography
                         key={geo.rsmKey}
