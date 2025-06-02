@@ -37,8 +37,8 @@ const homeApi = baseApi.injectEndpoints({
       },
       providesTags: ["topHomeData"],
     }),
-    // New endpoint for 500 posts
-    getAllPosts: builder.query({
+    // New endpoint for 500 video posts
+    getAllVideos: builder.query({
       query: () => ({
         url: `/post?limit=500`,
         method: "GET",
@@ -52,5 +52,5 @@ const homeApi = baseApi.injectEndpoints({
   }),
 });
 
-export const { useGetMultipleCategoryDataQuery, useGetTopHomeDataQuery, useGetAllPostsQuery } =
+export const { useGetMultipleCategoryDataQuery, useGetTopHomeDataQuery, useGetAllVideosQuery } =
   homeApi;

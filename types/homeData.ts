@@ -17,6 +17,7 @@ export interface HomeNews {
   updateContentAt: string;
   updatedAt: string;
   category: Category;
+  url: string;
 }
 export interface Category {
   id: string;

@@ -2,7 +2,7 @@
 
 import TopBreakingNews from "@/components/common/breaking-news/top-breaking-news";
 import HomePageSkeleton from "@/components/skeleton/HomePageSkeleton";
-import { useGetAllPostsQuery, useGetMultipleCategoryDataQuery, useGetTopHomeDataQuery } from "@/redux/features/home-data/homeApi";
+import {  useGetAllVideosQuery, useGetMultipleCategoryDataQuery, useGetTopHomeDataQuery } from "@/redux/features/home-data/homeApi";
 import { usePathname } from "next/navigation";
 import { Fragment } from "react";
 import config from "../../../config";
@@ -91,7 +91,7 @@ const HomeMain = () => {
     data: videos,
     isLoading: isVideosLoading,
     error: videosError,
-  } = useGetAllPostsQuery({
+  } = useGetAllVideosQuery({
   });
   
   // Define category IDs from environment variables
@@ -163,11 +163,13 @@ const HomeMain = () => {
             serial_number: 0,
             serial_update_at: "",
             news: topHomeData?.data.flat() ?? [],
+            
           }}
           sideData={{
             opinion: mergedResult[config.allCategories.opinion_id] ?? [],
           }}
           ads={dummyAds}
+          videos={(videos?.data ?? []).map((v) => v.url )}
         />
       )}
       {/* News With Latest: National */}
@@ -253,7 +255,7 @@ const HomeMain = () => {
 
       {/* videos section */}
       <Video
-        videos={videos?.data.map((v) => v.url || v.file?.originalUrl) || []}
+        videos={(videos?.data ?? []).map((v) => v.url )}
         slug='video'
         category_name='ভিডিও'
       />

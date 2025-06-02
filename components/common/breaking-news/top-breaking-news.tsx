@@ -6,8 +6,9 @@ import Image from "next/image";
 import Link from "next/link";
 import { useState, useMemo, useEffect } from "react";
 
-const MARQUEE_ITEM_DURATION_SECONDS = 20;
-const BREAKING_NEWS_TITLE = "ব্রেকিং";
+const MARQUEE_ITEM_DURATION_SECONDS = 15;
+const BREAKING_NEWS_TITLE = "এই মাত্র পাওয়া";
+const HIDE_DURATION_MS = 2 * 60 * 1000; 
 
 interface NewsItem {
   id: string | number;
@@ -37,16 +38,44 @@ const TopBreakingNews: React.FC = () => {
     // refetchOnMountOrArgChange: true,
   });
 
-
   const [isMarqueeHidden, setIsMarqueeHidden] = useState(() => {
     if (typeof window !== "undefined") {
-      return sessionStorage.getItem("isMarqueeHidden") === "true";
+      const storedValue = sessionStorage.getItem("isMarqueeHidden");
+      const hideUntil = sessionStorage.getItem("hideUntil");
+      if (storedValue === "true" && hideUntil) {
+        const now = Date.now();
+        if (now < parseInt(hideUntil, 10)) {
+          return true; // Keep hidden if within 5-minute window
+        } else {
+          // Clear storage if time has passed
+          sessionStorage.removeItem("isMarqueeHidden");
+          sessionStorage.removeItem("hideUntil");
+          return false;
+        }
+      }
+      return storedValue === "true";
     }
     return false;
   });
 
   useEffect(() => {
-    sessionStorage.setItem("isMarqueeHidden", isMarqueeHidden.toString());
+    if (isMarqueeHidden) {
+      const hideUntil = Date.now() + HIDE_DURATION_MS;
+      sessionStorage.setItem("isMarqueeHidden", "true");
+      sessionStorage.setItem("hideUntil", hideUntil.toString());
+      // Set a timeout to re-enable the marquee after 5 minutes
+      const timer = setTimeout(() => {
+        setIsMarqueeHidden(false);
+        sessionStorage.removeItem("isMarqueeHidden");
+        sessionStorage.removeItem("hideUntil");
+      }, HIDE_DURATION_MS);
+
+      // Cleanup timer on unmount or state change
+      return () => clearTimeout(timer);
+    } else {
+      sessionStorage.setItem("isMarqueeHidden", "false");
+      sessionStorage.removeItem("hideUntil");
+    }
   }, [isMarqueeHidden]);
 
   const topBreakingNews = useMemo(() => {
@@ -63,10 +92,10 @@ const TopBreakingNews: React.FC = () => {
   }, [breakingNewsApiResponse]);
 
   if (isLoading) {
-    return null; 
+    return null;
   }
   if (error || topBreakingNews.length === 0) {
-    return null; 
+    return null;
   }
 
   if (isMarqueeHidden) {
@@ -94,6 +123,7 @@ const TopBreakingNews: React.FC = () => {
     }, // Spacer
     ...topBreakingNews,
   ];
+
   return (
     <section
       aria-label='Top Breaking News Marquee'
@@ -101,7 +131,7 @@ const TopBreakingNews: React.FC = () => {
     >
       <div className='container mx-auto px-2 sm:px-4'>
         <div className='flex justify-between items-center bg-gray-100 dark:bg-gray-800 shadow-lg relative rounded overflow-hidden'>
-          <div className='flex justify-center items-center py-2 px-3 sm:px-4 bg-red-700 dark:bg-red-800 text-white font-semibold whitespace-nowrap'>
+          <div className='flex justify-center items-center py-2 p-3 sm:px-4 bg-red-700 dark:bg-red-800 text-white font-semibold whitespace-nowrap'>
             <div className='flex justify-center items-center'>
               <span className='relative flex h-4 w-4 sm:h-5 sm:w-5'>
                 <span className='animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 dark:bg-red-500 opacity-75'></span>
@@ -113,7 +143,7 @@ const TopBreakingNews: React.FC = () => {
             </span>
           </div>
 
-                  <div className='flex-grow overflow-hidden'>
+          <div className='flex-grow overflow-hidden'>
             <div
               className='marquee whitespace-nowrap'
               style={{ animationDuration: `${marqueeDuration}s` }}
@@ -129,7 +159,7 @@ const TopBreakingNews: React.FC = () => {
                   <div
                     key={`spacer-${idx}`}
                     className='inline-flex mx-5 sm:mx-6 w-48 sm:w-64'
-                  /> 
+                  />
                 ) : (
                   <Link
                     key={`${item.id}-marquee-${idx}`}
@@ -161,7 +191,10 @@ const TopBreakingNews: React.FC = () => {
                       }
                       className='mr-2'
                     />
-                    {item.news.headline}
+                    <span className='text-[var(--text-primary)] hover:text-black sm:text-xl'>
+                      {" "}
+                      {item.news.headline}
+                    </span>
                   </Link>
                 ),
               )}
@@ -198,7 +231,7 @@ const TopBreakingNews: React.FC = () => {
           will-change: transform;
           animation: marquee linear infinite;
           min-width: 200%;
-          padding-right: 2rem; 
+          padding-right: 2rem;
         }
 
         @keyframes marquee {
@@ -206,7 +239,7 @@ const TopBreakingNews: React.FC = () => {
             transform: translateX(0%);
           }
           to {
-            transform: translateX(-50%); 
+            transform: translateX(-50%);
           }
         }
         @media (max-width: 640px) {

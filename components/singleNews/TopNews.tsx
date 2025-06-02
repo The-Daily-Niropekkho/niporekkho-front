@@ -34,11 +34,14 @@ function NewsList({ posts }: { posts: NewsProps[] }) {
                   post.encode_titl || post.news_id
                 }`}
               >
-                <span className='number-circle inline-flex items-center justify-center size-6 lg:size-10 rounded-full bg-[#A90303] text-white font-bold text-sm lg:text-4xl'>
-                  {`${index + 1}`.replace(
-                    /\d/g,
-                    (d: string) => "০১২৩৪৫৬৭৮৯"[parseInt(d, 10)],
-                  )}
+                <span className='number-circle inline-flex items-center justify-center size-6 lg:size-6 rounded-full bg-[#fff] text-white font-bold text-sm lg:text-2xl'>
+                 <Image
+                   alt={`Video ${index + 1}`}
+                   src={`/images/ni_logo1.png`}
+                   width={25}
+                   height={25}
+                   className='rounded-full'
+                 />
                 </span>
                 <div className='flex-1'>
                   <div className='md:hidden ml-2 md:ml-0 lg:ml-2 mb-2 overflow-hidden float-right relative'>

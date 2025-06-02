@@ -1,12 +1,12 @@
 "use client";
 
+import VideoIcon from "@/public/icons/VideoIcon";
+import { ICategory } from "@/types/news";
 import TimeBefore from "@/ui/TimeBefore";
+import fileObjectToLink from "@/utils/fileObjectToLink";
 import Image from "next/image";
 import Link from "next/link";
 import SideCategoryNews from "../sideCategoryNews/SideCategoryNews";
-import VideoIcon from "@/public/icons/VideoIcon";
-import { ICategory, INews } from "@/types/news";
-import fileObjectToLink from "@/utils/fileObjectToLink";
 
 interface NewsWithLatestTwoProps {
   dataOne: ICategory;
@@ -63,7 +63,7 @@ const NewsWithLatestTwo = ({ dataOne, dataTwo }: NewsWithLatestTwoProps) => {
                     <div className='w-full md:w-1/2'>
                       <h3 className='text-2xl left-9 mx-4 md:mx-0 text-[var(--dark)] mt-2 md:mt-0 lg:mt-2 mb-0 md:mb-2 dark:text-white group-hover:text-[var(--text-primary)] font-semibold'>
                         {item.short_headline && (
-                          <span className='text-blue-800'>
+                          <span className='text-[var(--text-primary)]'>
                             {item.short_headline} /{" "}
                           </span>
                         )}
@@ -113,7 +113,7 @@ const NewsWithLatestTwo = ({ dataOne, dataTwo }: NewsWithLatestTwoProps) => {
                     </div>
                     <h3 className='mt-0 md:mt-2 text-lg text-[var(--dark)] group-hover:text-[var(--text-primary)] dark:text-white font-bold line-clamp-1'>
                       {item.short_headline && (
-                        <span className='text-blue-800'>
+                        <span className='text-[var(--text-primary)]'>
                           {item.short_headline} /{" "}
                         </span>
                       )}

@@ -1,7 +1,7 @@
 import AddCard from "@/components/common/addCard/AddCard";
-import VideoIcon from "@/public/icons/VideoIcon";
+import VideoEmbed from "@/components/VideoEmbed";
 import { HomeData } from "@/types/homeData";
-import { Ads, ICategory, SideData, OpinionItem } from "@/types/news";
+import { Ads, SideData } from "@/types/news";
 import TimeBefore from "@/ui/TimeBefore";
 import fileObjectToLink from "@/utils/fileObjectToLink";
 import Image from "next/image";
@@ -12,13 +12,19 @@ interface TopNewsProps {
   data: HomeData;
   sideData?: SideData;
   ads?: Ads;
+  videos: string[];
 }
 
-const TopNews = ({ data, ads, sideData }: TopNewsProps) => {
+const TopNews = ({ data, ads, sideData, videos }: TopNewsProps) => {
   // Extract opinion data from sideData
   const { opinion = [] } = sideData || {};
-  // console.log(sideData, "TopNews Side Data");
-
+  console.log(videos, "TopNews Side Data");
+const mappedVideos = videos?.map((url, index) => ({
+    id: `video-${index}`,
+    title: `Video ${index + 1}`,
+    url: url,
+    thumbnail: "https://via.placeholder.com/320x180", // Placeholder thumbnail
+  })) || [];
   return (
     <section className='mt-5'>
       <div className='container px-4 mx-auto'>
@@ -77,7 +83,7 @@ const TopNews = ({ data, ads, sideData }: TopNewsProps) => {
                             <div className='py-3 dark:bg-gray-800 border-[var(--border-color)] dark:border-[var(--border-dark)]'>
                               <h1 className='text-xl md:text-2xl lg:text-3xl font-[600] text-[var(--dark)] dark:text-white mb-2 tracking-tight group-hover:text-[var(--text-primary)] cursor-pointer'>
                                 {item.short_headline && (
-                                  <span className='text-blue-800'>
+                                  <span className='text-[var(--text-primary)]'>
                                     {item.short_headline} /{" "}
                                   </span>
                                 )}
@@ -141,7 +147,7 @@ const TopNews = ({ data, ads, sideData }: TopNewsProps) => {
                                   >
                                     <h1 className='text-base lg:text-lg font-semibold text-[var(--dark)] dark:text-white group-hover:text-[var(--text-primary)] line-clamp-2'>
                                       {item.short_headline && (
-                                        <span className='text-blue-800'>
+                                        <span className='text-[var(--text-primary)]'>
                                           {item.short_headline} /{" "}
                                         </span>
                                       )}
@@ -231,7 +237,7 @@ const TopNews = ({ data, ads, sideData }: TopNewsProps) => {
                             <h2 className='text-lg text-[var(--dark)] dark:text-white font-semibold group-hover:text-[var(--text-primary)] cursor-pointer'>
                               <span className='line-clamp-2'>
                                 {item.short_headline && (
-                                  <span className='text-blue-800'>
+                                  <span className='text-[var(--text-primary)]'>
                                     {item.short_headline} /{" "}
                                   </span>
                                 )}
@@ -248,7 +254,7 @@ const TopNews = ({ data, ads, sideData }: TopNewsProps) => {
                             <h2 className='text-lg text-[var(--dark)] dark:text-white font-semibold group-hover:text-[var(--text-primary)] cursor-pointer'>
                               <span className='line-clamp-2'>
                                 {item.short_headline && (
-                                  <span className='text-blue-800'>
+                                  <span className='text-[var(--text-primary)]'>
                                     {item.short_headline} /{" "}
                                   </span>
                                 )}
@@ -276,7 +282,7 @@ const TopNews = ({ data, ads, sideData }: TopNewsProps) => {
             <div className='w-full flex items-center justify-center'>
               <div className={`${ads?.home_12 ? "" : "h-[250px]"}`}>
                 <AddCard
-                  imgPath={`<a target="_blank" href="${ads?.home_12?.link}"><img width="100%" src="${ads?.home_12?.url}" alt="Advertisement"></a>`}
+                  imgPath={`<a target="_blank" href="${ads?.home_12?.link}"><img width="100%" src="https://i.ibb.co/21cmbNXD/300-A250.jpg" alt="Advertisement"></a>`}
                 />
               </div>
             </div>
@@ -296,57 +302,55 @@ const TopNews = ({ data, ads, sideData }: TopNewsProps) => {
                     </Link>
                   </div>
                 </div>
-                {opinion.slice(0, 1)?.map((item) => (
-                  <div
+                {opinion.slice(0, 1)?.map((item, index) => (
+                  <Link
                     key={item.id}
-                    className="relative after:content-[''] after:absolute after:left-0 after:-bottom-1 after:h-[2px] after:w-full after:bg-[#eff2f0] after:border-[#eff2f0]"
+                    className={`flex gap-3 group relative border-b-item ${
+                      index === 0
+                        ? "after:content-[''] after:absolute after:left-0 after:-bottom-1 after:h-[2px] after:w-full after:bg-[#eff2f0] after:border-[#eff2f0]"
+                        : ""
+                    }`}
+                    href={`/${item.category?.slug || "opinion"}/${item.id}/${
+                      item.slug
+                    }`}
+                    scroll={false}
                   >
-                    <Link
-                      className='gap-3 group'
-                      href={`/${item.category?.slug || "opinion"}/${item.id}/${
-                        item.slug
-                      }`}
-                    >
-                      <div>
-                        <Image
-                          alt={item.headline || "Author Image"}
-                          width={100}
-                          height={100}
-                          decoding='async'
-                          className='w-24 md:w-36 lg:w-32 h-24 md:h-36 lg:h-32 object-cover'
-                          src={fileObjectToLink(
-                            typeof item.reporter?.writer?.profile_image ===
-                              "string"
-                              ? item.reporter?.writer?.profile_image
-                              : (item.reporter?.writer?.profile_image as any)
-                                  ?.url ||
-                                  (item.reporter?.writer?.profile_image as any)
-                                    ?.originalUrl ||
-                                  null,
-                          )}
-                          loading='lazy'
-                        />
-                      </div>
-                      <div>
-                        <p className='font-normal mt-2 text-green-600 hover:text-green-700 dark:text-gray-300 flex gap-2 items-center'>
-                          <FaRegPenToSquare />{" "}
-                          {item.reporter?.writer?.first_name}{" "}
-                          {item.reporter?.writer?.last_name || "লেখক"}
-                        </p>
-                        <h2 className='text-base text-[var(--dark)] dark:text-white line-clamp-2'>
-                          <span className='text-red-500 font-bold'>
-                            {item.category?.title || "অভিমত"} /{" "}
-                          </span>{" "}
-                          <span className='hover:font-bold'>
-                            {item.headline}
-                          </span>
-                        </h2>
-                      </div>
-                    </Link>
-                  </div>
+                    <div className='flex-shrink-0'>
+                      <Image
+                        alt={item.headline || "Author Image"}
+                        width={120}
+                        height={120}
+                        decoding='async'
+                        className='w-36 h-36 object-cover rounded-sm'
+                        src={fileObjectToLink(
+                          typeof item.reporter?.writer?.profile_image ===
+                            "string"
+                            ? item.reporter?.writer?.profile_image
+                            : (item.reporter?.writer?.profile_image as any)
+                                ?.url ||
+                                (item.reporter?.writer?.profile_image as any)
+                                  ?.originalUrl ||
+                                null,
+                        )}
+                        loading='lazy'
+                      />
+                    </div>
+                    <div className='flex-1 min-w-0'>
+                      <p className='font-normal text-green-600 hover:text-green-700 dark:text-gray-300 flex gap-2 items-center text-sm whitespace-nowrap'>
+                        <FaRegPenToSquare /> {item.reporter?.writer?.first_name}{" "}
+                        {item.reporter?.writer?.last_name || "লেখক"}
+                      </p>
+                      <h2 className='text-base text-[var(--dark)] dark:text-white  leading-tight'>
+                        <span className='text-red-600 font-bold'>
+                          {item.category?.title || "অভিমত"} /{" "}
+                        </span>{" "}
+                        <span className='hover:font-bold'>{item.headline}</span>
+                      </h2>
+                    </div>
+                  </Link>
                 ))}
                 <div className='mt-3 space-y-4'>
-                  {opinion.slice(1, 3)?.map((item, index) => (
+                  {opinion.slice(1, 2)?.map((item, index) => (
                     <Link
                       key={item.id}
                       className={`flex gap-3 group relative border-b-item ${
@@ -403,108 +407,31 @@ const TopNews = ({ data, ads, sideData }: TopNewsProps) => {
         </div>
 
         {/* Additional News Grid for Larger Screens */}
-        <div className='hidden lg:block'>
+        <div className=''>
           <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mt-6 relative after:bg-[var(--border-color)] after:absolute after:w-full after:h-[1px] after:right-0 after:left-0 after:-bottom-3 after:[&>*]:absolute after:[&>*]:bg-[var(--border-color)] after:[&>*]:w-full after:[&>*]:h-[1px] after:[&>*]:-bottom-3 after:[&>*]:left-0 md:after:[&>*]:w-[1px] md:after:[&>*]:h-full md:after:[&>*]:top-0 md:after:[&>*]:-left-3 md:after:[&>*:nth-child(3)]:w-0 md:after:[&>*:nth-child(4)]:w-0 md:after:[&>*:nth-child(6)]:w-0 md:after:first:[&>*]:w-0 lg:after:[&>*:nth-child(3)]:w-[1px] lg:after:[&>*:nth-child(4)]:w-[1px] lg:after:[&>*:nth-child(6)]:w-[1px] lg:after:[&>*:nth-child(5)]:w-0 dark:after:[&>*]:bg-[var(--border-dark)] md:before:[&>*]:absolute md:before:[&>*]:bg-[var(--border-color)] md:before:[&>*]:w-full md:before:[&>*]:h-[1px] md:before:[&>*]:-bottom-3 md:before:[&>*]:right-0 md:before:[&>*]:nth-child(4):h-0 lg:before:[&>*:nth-child(n+4)]:h-0 dark:before:[&>*]:bg-[var(--border-dark)] dark:after:bg-[var(--border-dark)]'>
-            {data?.news?.slice(7, 10)?.map((item, i) => {
-              const imageUrl = item.banner_image
-                ? fileObjectToLink(
-                    typeof item.banner_image === "string"
-                      ? item.banner_image
-                      : (item.banner_image as any)?.url ||
-                          (item.banner_image as any)?.originalUrl ||
-                          null,
-                  )
-                : "https://i.ibb.co/LdP2NKkp/Placeholder-Begrippenlijst.webp";
-              const newsSlug =
-                item.slug ||
-                item.headline?.replace(/%/g, "-").replace(/\s/g, "-") ||
-                `news-${item.id || i}`;
-              return (
-                <div key={item.id || `news-${i}`} className='relative'>
-                  <Link
-                    className='group'
-                    href={`/${item.category?.slug || "category"}/${
-                      item.id || i
-                    }/${newsSlug}`}
-                  >
-                    <div className='ml-2 md:ml-0 lg:ml-2 mb-2 overflow-hidden float-right relative'>
-                      <Image
-                        alt={item.headline || "News Image"}
-                        width={160}
-                        height={90}
-                        decoding='async'
-                        className='w-[124px] h-auto lg:w-[110px] lg:h-[75px] object-cover group-hover:scale-105 duration-700 ease-out'
-                        src={imageUrl}
-                        loading='lazy'
-                      />
-                    </div>
-                    <h3 className='text-lg text-[var(--dark)] dark:text-white font-bold group-hover:text-[var(--text-primary)] cursor-pointer line-clamp-3'>
-                      {item.short_headline && (
-                        <span className='text-blue-800'>
-                          {item.short_headline} /{" "}
-                        </span>
-                      )}
-                      {item.headline}
-                    </h3>
-                  </Link>
-                  <TimeBefore title={item.createdAt} />
+            {mappedVideos.slice(0, 3).map((video, i) => (
+              <div
+                key={video.id}
+                className='col-span-12 lg:col-span-1 relative after:bg-[var(--border-color)] after:absolute after:w-full after:h-[1px] after:-bottom-3 after:right-0 after:last:h-0 lg:after:w-[1px] lg:after:h-full lg:after:-right-3 lg:after:top-0 lg:after:last:w-0 dark:after:bg-[var(--border-dark)]'
+              >
+                <div className=''>
+                  <VideoEmbed videoUrl={video.url} width={100} />
                 </div>
-              );
-            })}
+              </div>
+            ))}
             <div className='hidden lg:block md:col-span-2 md:row-span-2 lg:col-span-1 md:order-1 lg:order-none relative'>
-              <div>
+              <div className='flex justify-center items-center h-full'>
                 <AddCard
-                  imgPath={`<a target="_blank" href="${ads?.home_13?.link}"><img width="100%" src="${ads?.home_13?.url}" alt="Advertisement"></a>`}
+                  imgPath={`<a target="_blank" href="${ads?.home_13?.link}"><img width="100%" src="https://i.ibb.co/0jVFr5PK/1280-720.jpg" alt="Advertisement"></a>`}
                 />
               </div>
             </div>
-            <div className='hidden'>
-              {data?.news?.slice(9, 12)?.map((item, i) => {
-                const imageUrl = item.banner_image
-                  ? fileObjectToLink(
-                      typeof item.banner_image === "string"
-                        ? item.banner_image
-                        : (item.banner_image as any)?.url ||
-                            (item.banner_image as any)?.originalUrl ||
-                            null,
-                    )
-                  : "https://i.ibb.co/LdP2NKkp/Placeholder-Begrippenlijst.webp";
-                const newsSlug =
-                  item.slug ||
-                  item.headline?.replace(/%/g, "-").replace(/\s/g, "-") ||
-                  `news-${item.id || i}`;
-                return (
-                  <div key={item.id || `news-${i}`} className='relative'>
-                    <Link
-                      className='group'
-                      href={`/${item.category?.slug || "category"}/${
-                        item.id || i
-                      }/${newsSlug}`}
-                    >
-                      <div className='ml-2 md:ml-0 lg:ml-2 mb-2 overflow-hidden float-right relative'>
-                        <Image
-                          alt={item.headline || "News Image"}
-                          width={160}
-                          height={90}
-                          decoding='async'
-                          className='w-[124px] h-auto lg:w-[110px] lg:h-[75px] object-cover group-hover:scale-105 duration-700 ease-out'
-                          src={imageUrl}
-                          loading='lazy'
-                        />
-                      </div>
-                      <h3 className='text-lg text-[var(--dark)] dark:text-white'>
-                        {item.short_headline && (
-                          <span className='text-blue-800'>
-                            {item.short_headline} /{" "}
-                          </span>
-                        )}
-                        {item.headline}
-                      </h3>
-                    </Link>
-                    <TimeBefore title={item.createdAt} clss='ml-4 md:ml-0' />
-                  </div>
-                );
-              })}
+          </div>
+          <div className='lg:hidden block md:col-span-2 md:row-span-2 lg:col-span-1 md:order-1 lg:order-none relative'>
+            <div className='flex justify-center items-center h-full'>
+              <AddCard
+                imgPath={`<a target="_blank" href="${ads?.home_13?.link}"><img width="100%" src="https://i.ibb.co/0jVFr5PK/1280-720.jpg" alt="Advertisement"></a>`}
+              />
             </div>
           </div>
         </div>

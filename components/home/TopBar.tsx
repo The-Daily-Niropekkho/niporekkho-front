@@ -214,14 +214,14 @@ const TopBar = () => {
       key: "epaper",
       icon: faNewspaper,
       href: "https://epaper.dailyniropekkho.com/",
-      hover: "bg-[#f0f0f0] text-red-500 hover:text-black",
+      hover: "bg-[#f0f0f0] text-[#a40e0f] hover:text-black",
     },
     {
       label: currentLanguage === "bn" ? "English" : "বাংলা",
       key: "language",
       icon: null,
       href: "#",
-      hover: "bg-[#f0f0f0] text-red-500 hover:text-black",
+      hover: "bg-[#f0f0f0] text-[#a40e0f] hover:text-black",
       className: "notranslate",
     },
   ];
