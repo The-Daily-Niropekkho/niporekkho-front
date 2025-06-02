@@ -30,6 +30,7 @@ export type TResponse<T> = {
 };
 
 export type TResponseRedux<T> = TResponse<T> & BaseQueryApi;
+export type TArgsParam = Record<string, any>
 
 export type TQueryParam = {
     name: string;

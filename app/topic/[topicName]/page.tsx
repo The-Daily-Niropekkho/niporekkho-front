@@ -9,6 +9,8 @@ import { FaFacebookF, FaTwitter, FaWhatsapp, FaInstagram, FaArrowUp, FaSearch } 
 import date_output_bn from "@/utils/datetime";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css"; // Import Skeleton CSS
+//import TopNews from "@/components/singleNews/TopNews";
+import TopNewsForNewsDetails from "@/components/singleNews/top-news-for-news-details";
 
 function Page() {
   const [showScroll, setShowScroll] = useState(false);
@@ -181,36 +183,7 @@ function Page() {
       </div>
 
       {/* Social Media Icons */}
-      <div className="flex justify-center gap-4 mb-8">
-        <a
-          href="#"
-          className="w-10 h-10 bg-blue-600 text-white flex items-center justify-center rounded-full hover:bg-blue-700 transition-colors"
-          aria-label="Facebook"
-        >
-          <FaFacebookF size={18} />
-        </a>
-        <a
-          href="#"
-          className="w-10 h-10 bg-blue-400 text-white flex items-center justify-center rounded-full hover:bg-blue-500 transition-colors"
-          aria-label="Twitter"
-        >
-          <FaTwitter size={18} />
-        </a>
-        <a
-          href="#"
-          className="w-10 h-10 bg-green-500 text-white flex items-center justify-center rounded-full hover:bg-green-600 transition-colors"
-          aria-label="WhatsApp"
-        >
-          <FaWhatsapp size={18} />
-        </a>
-        <a
-          href="#"
-          className="w-10 h-10 bg-pink-500 text-white flex items-center justify-center rounded-full hover:bg-pink-600 transition-colors"
-          aria-label="Instagram"
-        >
-          <FaInstagram size={18} />
-        </a>
-      </div>
+     
 
       {/* Main Content Grid */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -221,7 +194,7 @@ function Page() {
               <div
                 key={news.id}
                 className="flex flex-col md:flex-row gap-5 pb-4 border-b border-gray-200 dark:border-gray-700 cursor-pointer"
-                onClick={() => router.push(`/${news.slug}/${news.id}`)} // Navigate to news details
+                onClick={() => router.push(`/${news.category}/${news.id}/${news.slug}`)} // Navigate to news details
               >
                 {/* Image */}
                 <div className="flex-shrink-0 w-full md:w-80">
@@ -261,17 +234,8 @@ function Page() {
               src: "https://tpc.googlesyndication.com/simgad/3745460761502011018",
               alt: "Advertisement 1",
               title: "আপনার বিজ্ঞাপন এখানে",
-            },
-            {
-              src: "https://tpc.googlesyndication.com/simgad/15462104757940701746",
-              alt: "Advertisement 2",
-              title: "আপনার বিজ্ঞাপন এখানে",
-            },
-            {
-              src: "https://tpc.googlesyndication.com/simgad/17108746503489790551",
-              alt: "Advertisement 3",
-              title: "আপনার বিজ্ঞাপন এখানে",
-            },
+            }
+            
           ].map((ad, index) => (
             <div
               key={index}
@@ -288,6 +252,12 @@ function Page() {
               </div>
             </div>
           ))}
+
+
+
+          <div>
+            <TopNewsForNewsDetails count={5} />
+        </div>
         </div>
       </div>
 

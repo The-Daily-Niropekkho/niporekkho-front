@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { FaChevronDown } from "react-icons/fa";
 import { useState, useEffect } from "react";
 
 interface Category {
@@ -26,7 +27,6 @@ interface NavItemsProps {
   setActiveMenu: (menu: string) => void;
   className?: string;
 }
-
 const NavItems = ({
   data,
   isLoading,
@@ -35,6 +35,7 @@ const NavItems = ({
   setActiveMenu,
   className,
 }: NavItemsProps) => {
+  // keep menuData in sync with incoming data
   const [menuData, setMenuData] = useState<Category[]>([]);
 
   useEffect(() => {
@@ -62,158 +63,115 @@ const NavItems = ({
   }
 
   return (
-    <>
-      <ul className='lg:flex items-center gap-5 hidden'>
-        {menuData.slice(0, 12).map((item) => (
-          <li key={item.title}>
-            <Link
-              href={`/category/${item.slug}?id=${item.id}`}
-              className={`whitespace-nowrap py-[11px] px-3 text-md text-[var(--dark)] dark:text-white hover:text-red-500 capitalize border-r-2 ${className}`}
-            >
-              {item.title}
-            </Link>
-          </li>
-        ))}
-        <li className='group relative text-black dark:text-white'>
-          <div className='flex items-center gap-1 py-[11px] px-5 text-md text-[var(--dark)] dark:text-white hover:text-red-500 capitalize border-r-2'>
-            <p className={`flex items-center gap-2 ${className}`}>
-              অন্যান্য
-              <span className='scroll-arrow'>
-                <span className='arrow'></span>
-                <span className='arrow'></span>
-              </span>
-            </p>
-          </div>
-
-          {/* Mega Menu */}
-          <div
-            className='absolute left-0 z-50 w-screen bg-white dark:bg-gray-900 shadow-lg border border-gray-200 dark:border-gray-700 rounded-b-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 transform -translate-y-2 group-hover:translate-y-0'
-            style={{
-              width: "100vw",
-              left: "80%",
-              transform: "translateX(-90%)",
-              maxWidth: "1200px",
-            }}
+    <ul className='lg:flex items-center gap- hidden'>
+      {menuData.slice(0, 12).map((item) => (
+        <li key={item.title} className='relative group'>
+          <Link
+            href={`/${item.slug}?id=${item.id}`}
+            className={`whitespace-nowrap py-[11px] px-3 text-md text-[var(--dark)] dark:text-white hover:text-red-500 capitalize border-r-2 ${className}`}
           >
-            <div className='grid grid-cols-4 gap-10 p-6 md:p-6'>
-              {/* Column 1 */}
-              <div>
-                <ul className='space-y-2'>
-                  {menuData.slice(12, 17).map((item) => (
-                    <li key={item.title}>
-                      <Link
-                        href={`/category/${item.slug}?id=${item.id}`}
-                        className='block text-gray-700 dark:text-gray-300 hover:text-red-500 dark:hover:text-red-500 transition-colors duration-200'
-                      >
-                        {item.title}
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              </div>
+            {item.title}
+          </Link>
+          {item.slug === "countryroaming" && (
+            <ul className='absolute left-0 top-full hidden group-hover:block bg-white dark:bg-gray-800 shadow-lg border border-gray-200 dark:border-gray-700 z-10 w-48'>
+              <li>
+                <Link
+                  href='/districtnews'
+                  className='block px-4 py-2 text-md text-[var(--dark)] dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-red-500'
+                >
+                  জেলার খবর
+                </Link>
+              </li>
+            </ul>
+          )}
+        </li>
+      ))}
+      <li className='group relative text-black dark:text-white'>
+        <div className='flex items-center gap-1 py-[11px] px-5 text-md text-[var(--dark)] dark:text-white hover:text-red-500 capitalize border-r-2'>
+          <p className={`flex items-center gap-1 ${className}`}>
+            অন্যান্য
+            <FaChevronDown className='group-hover:rotate-180 transition-transform duration-200' />
+          </p>
+        </div>
 
-              {/* Column 2 */}
-              <div>
-                <ul className='space-y-2'>
-                  {menuData.slice(17, 21).map((item) => (
-                    <li key={item.title}>
-                      <Link
-                        href={`/category/${item.slug}?id=${item.id}`}
-                        className='block text-gray-700 dark:text-gray-300 hover:text-red-500 dark:hover:text-red-500 transition-colors duration-200'
-                      >
-                        {item.title}
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              </div>
+        {/* Mega Menu */}
+        <div
+          className='absolute left-0 z-50 w-screen bg-white dark:bg-gray-900 shadow-lg border border-gray-200 dark:border-gray-700 rounded-b-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 transform -translate-y-2 group-hover:translate-y-0'
+          style={{
+            width: "100vw",
+            left: "80%",
+            transform: "translateX(-90%)",
+            maxWidth: "1200px",
+          }}
+        >
+          <div className='grid grid-cols-4 gap-10 p-6 md:p-6'>
+            {/* Column 1 */}
+            <div>
+              <ul className='space-y-2'>
+                {menuData.slice(12, 17).map((item) => (
+                  <li key={item.title}>
+                    <Link
+                      href={`/${item.slug}?id=${item.id}`}
+                      className='block text-gray-700 dark:text-gray-300 hover:text-red-500 dark:hover:text-red-500 transition-colors duration-200'
+                    >
+                      {item.title}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
 
-              {/* Column 3 */}
-              <div>
-                <ul className='space-y-2'>
-                  {menuData.slice(21, 25).map((item) => (
-                    <li key={item.title}>
-                      <Link
-                        href={`/category/${item.slug}?id=${item.id}`}
-                        className='block text-gray-700 dark:text-gray-300 hover:text-red-500 dark:hover:text-red-500 transition-colors duration-200'
-                      >
-                        {item.title}
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              </div>
+            {/* Column 2 */}
+            <div>
+              <ul className='space-y-2'>
+                {menuData.slice(17, 21).map((item) => (
+                  <li key={item.title}>
+                    <Link
+                      href={`/${item.slug}?id=${item.id}`}
+                      className='block text-gray-700 dark:text-gray-300 hover:text-red-500 dark:hover:text-red-500 transition-colors duration-200'
+                    >
+                      {item.title}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
 
-              {/* Column 4 */}
-              <div>
-                <ul className='space-y-2'>
-                  {menuData.slice(25, 29).map((item) => (
-                    <li key={item.title}>
-                      <Link
-                        href={`/category/${item.slug}?id=${item.id}`}
-                        className='block text-gray-700 dark:text-gray-300 hover:text-red-500 dark:hover:text-red-500 transition-colors duration-200'
-                      >
-                        {item.title}
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              </div>
+            {/* Column 3 */}
+            <div>
+              <ul className='space-y-2'>
+                {menuData.slice(21, 25).map((item) => (
+                  <li key={item.title}>
+                    <Link
+                      href={`/${item.slug}?id=${item.id}`}
+                      className='block text-gray-700 dark:text-gray-300 hover:text-red-500 dark:hover:text-red-500 transition-colors duration-200'
+                    >
+                      {item.title}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            {/* Column 4 */}
+            <div>
+              <ul className='space-y-2'>
+                {menuData.slice(25, 29).map((item) => (
+                  <li key={item.title}>
+                    <Link
+                      href={`/${item.slug}?id=${item.id}`}
+                      className='block text-gray-700 dark:text-gray-300 hover:text-red-500 dark:hover:text-red-500 transition-colors duration-200'
+                    >
+                      {item.title}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
             </div>
           </div>
-        </li>
-      </ul>
-
-      <style jsx>{`
-        .scroll-arrow {
-          display: inline-flex;
-          flex-direction: column;
-          align-items: center;
-          width: 16px;
-          height: 24px;
-          margin-left: 4px;
-          animation: bounce 1.5s infinite ease-in-out;
-        }
-
-        .scroll-arrow .arrow {
-          width: 12px;
-          height: 12px;
-          border-right: 3px solid #bebebe;
-          border-bottom: 3px solid #bebebe;
-          transform: rotate(45deg);
-          animation: fade 1.5s infinite ease-in-out;
-        }
-
-        .scroll-arrow .arrow:last-child {
-          margin-top: -6px;
-          animation-direction: reverse;
-        }
-
-        @keyframes fade {
-          0% {
-            opacity: 0;
-          }
-          50% {
-            opacity: 1;
-          }
-          100% {
-            opacity: 0;
-          }
-        }
-
-        @keyframes bounce {
-          0% {
-            transform: translateY(0);
-          }
-          50% {
-            transform: translateY(6px);
-          }
-          100% {
-            transform: translateY(0);
-          }
-        }
-      `}</style>
-    </>
+        </div>
+      </li>
+    </ul>
   );
 };
 
