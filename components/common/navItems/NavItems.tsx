@@ -66,15 +66,27 @@ const NavItems = ({
   return (
     <ul className='lg:flex items-center gap- hidden'>
       {menuData.slice(0, 12).map((item) => (
-        <li key={item.title}>
+  <li key={item.title} className="relative group">
+    <Link
+      href={`/${item.slug}?id=${item.id}`}
+      className={`whitespace-nowrap py-[11px] px-3 text-md text-[var(--dark)] dark:text-white hover:text-red-500 capitalize border-r-2 ${className}`}
+    >
+      {item.title}
+    </Link>
+    {item.slug === "countryroaming" && (
+      <ul className="absolute left-0 top-full hidden group-hover:block bg-white dark:bg-gray-800 shadow-lg border border-gray-200 dark:border-gray-700 z-10 w-48">
+        <li>
           <Link
-            href={`/${item.slug}?id=${item.id}`}
-            className={`whitespace-nowrap py-[11px] px-3 text-md text-[var(--dark)] dark:text-white hover:text-red-500 capitalize border-r-2 ${className}`}
+            href="/districtnews"
+            className="block px-4 py-2 text-md text-[var(--dark)] dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-red-500"
           >
-            {item.title}
+            জেলার খবর
           </Link>
         </li>
-      ))}
+      </ul>
+    )}
+  </li>
+))}
       <li className='group relative text-black dark:text-white'>
         <div className='flex items-center gap-1 py-[11px] px-5 text-md text-[var(--dark)] dark:text-white hover:text-red-500 capitalize border-r-2'>
           <p className={`flex items-center gap-1 ${className}`}>
@@ -158,21 +170,7 @@ const NavItems = ({
               </ul>
             </div>
 
-            {/* Column 5
-            <div>
-              <ul className='space-y-2'>
-                {menuData.slice(39, 43).map((item) => (
-                  <li key={item.title}>
-                    <Link
-                      href={`/${item.slug}?id=${item.id}`}
-                      className='block text-gray-700 dark:text-gray-300 hover:text-red-500 dark:hover:text-red-500 transition-colors duration-200'
-                    >
-                      {item.title}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </div> */}
+            
           </div>
         </div>
       </li>
