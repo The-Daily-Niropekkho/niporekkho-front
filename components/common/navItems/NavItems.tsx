@@ -78,21 +78,10 @@ const NavItems = ({
           <div className='flex items-center gap-1 py-[11px] px-5 text-md text-[var(--dark)] dark:text-white hover:text-red-500 capitalize border-r-2'>
             <p className={`flex items-center gap-2 ${className}`}>
               অন্যান্য
-              <div
-                className='scroll-prompt'
-                scroll-prompt=''
-                ng-show='showPrompt'
-                style='opacity: 1;'
-              >
-                <div className='scroll-prompt-arrow-container'>
-                  <div className='scroll-prompt-arrow'>
-                    <div></div>
-                  </div>
-                  <div className='scroll-prompt-arrow'>
-                    <div></div>
-                  </div>
-                </div>
-              </div>
+              <span className='scroll-arrow'>
+                <span className='arrow'></span>
+                <span className='arrow'></span>
+              </span>
             </p>
           </div>
 
