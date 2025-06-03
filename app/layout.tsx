@@ -68,13 +68,10 @@ export default function RootLayout({
             <ScrollPreserver />
             <WebSettingProvider>
               <TopBar />
-
               <NavBar />
               {/* <BreakingNews /> */}
               {children}
-
               <Footer />
-
               {/* <ScrollToTop /> */}
               <DynamicFavicon />
               <BreakingNewsMarquee />
