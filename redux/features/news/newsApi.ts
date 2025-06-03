@@ -77,13 +77,6 @@ const newsApi = baseApi.injectEndpoints({
         if (upazilla_id) params.append("upazilla_id", upazilla_id);
         if (limit) params.append("limit", limit.toString());
 
-    searchNews: builder.query({
-      query: ({ keyword, offset }: { keyword: string; offset: number }) => {
-        const limit = 500; 
-        const url = `/news?searchTerm=${encodeURIComponent(
-          keyword.replace(/%20/g, " "),
-        )}&limit=${limit}&offset=${offset}`;
-        console.log("Constructed URL:", url);
         return {
           url: `/news?${params.toString()}`,
           method: "GET",
@@ -96,6 +89,30 @@ const newsApi = baseApi.injectEndpoints({
         };
       },
     }),
+    searchNews: builder.query({
+      query: ({ keyword, offset }: { keyword: string; offset: number }) => {
+        const limit = 500; 
+        const url = `/news?searchTerm=${encodeURIComponent(
+          keyword.replace(/%20/g, " "),
+        )}&limit=${limit}&offset=${offset}`;
+        console.log("Constructed URL:", url);
+        return {
+          url,
+          method: "GET",
+        };
+      },
+      transformResponse: (response: TResponseRedux<NewsDetails[]>) => {
+        console.log("API Response:", response);
+        return { data: response.data, meta: response.meta };
+      },
+      providesTags: ["news"],
+      serializeQueryArgs: ({ endpointName, queryArgs }) => {
+        return `${endpointName}-${queryArgs.keyword}-${queryArgs.offset}`;
+      },
+      forceRefetch({ currentArg, previousArg }) {
+        return currentArg?.offset !== previousArg?.offset;
+      },
+    }),
   }),
 });
 
@@ -105,5 +122,6 @@ export const {
   useGetNewsBySlugQuery,
   useUpdateNewsMutation,
   useTropicwiseNewsQuery,
-  useZonewiseNewsQuery
+  useZonewiseNewsQuery,
+  useSearchNewsQuery
 } = newsApi;
