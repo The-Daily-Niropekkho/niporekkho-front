@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { FaChevronDown } from "react-icons/fa";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FiChevronsRight } from "react-icons/fi";
 import { formatBanglaAndHijri } from "@/utils/bengaliTime";
 
@@ -214,37 +214,46 @@ const NavItems = ({
   setActiveMenu,
   className,
 }: NavItemsProps) => {
-  // No need for useEffect since data is static
   const menuData = staticCategories;
+  const [visibleItems, setVisibleItems] = useState(11); // Default number of visible items
+  const [isClient, setIsClient] = useState(false);
+  // Ensure client-side rendering for window resize
+  useEffect(() => {
+    setIsClient(true);
 
-  // if (isLoading || !menuData.length) {
-  //   return (
-  //     <ul className='lg:flex items-center gap-5 hidden'>
-  //       {[1, 2, 3, 4, 5, 6, 7, 8].map((item) => (
-  //         <li key={item} className='py-[11px] px-5 text-md'>
-  //           <div className='h-5 w-20 bg-gray-200 rounded-md animate-pulse'></div>
-  //         </li>
-  //       ))}
-  //     </ul>
-  //   );
-  // }
+    const handleResize = () => {
+      const screenWidth = window.innerWidth;
+      // Dynamically adjust the number of visible items based on screen width
+      if (screenWidth < 640) {
+        setVisibleItems(2); // Show only 2 items on very small screens
+      } else if (screenWidth < 768) {
+        setVisibleItems(4); // Show 4 items on small screens
+      } else if (screenWidth < 1024) {
+        setVisibleItems(6); // Show 6 items on medium screens
+      } else if (screenWidth < 1280) {
+        setVisibleItems(8); // Show 8 items on large screens
+      } else {
+        setVisibleItems(11); // Show all 11 items on extra large screens
+      }
+    };
 
-  // if (error) {
-  //   return (
-  //     <ul className='lg:flex items-center gap-5 hidden'>
-  //       <li className='text-red-500'>Error loading categories</li>
-  //     </ul>
-  //   );
-  // }
+    handleResize(); // Initial check
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  if (!isClient) {
+    return null; // Prevent rendering on server-side to avoid hydration mismatch
+  }
 
   return (
     <>
-      <ul className='lg:flex items-center hidden'>
-        {menuData.slice(0, 11).map((item) => (
+      <ul className='flex items-center flex- justify-start lg:justify-start'>
+        {menuData.slice(0, visibleItems).map((item) => (
           <li key={item.title} className='relative group'>
             <Link
               href={`/category/${item.slug}?id=${item.id}`}
-              className={`whitespace-nowrap py-[11px] px-3 text-md text-[var(--dark)] dark:text-white hover:text-red-500 capitalize border-r-2 ${className}`}
+              className={`whitespace-nowrap py-2 px-3 text-sm lg:text-base text-[var(--dark)] dark:text-white hover:text-red-500 capitalize border-r border-gray-300 dark:border-gray-600 ${className}`}
             >
               {item.title}
             </Link>
@@ -253,7 +262,7 @@ const NavItems = ({
                 <li>
                   <Link
                     href='/districtnews'
-                    className='block px-4 py-2 text-md text-[var(--dark)] dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-red-500'
+                    className='block px-4 py-2 text-sm lg:text-md text-[var(--dark)] dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-red-500'
                   >
                     জেলার খবর
                   </Link>
