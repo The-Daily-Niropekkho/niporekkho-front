@@ -20,84 +20,83 @@ import { FaChevronDown } from "react-icons/fa";
 import { AnimatePresence, motion } from "framer-motion";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useGetAllCategoriesQuery } from "@/redux/features/category/categoryApi";
+import { useSearchNewsQuery } from "@/redux/features/news/newsApi"; // Updated import
+import SearchBar from "./Searchbar";
 
 const NavBar = () => {
   const { data, error, isLoading } = useGetAllCategoriesQuery(
     { sortBy: "position,position_update_at", sortOrder: "asc", limit: 500 },
     { skip: false },
   );
-  // console.log(data);
   const [isSticky, setIsSticky] = useState(false);
   const firstNavbarRef = useRef<HTMLElement>(null);
+  const [activeMenu, setActiveMenu] = useState<string>("");
 
   useEffect(() => {
     const handleScroll = () => {
-      // Assume the content section is the first element after the navbar
-      const contentSection = document.querySelector("main") || document.body; // Adjust selector as needed
+      const contentSection = document.querySelector("main") || document.body;
       if (contentSection && firstNavbarRef.current) {
         const navbarHeight = firstNavbarRef.current.offsetHeight;
-        const sectionHeight = contentSection.offsetTop + navbarHeight; // Top of content + navbar height
-        setIsSticky(window.scrollY > sectionHeight); // Sticky after section is out of view
+        const sectionHeight = contentSection.offsetTop + navbarHeight;
+        setIsSticky(window.scrollY > sectionHeight);
       }
     };
 
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
-  
+
   const { theme, setTheme } = useTheme();
   const [showSidebar, setShowSidebar] = useState(false);
   const [enabled, setEnabled] = useState(false);
   const [showSearch, setShowSearch] = useState(false);
   const [searchText, setSearchText] = useState("");
-  // const { data, isLoading } = useContext(WebSettingContext);
-  const [activeMenu, setActiveMenu] = useState<string | undefined>("");
+  const [searchResults, setSearchResults] = useState<any[]>([]);
   const logo =
     "https://www.dailyniropekkho.com/_next/image?url=https%3A%2F%2Fadmin.dailyniropekkho.com%2Fstorage%2Fapplication%2F1734496289logo.png&w=256&q=75";
   const router = useRouter();
 
+  // Fetch search results
+  const { data: searchData, isFetching } = useSearchNewsQuery(
+    { keyword: searchText, page_number: 1 },
+    {
+      skip: !showSearch || searchText.trim() === "",
+    }
+  );
+
+  useEffect(() => {
+    if (searchData && searchData.data) {
+      setSearchResults(searchData.data);
+    }
+  }, [searchData]);
 
   const handleSearchItem = (e: any) => {
     e.preventDefault();
-    const searchQuery = `/search?search_slug=${searchText}`;
-    router.replace(searchQuery);
-    setShowSearch(false);
+    if (searchText.trim()) {
+      router.replace(`/search?search_slug=${encodeURIComponent(searchText)}`);
+      setShowSearch(false);
+    }
   };
 
-  /**
-   * Handle the visibility of the sidebar.
-   *
-   * This function toggles the visibility state of the sidebar. When called,
-   * it flips the value of `showSidebar`, showing the sidebar if it's hidden,
-   * or hiding it if it's visible.
-   */
   const handleSidebar = () => {
-    //chng: Log sidebar state for debugging
     console.log("Sidebar toggled, new state:", !showSidebar);
     setShowSidebar(!showSidebar);
   };
-  /**
-   * Toggle the application theme between dark and light modes.
-   *
-   * This function checks the current theme state and switches it between "dark"
-   * and "light" modes. If the theme is currently set to "dark" or "system", it
-   * changes it to "light". If it's set to "light", it changes it to "dark".
-   */
+
   const handleTheme = () => {
-    // Toggle the theme between "dark" and "light" based on the current theme state
     setTheme(theme === "dark" || theme === "system" ? "light" : "dark");
   };
 
-  // set the theme to the current theme
   useEffect(() => setEnabled(true), []);
 
   if (!enabled) return null;
+
 
   return (
     <Fragment>
       <header
         ref={firstNavbarRef}
-        className=' border-b-[1px] border-[var(--border-color)] dark:border-[var(--border-dark)] top-0 z-10 bg-[var(--bg)] dark:bg-[#191c20] hidden md:block'
+        className='border-b-[1px] border-[var(--border-color)] dark:border-[var(--border-dark)] top-0 z-10 bg-[var(--bg)] dark:bg-[#191c20] hidden md:block'
       >
         <div className='container py-0 mx-auto'>
           <div className='flex items-center'>
@@ -107,7 +106,6 @@ const NavBar = () => {
                   className=''
                   initial={{ y: -100, opacity: 0 }}
                   animate={{ y: 0, opacity: 1 }}
-                  // exit={{ y: -200, opacity: 0 }}
                   transition={{ duration: 0.3, ease: "easeInOut" }}
                 >
                   <Link
@@ -115,18 +113,17 @@ const NavBar = () => {
                     aria-label='logo'
                     onClick={() => setActiveMenu("")}
                   >
-                    {/* <Image
+                    <Image
                       src={logo}
                       alt='Daily Niropekkho'
                       width={180}
                       height={100}
-                    /> */}
+                    />
                   </Link>
                 </motion.div>
               )}
             </AnimatePresence>
 
-            {/* Nav item here */}
             <NavItems
               data={data?.data?.map((cat: any) => ({
                 ...cat,
@@ -139,41 +136,45 @@ const NavBar = () => {
             />
 
             <div className='flex items-center justify-center print:hidden'>
-              {/* <div className='p-3 last:pr-0 hidden md:block'>
-                <button
-                  className='flex '
-                  aria-label='theme'
-                  onClick={handleTheme}
-                >
-                  {theme === "light" ? (
-                    <div className='text-black'>
-                      <MoonIcon />
-                    </div>
-                  ) : (
-                    <div className='text-white'>
-                      <SunIcon />
-                    </div>
-                  )}
-                </button>
-              </div> */}
-
-              <button
-                className='ml-4 p-2 last:pr-0'
-                aria-label='search'
-                onClick={() => setShowSearch(!showSearch)}
-              >
-                {showSearch ? <XIcon clss='' /> : <SearchIcon clss='' />}
-              </button>
-              <button
-                className='p-2 last:pr-0 lg:hidden md:block'
-                type='button'
-                aria-label='menu'
-                onClick={handleSidebar}
-              >
-                <MenuIcon />
-              </button>
+              <p className='py-[11px] px-5 text-md'>
+                <SearchBar
+                  showSearch={showSearch}
+                  setShowSearch={setShowSearch}
+                  searchText={searchText}
+                  setSearchText={setSearchText}
+                  handleSearchItem={handleSearchItem}
+                />
+              </p>
             </div>
           </div>
+
+          {/* Search Results Display */}
+          {/* {showSearch && searchResults.length > 0 && (
+            <motion.div
+              className='absolute top-full left-0 w-full bg-white dark:bg-gray-900 shadow-lg border border-gray-200 dark:border-gray-700 rounded-b-lg z-20'
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -10 }}
+              transition={{ duration: 0.2 }}
+            >
+              <ul className='py-2'>
+                {searchResults.map((news) => (
+                  <li
+                    key={news.id}
+                    className='px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-800'
+                  >
+                    <Link
+                      href={`/news/${news.slug || news.id}`}
+                      className='text-[var(--dark)] dark:text-white line-clamp-1'
+                      onClick={() => setShowSearch(false)}
+                    >
+                      {news.headline || news.title}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </motion.div>
+          )} */}
         </div>
       </header>
 
@@ -194,7 +195,7 @@ const NavBar = () => {
                   onClick={() => setActiveMenu("")}
                 >
                   <Image
-                    src={"/images/logo.png"}
+                    src={logo}
                     alt='Daily Niropekkho'
                     width={180}
                     height={100}
@@ -213,23 +214,45 @@ const NavBar = () => {
                   className='text-base'
                 />
                 <div className='flex items-center justify-center print:hidden'>
-                  <button
-                    className='ml-2 p-2 last:pr-0'
-                    aria-label='search'
-                    onClick={() => setShowSearch(!showSearch)}
-                  >
-                    {showSearch ? <XIcon clss='' /> : <SearchIcon clss='' />}
-                  </button>
-                  <button
-                    className='p-2 last:pr-0 lg:hidden md:block'
-                    type='button'
-                    aria-label='menu'
-                    onClick={handleSidebar}
-                  >
-                    <MenuIcon />
-                  </button>
+                  <p className='py-[11px] text-md'>
+                    <SearchBar
+                      showSearch={showSearch}
+                      setShowSearch={setShowSearch}
+                      searchText={searchText}
+                      setSearchText={setSearchText}
+                      handleSearchItem={handleSearchItem}
+                    />
+                  </p>
                 </div>
               </div>
+
+              {/* Search Results Display (Sticky Header)
+              {showSearch && searchResults.length > 0 && (
+                <motion.div
+                  className='absolute top-full left-0 w-full bg-white dark:bg-gray-900 shadow-lg border border-gray-200 dark:border-gray-700 rounded-b-lg z-20'
+                  initial={{ opacity: 0, y: -10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -10 }}
+                  transition={{ duration: 0.2 }}
+                >
+                  <ul className='py-2'>
+                    {searchResults.map((news) => (
+                      <li
+                        key={news.id}
+                        className='px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-800'
+                      >
+                        <Link
+                          href={`/news/${news.slug || news.id}`}
+                          className='text-[var(--dark)] dark:text-white line-clamp-1'
+                          onClick={() => setShowSearch(false)}
+                        >
+                          {news.headline || news.title}
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                </motion.div>
+              )} */}
             </div>
           </motion.header>
         )}
