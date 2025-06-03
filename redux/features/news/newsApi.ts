@@ -61,7 +61,7 @@ const newsApi = baseApi.injectEndpoints({
 
     searchNews: builder.query({
       query: ({ keyword, offset }: { keyword: string; offset: number }) => {
-        const limit = 500; // Fetch 500 items at a time (we'll display 10 at a time)
+        const limit = 500; 
         const url = `/news?searchTerm=${encodeURIComponent(
           keyword.replace(/%20/g, " "),
         )}&limit=${limit}&offset=${offset}`;
