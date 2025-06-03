@@ -1,395 +1,278 @@
 "use client";
 
-import LatestNewsVertical from "@/components/common/latestNews/LatestNewsVertical";
-import {NewsItem} from "@/interface/post";
-import CopyIcon from "@/public/icons/CopyIcon";
-import FacebookIcon from "@/public/icons/FacebookIcon";
-import WhatsAppIcon from "@/public/icons/WhatsAppIcon";
-import NotFoundBody from "@/ui/notFoundBody/NotFoundBody";
-import Spin from "@/ui/spin/Spin";
-import ThreeDotsLoader from "@/ui/threeDotsLoader/ThreeDotsLoader";
-import fetcher from "@/utils/fetcher";
-import instance from "@/utils/instance";
-import timestampToBangleDateWithTime from "@/utils/timestampToBangleDateWithTime";
+import React, { useEffect, useState } from "react";
+import { useSearchParams, usePathname, useRouter } from "next/navigation"; // Added useRouter
+import { useTropicwiseNewsQuery } from "@/redux/features/news/newsApi";
+import fileObjectToLink from "@/utils/fileObjectToLink";
 import Image from "next/image";
-import Link from "next/link";
-import {useParams} from "next/navigation";
-import {useEffect, useState} from "react";
-import {
-    FacebookShareButton,
-    TwitterShareButton,
-    WhatsappShareButton,
-} from "react-share";
-import notFoundImg from "@/public/images/not-found.png";
-import useSWR from "swr";
+import { FaFacebookF, FaTwitter, FaWhatsapp, FaInstagram, FaArrowUp, FaSearch } from "react-icons/fa";
+import date_output_bn from "@/utils/datetime";
+import Skeleton from "react-loading-skeleton";
+import "react-loading-skeleton/dist/skeleton.css"; // Import Skeleton CSS
+//import TopNews from "@/components/singleNews/TopNews";
+import TopNewsForNewsDetails from "@/components/singleNews/top-news-for-news-details";
 
-interface RelatedTopic {
-    id: number;
-    category_name: string;
-    slug: string;
-}
+function Page() {
+  const [showScroll, setShowScroll] = useState(false);
+  const [searchQuery, setSearchQuery] = useState(""); // State for search input
+  const router = useRouter(); // For navigation
 
-interface Profile {
-    category_name: string;
-    slug: string;
-    category_imgae: string;
-    description: string;
-    related_topic: RelatedTopic[];
-}
+  // URL থেকে query parameter এবং path পড়া
+  const searchParams = useSearchParams();
+  const pathname = usePathname();
+  const topicId = searchParams.get("topic_id");
 
-interface TopicData {
-    profile: Profile;
-    posts: NewsItem[];
-}
+  // Extract topicName from the URL path (e.g., /topic/পরিবেশ)
+  const topicName = decodeURIComponent(pathname.split("/")[2] || ""); // Gets "পরিবেশ" from the path
 
-export default function TopicNamePage() {
-    const [currentUrl, setCurrentUrl] = useState("");
-    const [isLoadingMoreData, setIsLoadingMoreData] = useState(false);
-    const [moreData, setMoreData] = useState<any[]>([]);
-    const [pageNumber, setPageNumber] = useState(0);
+  // API থেকে ডেটা ফেচ করা
+  const { data, isLoading, error } = useTropicwiseNewsQuery({
+    topic_id: topicId ?? undefined,
+    limit: 1000,
+  });
 
-    const param = useParams();
+  // Scroll-to-top button visibility
+  useEffect(() => {
+    const checkScrollTop = () => {
+      if (!showScroll && window.pageYOffset > 400) {
+        setShowScroll(true);
+      } else if (showScroll && window.pageYOffset <= 400) {
+        setShowScroll(false);
+      }
+    };
 
-    const {
-        data,
-        error,
-        isLoading,
-    }: { data: TopicData; error: any; isLoading: boolean } = useSWR(
-        `/topic-posts/${param.topicName}?page_number=0`,
-        fetcher
-    );
+    window.addEventListener("scroll", checkScrollTop);
+    return () => window.removeEventListener("scroll", checkScrollTop);
+  }, [showScroll]);
 
-    useEffect(() => {
-        if (pageNumber > 0) {
-            (async () => {
-                setIsLoadingMoreData(true);
-                try {
-                    const {data} = await instance.get(
-                        `/topic-posts/${param.topicName}?page_number=${pageNumber}`
-                    );
+  const scrollTop = () => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
 
-                    setMoreData((prev) => [...prev, ...data.data.posts]);
-                } catch (error) {
-                    console.error(error);
-                } finally {
-                    setIsLoadingMoreData(false);
-                }
-            })();
-        }
-    }, [pageNumber, param.topicName]);
+  // Filter data based on search query
+  const filteredData = data?.data?.filter((news) =>
+    news.headline.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    news.short_headline.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
-    useEffect(() => {
-        const currentUrl = window.location.href;
-        setCurrentUrl(currentUrl);
-    }, []);
-
-    // decide what to render
-    //@TODO: When the error occurred
-    if (error)
-        return <NotFoundBody title={`  ${error.message}`} img={notFoundImg}/>;
-
-    //@TODO: When the loading
-    if (isLoading)
-        return <ThreeDotsLoader clss={"h-[300px] sm:h-[600px]"} color="51c27c"/>;
-
-    //@TODO: When No data found
-    if (!data.posts.length)
-        return (
-            <NotFoundBody title="">
-                <h2 className="text-7xl ">404</h2>
-                <h3 className="text-2xl my-1 ">Not found anything</h3>
-                <p className="">
-                    What you are looking for was not found. Maybe you&apos;re looking for it
-                    wrong.
-                </p>
-                <div className="mt-10">
-                    <Link
-                        href="/"
-                        className="text-lg text-white  py-2 px-4 bg-[var(--primary)]  rounded-md"
-                    >
-                        Back to Home
-                    </Link>
-                </div>
-            </NotFoundBody>
-        );
-
-    // destructure data
-    const {posts, profile} = data;
-    const {category_imgae, category_name, description, related_topic, slug} =
-        profile;
-
+  // লোডিং স্টেট with Skeleton
+  if (isLoading) {
     return (
-        <section className="py-[60px]">
-            <div className="container px-4 mx-auto">
-                <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
-                    <div
-                        className="col-span-12 md:col-span-12 lg:col-span-4 xl:col-span-4 relative after:bg-[var(--border-color)] after:absolute after:w-full after:h-[1px] after:-bottom-3 after:right-0 after:last:h-0 lg:after:w-[1px] lg:after:h-full lg:after:-right-3 lg:after:top-0 lg:after:last:w-0 dark:after:bg-[var(--border-dark)]">
-                        <div className="overflow-hidden lg:sticky lg:top-[4rem]">
-                            <div
-                                className="mb-6 relative after:bg-[var(--border-color)] after:absolute after:w-full after:h-[1px] after:-bottom-3 after:left-0 dark:after:bg-[var(--border-dark)] min-h-[120px]">
-                                <Image
-                                    alt={category_name}
-                                    loading="lazy"
-                                    width={500}
-                                    height={500}
-                                    decoding="async"
-                                    className="rounded-md w-[120px] h-auto float-left mr-3"
-                                    src={category_imgae}
-                                />
-                                <h1 className="text-2xl md:text-3xl leading-9 md:leading-10 text-[var(--dark)] dark:text-white mb-2">
-                                    {category_name}
-                                </h1>
+      <div className="container mx-auto p-6 font-solaimanlipi">
+        {/* Header and Search Skeleton */}
+        <div className="flex justify-between items-center mb-6">
+          <Skeleton width={200} height={40} />
+          <Skeleton width={150} height={40} />
+        </div>
 
-                                <div
-                                    className="text-lg text-[var(--gray-2)] mt-3 dark:text-white/80 max-h-[80px] md:max-h-max overflow-hidden md:overflow-visible">
-                                    <p>
-                                        <em>{category_name} : </em>
-                                        {description}
-                                    </p>
-                                </div>
+        {/* Social Media Icons Skeleton */}
+        <div className="flex justify-center gap-4 mb-8">
+          {Array(4)
+            .fill(0)
+            .map((_, index) => (
+              <Skeleton key={index} circle width={40} height={40} />
+            ))}
+        </div>
 
-                                <div className="mt-3">
-                                    <p className="text-lg text-[var(--dark)] mb-2 dark:text-white">
-                                        Related thinks:
-                                    </p>
-
-                                    {related_topic.map((topic) => {
-                                        const {category_name, id, slug} = topic;
-                                        return (
-                                            <Link
-                                                key={id}
-                                                className="text-sm text-[var(--primary)] border border-[var(--primary)] rounded-full md:last:mr-0 dark:border-[var(--primary)] dark:text-[var(--primary)] text-center inline-block px-2 py-1 mb-3 mr-2 last:mr-0"
-                                                href={`/topic/${slug}`}
-                                            >
-                                                {category_name}
-                                            </Link>
-                                        );
-                                    })}
-                                </div>
-
-                                <div
-                                    className="w-auto flex items-center whitespace-nowrap justify-start min-h-[40px] md:min-h-[48px]  print:hidden select-none">
-                                    <div className="flex items-center">
-                                        <FacebookShareButton
-                                            url={currentUrl}
-                                            title={category_name}
-                                            quote={category_name}
-                                            className="flex justify-center cursor-pointer text-xs h-[32px] w-[36px] mr-2 !bg-[var(--slate)] dark:!bg-[var(--gray-1)] dark:!text-white rounded-md items-center border"
-                                        >
-                                            <FacebookIcon/>
-                                        </FacebookShareButton>
-
-                                        <WhatsappShareButton
-                                            url={currentUrl}
-                                            title={category_name}
-                                            className="flex justify-center cursor-pointer text-xs h-[32px] w-[36px] mr-2 !bg-[var(--slate)] dark:!bg-[var(--gray-1)] dark:!text-white rounded-md items-center border"
-                                        >
-                                            <WhatsAppIcon/>
-                                        </WhatsappShareButton>
-
-                                        <TwitterShareButton
-                                            url={currentUrl}
-                                            title={category_name}
-                                            className="flex justify-center cursor-pointer text-xs h-[32px] w-[36px] mr-2 !bg-[var(--slate)] dark:!bg-[var(--gray-1)] dark:!text-white rounded-md items-center border"
-                                        >
-                                            <svg
-                                                className="w-4 h-4 fill-black dark:fill-white"
-                                                viewBox="0 0 512 512"
-                                            >
-                                                <path
-                                                    d="M389.2 48h70.6L305.6 224.2 487 464H345L233.7 318.6 106.5 464H35.8L200.7 275.5 26.8 48H172.4L272.9 180.9 389.2 48zM364.4 421.8h39.1L151.1 88h-42L364.4 421.8z"></path>
-                                            </svg>
-                                        </TwitterShareButton>
-
-                                        <div
-                                            className="flex justify-center cursor-pointer text-xs h-[32px] w-[36px] mr-2 bg-[var(--slate)] dark:bg-[var(--gray-1)] dark:text-white rounded-md items-center"
-                                            onClick={() => navigator.clipboard.writeText(currentUrl)}
-                                        >
-                                            <CopyIcon/>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="w-full flex items-center justify-center"></div>
-                        </div>
+        {/* Main Content Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          {/* News Cards Skeleton */}
+          <div className="col-span-1 md:col-span-2">
+            <div className="space-y-8">
+              {Array(10) // Increased to 10 skeletons to match the limit
+                .fill(0)
+                .map((_, index) => (
+                  <div key={index} className="flex flex-col md:flex-row gap-5 pb-4 border-b border-gray-200">
+                    <Skeleton width={320} height={200} className="rounded-lg" />
+                    <div className="flex-1">
+                      <Skeleton width="80%" height={28} className="mb-2" />
+                      <Skeleton width="60%" height={16} className="mb-3" />
+                      <Skeleton count={3} height={16} className="mb-3" />
+                      <Skeleton width="40%" height={14} />
                     </div>
-                    <div
-                        className="col-span-12 md:col-span-7 lg:col-span-4 xl:col-span-5 relative after:bg-[var(--border-color)] after:absolute after:w-full after:h-[1px] after:-bottom-3 after:right-0 after:last:h-0 md:after:w-[1px] md:after:h-full md:after:-right-3 md:after:top-0 md:after:last:w-0 dark:after:bg-[var(--border-dark)]">
-                        {posts.slice(0, 1).map((itm) => {
-                            const {
-                                news_id,
-                                post_title,
-                                stitle,
-                                excerpt,
-                                image_large,
-                                time_stamp,
-                                category,
-                                encode_titl,
-                            } = itm;
-                            return (
-                                <Link
-                                    key={news_id}
-                                    className="group flex flex-col relative after:bg-[var(--border-color)] after:absolute after:w-full after:h-[1px] after:right-0 after:left-0 after:-bottom-3 dark:after:bg-[var(--border-dark)]"
-                                    href={`/${category.toLocaleLowerCase()}/${encode_titl}`}
-                                >
-                                    <div className="overflow-hidden relative">
-                                        <div>
-                                            <Image
-                                                alt={post_title}
-                                                width={560}
-                                                height={315}
-                                                decoding="async"
-                                                className="w-full h-auto group-hover:scale-105 duration-700 ease-out"
-                                                src={image_large}
-                                            />
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <h3 className="text-2xl left-9 mt-2 md:mt-0 lg:mt-2 mb-0 md:mb-2 text-[var(--dark)]    dark:text-white   ">
-                                            {post_title}
-                                        </h3>
-                                        <p className="text-base text-[var(--gray-2)] dark:text-[var(--gray-3)]">
-                                            {timestampToBangleDateWithTime(time_stamp)}
-                                        </p>
-                                    </div>
-                                </Link>
-                            );
-                        })}
-                        <div className="flex flex-col py-6">
-                            {posts.slice(1, 11).map((itm: NewsItem) => {
-                                const {
-                                    news_id,
-                                    post_title,
-                                    stitle,
-                                    excerpt,
-                                    image_large,
-                                    image_thumb,
-                                    time_stamp,
-                                    category,
-                                    encode_titl,
-                                } = itm;
-                                return (
-                                    <div
-                                        key={news_id}
-                                        className="mb-6 last:mb-0 relative after:bg-[var(--border-color)] after:absolute after:w-full after:h-[1px] after:left-0 after:-bottom-3 dark:after:bg-[var(--border-dark)]"
-                                    >
-                                        <Link
-                                            className="group"
-                                            href={`/${category.toLocaleLowerCase()}/${encode_titl}`}
-                                        >
-                                            <div
-                                                className="mr-2.5 md:mr-0 lg:mr-2.5 mb-2 xl:mb-0 overflow-hidden float-left relative">
-                                                <div>
-                                                    <Image
-                                                        alt={post_title}
-                                                        width={330}
-                                                        height={186}
-                                                        decoding="async"
-                                                        className="w-[124px] h-auto lg:w-[110px] lg:h-[75px] xl:w-[180px] xl:h-[120px] object-cover group-hover:scale-105 duration-700 ease-out"
-                                                        src={image_thumb}
-                                                        loading="lazy"
-                                                    />
-                                                </div>
-                                            </div>
-                                            <h2 className="text-lg text-[var(--dark)]    dark:text-white   ">
-                                                {post_title}
-                                            </h2>
-                                            <p className="text-base text-[var(--gray-2)] dark:text-[var(--gray-3)]">
-                                                {timestampToBangleDateWithTime(time_stamp)}
-                                            </p>
-                                        </Link>
-                                    </div>
-                                );
-                            })}
-                            {moreData.map((itm: NewsItem) => {
-                                const {
-                                    news_id,
-                                    post_title,
-                                    stitle,
-                                    excerpt,
-                                    image_large,
-                                    image_thumb,
-                                    time_stamp,
-                                    category,
-                                    encode_titl,
-                                } = itm;
-                                return (
-                                    <div
-                                        key={news_id}
-                                        className="mb-6 last:mb-0 relative after:bg-[var(--border-color)] after:absolute after:w-full after:h-[1px] after:left-0 after:-bottom-3 dark:after:bg-[var(--border-dark)]"
-                                    >
-                                        <Link
-                                            className="group"
-                                            href={`/${category.toLocaleLowerCase()}/${encode_titl}`}
-                                        >
-                                            <div
-                                                className="mr-2.5 md:mr-0 lg:mr-2.5 mb-2 xl:mb-0 overflow-hidden float-left relative">
-                                                <div>
-                                                    <Image
-                                                        alt={post_title}
-                                                        width={330}
-                                                        height={186}
-                                                        decoding="async"
-                                                        className="w-[124px] h-auto lg:w-[110px] lg:h-[75px] xl:w-[180px] xl:h-[120px] object-cover group-hover:scale-105 duration-700 ease-out"
-                                                        src={image_thumb}
-                                                        loading="lazy"
-                                                    />
-                                                </div>
-                                            </div>
-                                            <h2 className="text-lg text-[var(--dark)]    dark:text-white   ">
-                                                {post_title}
-                                            </h2>
-                                            <p className="text-base text-[var(--gray-2)] dark:text-[var(--gray-3)]">
-                                                {timestampToBangleDateWithTime(time_stamp)}
-                                            </p>
-                                        </Link>
-                                    </div>
-                                );
-                            })}
-                        </div>
-
-                        <div className="flex justify-center">
-                            {moreData?.length > 0 ? (
-                                <button
-                                    className="flex items-center justify-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed text-white text-lg bg-[var(--primary)] px-4 py-2 hover:bg-[var(--primary)] rounded-sm"
-                                    disabled={isLoadingMoreData}
-                                    onClick={() => setPageNumber((prev) => prev + 1)}
-                                >
-                                    See more
-                                    {isLoadingMoreData && <Spin clss="w-7 h-7"/>}
-                                </button>
-                            ) : (
-                                ""
-                            )}
-                        </div>
-                        {/* <div className="flex justify-center">
-              <button
-                className="flex items-center justify-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed text-white text-lg bg-[var(--primary)] px-4 py-2 hover:bg-[var(--primary)] rounded-sm"
-                disabled={isLoadingMoreData}
-                onClick={() => setPageNumber((prev) => prev + 1)}
-              >
-                See more
-                {isLoadingMoreData && <Spin clss="w-7 h-7" />}
-              </button>
-            </div> */}
-                    </div>
-                    <div
-                        className="col-span-12 md:col-span-5 lg:col-span-4 xl:col-span-3 relative after:bg-[var(--border-color)] after:absolute after:w-full after:h-[1px] after:-bottom-3 after:right-0 after:last:h-0 md:after:w-[1px] md:after:h-full md:after:-right-3 md:after:top-0 md:after:last:w-0 dark:after:bg-[var(--border-dark)]">
-                        <div className="md:sticky md:top-[4.5rem]">
-                            <div className="w-full flex items-center justify-center"></div>
-                            <div>
-                                <div
-                                    className="mt-3 mb-3 border-[var(--border-color)] border-t-2 border-b-[2px] dark:border-[var(--border-dark)]">
-                                    <h4 className="text-[var(--primary)] text-xl md:text-2xl py-2 dark:text-[var(--primary)]">
-                                        Latest
-                                    </h4>
-                                </div>
-                                <LatestNewsVertical/>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                  </div>
+                ))}
             </div>
-        </section>
+          </div>
+
+          {/* Ad Cards Skeleton */}
+          <div className="col-span-1 space-y-6">
+            {Array(3)
+              .fill(0)
+              .map((_, index) => (
+                <div key={index} className="bg-gray-100 rounded-lg p-4 border border-gray-200">
+                  <Skeleton height={150} width={200} className="rounded-lg mb-4 mx-auto" />
+                  <Skeleton width="70%" height={20} className="mb-2 mx-auto" />
+                  <Skeleton width="50%" height={16} className="mx-auto" />
+                </div>
+              ))}
+          </div>
+        </div>
+      </div>
     );
+  }
+
+  // এরর স্টেট
+  if (error) {
+    return (
+      <div className="p-4 text-center font-solaimanlipi">
+        <p className="text-lg text-red-500 font-medium">
+          নিউজ লোড করতে সমস্যা:{" "}
+          {typeof error === "object" && error !== null
+            ? "message" in error
+              ? (error as { message: string }).message
+              : "error" in error
+              ? (error as { error: string }).error
+              : "কিছু ভুল হয়েছে"
+            : "কিছু ভুল হয়েছে"}
+        </p>
+      </div>
+    );
+  }
+
+  // খালি স্টেট
+  if (!data || !data?.data || data?.data?.length === 0) {
+    return (
+      <div className="p-4 text-center font-solaimanlipi">
+        <p className="text-lg text-gray-500 font-medium">
+          এই টপিকের জন্য কোনো নিউজ পাওয়া যায়নি।
+        </p>
+      </div>
+    );
+  }
+
+  return (
+    <div className="container mx-auto p-6 font-solaimanlipi">
+      {/* Header and Search */}
+      <div className="flex justify-between items-center mb-6">
+        <h1 className="text-3xl font-extrabold text-orange-600 tracking-tight">
+          {topicName}
+        </h1>
+        <div className="relative">
+          <input
+            type="text"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            placeholder="নিউজ খুঁজুন..."
+            className="w-48 md:w-64 p-2 pl-10 pr-4 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-orange-500"
+          />
+          <FaSearch
+            size={16}
+            className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
+          />
+          <button
+            onClick={() => setSearchQuery("")}
+            className="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-red-500"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-4 w-4"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M6 18L18 6M6 6l12 12"
+              />
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      {/* Social Media Icons */}
+     
+
+      {/* Main Content Grid */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        {/* News Cards */}
+        <div className="col-span-1 md:col-span-2">
+          <div className="space-y-8">
+            {filteredData?.slice(0, 10).map((news) => ( // Limit to 10 news items
+              <div
+                key={news.id}
+                className="flex flex-col md:flex-row gap-5 pb-4 border-b border-gray-200 dark:border-gray-700 cursor-pointer"
+                onClick={() => router.push(`/${news.category}/${news.id}/${news.slug}`)} // Navigate to news details
+              >
+                {/* Image */}
+                <div className="flex-shrink-0 w-full md:w-80">
+                  <Image
+                    src={fileObjectToLink(news.banner_image)}
+                    alt={news.headline || "News banner"}
+                    width={320}
+                    height={200}
+                    className="object-cover rounded-lg w-full h-48 md:h-full"
+                  />
+                </div>
+                {/* Content */}
+                <div className="flex-1">
+                  <h2 className="text-xl md:text-2xl font-bold text-gray-900 dark:text-white mb-2 hover:text-orange-600 transition-colors">
+                    {news.headline}
+                  </h2>
+                  <p className="text-gray-600 dark:text-gray-300 text-sm mb-3 font-medium">
+                    {news.short_headline}
+                  </p>
+                  <div
+                    className="text-gray-700 dark:text-gray-200 text-base leading-relaxed mb-3 line-clamp-3"
+                    dangerouslySetInnerHTML={{ __html: news.details }}
+                  />
+                  <p className="text-gray-500 dark:text-gray-400 text-sm font-medium">
+                    {date_output_bn(news.publish_date)}
+                  </p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Ad Cards on the Right */}
+        <div className="col-span-1 space-y-6">
+          {[
+            {
+              src: "https://tpc.googlesyndication.com/simgad/3745460761502011018",
+              alt: "Advertisement 1",
+              title: "আপনার বিজ্ঞাপন এখানে",
+            }
+            
+          ].map((ad, index) => (
+            <div
+              key={index}
+              className="bg-white dark:bg-gray-900 p-4 rounded-lg border border-gray-200 dark:border-gray-700 hover:border-orange-500 transition-colors"
+            >
+              <div className="mb-4 flex justify-center">
+                <Image
+                  src={ad.src}
+                  alt={ad.alt}
+                  width={300}
+                  height={200}
+                  className="object-cover rounded-lg"
+                />
+              </div>
+            </div>
+          ))}
+
+
+
+          <div>
+            <TopNewsForNewsDetails count={5} />
+        </div>
+        </div>
+      </div>
+
+      {/* Back to Top Button */}
+      <button
+        onClick={scrollTop}
+        className={`fixed z-50 bottom-6 right-6 w-12 h-12 bg-orange-600 text-white rounded-full flex items-center justify-center hover:bg-orange-700 transition-all duration-300 ${
+          showScroll ? "opacity-100" : "opacity-0"
+        }`}
+        aria-label="Back to Top"
+      >
+        <FaArrowUp size={20} />
+      </button>
+    </div>
+  );
 }
+
+export default Page;

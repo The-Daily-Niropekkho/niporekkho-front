@@ -43,7 +43,7 @@ const Breadcrumb = ({ items }: BreadcrumbProps) => {
               </svg>
             )}
             <Link
-              className='flex items-center gap-2 px-2 py-1 text-gray-600 dark:text-gray-300 hover:text-red-600 transition-colors duration-200'
+              className='flex items-center gap-2 px-2 py-1 text-gray-600 dark:text-gray-300 hover:text-red-600 transition-colors duration-200 text-lg'
               href={item.href}
             >
               {item.label}

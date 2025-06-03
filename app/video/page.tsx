@@ -30,7 +30,7 @@ const VideoPage = () => {
         (async () => {
             await fetchData();
         })();
-    }, [page]);
+    }, [page,fetchData]);
 
     if (isLoading) return <CategoryPageSkeleton/>;
 
