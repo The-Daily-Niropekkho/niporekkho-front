@@ -58,7 +58,7 @@ const NavBar = () => {
 
   // Fetch search results
   const { data: searchData, isFetching } = useSearchNewsQuery(
-    { keyword: searchText, page_number: 1 },
+    { keyword: searchText, offset: 0 },
     {
       skip: !showSearch || searchText.trim() === "",
     }
@@ -89,7 +89,7 @@ const NavBar = () => {
 
   useEffect(() => setEnabled(true), []);
 
-  if (!enabled) return null;
+  // if (!enabled) return null;
 
 
   return (

@@ -1,23 +1,51 @@
+// src/components/singleNews/TopNewsForNewsDetails2.tsx
 "use client";
 
 /**
  * sidebar for single news details page
  */
 
-import fetcher from "@/utils/fetcher";
 import Image from "next/image";
 import Link from "next/link";
-import useSWR from "swr";
+import fileObjectToLink from "@/utils/fileObjectToLink";
+import { useGetTopReadNewsQuery } from "@/redux/features/news-utils/newsUtilsApi";
 
-import "@/app/topnews.css";
+// Define interfaces (aligned with previous code)
+interface NewsUtils {
+  id: string;
+  news_id: string;
+  total_share: number;
+  total_like: number;
+  total_comment: number;
+  total_view: number;
+  news: News;
+}
+
+interface News {
+  id: string;
+  headline: string;
+  short_headline: string;
+  publish_date: string;
+  slug: string;
+  category: Category;
+  banner_image?: {
+    url: string;
+  };
+}
+
+interface Category {
+  id: string;
+  slug: string;
+  title: string;
+}
 
 interface NewsProps {
-  news_id: number;
+  news_id: string;
   post_title: string;
   image_thumb: string;
   image_alt: string;
-  category: string;
-  encode_titl: string;
+  category: string; // Category slug
+  slug: string;
 }
 
 function NewsList({ posts }: { posts: NewsProps[] }) {
@@ -28,14 +56,8 @@ function NewsList({ posts }: { posts: NewsProps[] }) {
   return (
     <div className='last:[&>*]:mb-0 after:last:[&>*]:h-0'>
       {posts.map((post: NewsProps, index: number) => {
-        const {
-          news_id,
-          post_title,
-          image_thumb,
-          image_alt,
-          category,
-          encode_titl,
-        } = post;
+        const { news_id, post_title, image_thumb, image_alt, category, slug } =
+          post;
         return (
           <div key={news_id} className='pb-2'>
             <div className='flex mb-4'>
@@ -48,7 +70,7 @@ function NewsList({ posts }: { posts: NewsProps[] }) {
               >
                 <Link
                   className='group flex items-start gap-3'
-                  href={`/${category.toLocaleLowerCase()}/${encode_titl}`}
+                  href={`/${category.toLowerCase()}/${news_id}/${slug}`} // Updated link structure: /categorytitle/newsid/slug
                 >
                   {/* Image on the left */}
                   <div className='overflow-hidden relative'>
@@ -59,6 +81,7 @@ function NewsList({ posts }: { posts: NewsProps[] }) {
                       decoding='async'
                       className='w-[100px] h-[60px] object-cover group-hover:scale-105 duration-700 ease-out'
                       src={image_thumb}
+                      loading='lazy'
                     />
                   </div>
                   {/* Title on the right */}
@@ -78,20 +101,40 @@ function NewsList({ posts }: { posts: NewsProps[] }) {
 }
 
 function TopNewsForNewsDetails2({ count = 6 }: { count: number }) {
-  const latestData = useSWR("/populer-post", fetcher);
+  // Fetch the most-read news using RTK Query
+  const {
+    data: topReadNewsResponse,
+    isLoading: isTopReadLoading,
+    error: topReadError,
+  } = useGetTopReadNewsQuery({ limit: count });
+    console.log("🚀 ~ TopNewsForNewsDetails2 ~ topReadNewsResponse:", topReadNewsResponse)
 
-  if (latestData.isLoading) {
+  // Map the API response to NewsProps
+  const topReadNews: NewsProps[] =
+    topReadNewsResponse?.data?.slice(0, count).map((item: NewsUtils) => ({
+      news_id: item.news_id,
+      post_title: item.news.headline,
+      image_thumb:
+        fileObjectToLink(item.news.banner_image ?? null) ||
+        "https://i.ibb.co/LdP2NKkp/Placeholder-Begrippenlijst.webp", // Use banner_image if available, else placeholder
+      image_alt: item.news.headline || "News Image",
+      category: item.news.category?.slug || "news", // Use category slug, fallback to "news"
+      slug: item.news.slug,
+    })) || [];
+
+  // Handle loading and error states
+  if (isTopReadLoading) {
     return <div className='text-center py-4'>লোড হচ্ছে...</div>;
   }
 
-  if (latestData.error) {
+  if (topReadError) {
     return <div className='text-center py-4'>ডাটা লোড করতে ব্যর্থ হয়েছে</div>;
   }
 
   return (
-    <div className='widget-tab-container md:block hidden w-full overflow-hiddenz'>
+    <div className='widget-tab-container md:block hidden w-full overflow-hidden'>
       {/* Tab Header with Orange Dots */}
-      <div className='relative flex w-full  items-center justify-center py-2 '>
+      <div className='relative flex w-full items-center justify-center py-2'>
         <div className='flex items-center gap-2'>
           <span className='w-3 h-3 rounded-full bg-orange-500'></span>
           <h2 className='text-xl font-bold text-[#A90303] tracking-wide'>
@@ -103,14 +146,14 @@ function TopNewsForNewsDetails2({ count = 6 }: { count: number }) {
         <div className='absolute bottom-0 h-1 bg-[#A90303] w-full'></div>
       </div>
 
-      {/* Tab Panel for Latest News */}
+      {/* Tab Panel for Most Read News */}
       <div
-        className='tab-panel2 px-2 py-2 h-[535px] '
+        className='tab-panel2 px-4 py-2 h-[535px] overflow-y-auto'
         style={{
           backgroundColor: "#f9fafb",
         }}
       >
-        <NewsList posts={latestData.data?.slice(0, 6) || []} />
+        <NewsList posts={topReadNews} />
       </div>
     </div>
   );
@@ -141,6 +184,7 @@ export default TopNewsForNewsDetails2;
   .tab-panel2::-webkit-scrollbar-thumb:hover {
     background: #8b0202;
   }
+
   .tab-panel2 {
     scrollbar-width: thin;
     scrollbar-color: #a90303 #e5e5e5;

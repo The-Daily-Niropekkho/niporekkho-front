@@ -28,5 +28,6 @@ export const baseApi = createApi({
     "districts",
     "upazillas",
     "allVideos",
+    "newsUtils",
   ],
 });

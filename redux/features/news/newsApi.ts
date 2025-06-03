@@ -22,7 +22,7 @@ const newsApi = baseApi.injectEndpoints({
 
     getLatestNews: builder.query({
       query: ({ limit = 20 }: { limit?: number }) => ({
-        url: `/news/get-latest-news?sortBy=createdAt&sortOrder=desc&limit=${limit}`,
+        url: `/news/get-latest-news?fields=banner_image&sortBy=createdAt&sortOrder=desc&limit=${limit}`,
         method: "GET",
       }),
       transformResponse: (response: TResponseRedux<NewsDetails[]>) => {

@@ -283,7 +283,7 @@ const NewsWithLatest = ({
             {/* chng: Render ads */}
 
             {/* chng: Render TopNews with dummy data */}
-            {topnews && <TopNews count={8} />}
+            {topnews && <TopNews count={20} />}
           </div>
         </div>
       </div>
