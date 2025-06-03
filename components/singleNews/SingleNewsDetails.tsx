@@ -152,9 +152,9 @@ const SingleNewsDetails = ({ data, clss }: SingleNewsDetailsProps) => {
                   <Image
                     alt={data.headline}
                     width={1200}
-                    height={675}
+                    height={630}
                     decoding='async'
-                    className='w-full h-auto'
+                    className=' w-full h-auto lg:w-[1200px] lg:h-[510px]'
                     src={fileObjectToLink(data.banner_image)}
                     loading='lazy'
                   />

@@ -25,7 +25,7 @@ const SearchBar = ({
         searchRef.current &&
         !searchRef.current.contains(event.target as Node)
       ) {
-        setShowSearch(false);
+        setShowSearch(true);
       }
     };
 
@@ -40,7 +40,7 @@ const SearchBar = ({
           <input
             type='search'
             className='search-input'
-            placeholder='Search news...'
+            placeholder='খবর অনুসন্ধান করুন...'
             value={searchText}
             onChange={(e) => setSearchText(e.target.value)}
             onFocus={() => setShowSearch(true)}

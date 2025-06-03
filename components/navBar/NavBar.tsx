@@ -49,7 +49,7 @@ const NavBar = () => {
   const { theme, setTheme } = useTheme();
   const [showSidebar, setShowSidebar] = useState(false);
   const [enabled, setEnabled] = useState(false);
-  const [showSearch, setShowSearch] = useState(false);
+  const [showSearch, setShowSearch] = useState(true);
   const [searchText, setSearchText] = useState("");
   const [searchResults, setSearchResults] = useState<any[]>([]);
   const logo =
@@ -60,7 +60,7 @@ const NavBar = () => {
   const { data: searchData, isFetching } = useSearchNewsQuery(
     { keyword: searchText, offset: 0 },
     {
-      skip: !showSearch || searchText.trim() === "",
+      skip: showSearch || searchText.trim() === "",
     }
   );
 
@@ -74,7 +74,7 @@ const NavBar = () => {
     e.preventDefault();
     if (searchText.trim()) {
       router.replace(`/search?search_slug=${encodeURIComponent(searchText)}`);
-      setShowSearch(false);
+      setShowSearch(true);
     }
   };
 
@@ -99,7 +99,7 @@ const NavBar = () => {
         className='border-b-[1px] border-[var(--border-color)] dark:border-[var(--border-dark)] top-0 z-10 bg-[var(--bg)] dark:bg-[#191c20] hidden md:block'
       >
         <div className='container py-0 mx-auto'>
-          <div className='flex items-center'>
+          <div className='flex items-center justify-between'>
             <AnimatePresence>
               {isSticky && !isLoading && (
                 <motion.div
@@ -135,7 +135,7 @@ const NavBar = () => {
               activeMenu={activeMenu || ""}
             />
 
-            <div className='flex items-center justify-center print:hidden'>
+            <div className='flex items-center justify-between print:hidden'>
               <p className='py-[11px] px-5 text-md'>
                 <SearchBar
                   showSearch={showSearch}
@@ -213,7 +213,7 @@ const NavBar = () => {
                   activeMenu={activeMenu || ""}
                   className='text-base'
                 />
-                <div className='flex items-center justify-center print:hidden'>
+                <div className='flex items-center justify-between print:hidden'>
                   <p className='py-[11px] text-md'>
                     <SearchBar
                       showSearch={showSearch}

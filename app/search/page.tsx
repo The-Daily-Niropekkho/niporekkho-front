@@ -14,9 +14,9 @@ import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import {
-    FacebookShareButton,
-    TwitterShareButton,
-    WhatsappShareButton,
+  FacebookShareButton,
+  TwitterShareButton,
+  WhatsappShareButton,
 } from "react-share";
 import add1 from "/public/images/add1.png";
 
@@ -44,23 +44,41 @@ const mapToNewsItem = (apiData: any): NewsItem => ({
   publish_date: apiData.publish_date || "",
 });
 
+// Utility function to highlight search term in text
+const highlightSearchTerm = (text: string, searchTerm: string): JSX.Element => {
+  if (!searchTerm.trim()) return <>{text}</>;
+
+  const regex = new RegExp(`(${searchTerm})`, "gi");
+  const parts = text.split(regex);
+  return (
+    <>
+      {parts.map((part, index) =>
+        regex.test(part) ? (
+          <span key={index} className='text-red-600'>
+            {part}
+          </span>
+        ) : (
+          part
+        ),
+      )}
+    </>
+  );
+};
+
 export default function SearchPage() {
-  const [allData, setAllData] = useState<NewsItem[]>([]); // Store all fetched data
-  const [displayCount, setDisplayCount] = useState(10); // Number of items to display
-  const [offset, setOffset] = useState(0); // Offset for fetching more data
+  const [allData, setAllData] = useState<NewsItem[]>([]);
+  const [displayCount, setDisplayCount] = useState(10);
+  const [offset, setOffset] = useState(0);
   const [currentUrl, setCurrentUrl] = useState("");
   const [noData, setNoData] = useState(false);
-  const [hasMore, setHasMore] = useState(true); // Track if more data is available
-  const [isParamChanging, setIsParamChanging] = useState(false); // Track parameter change
-  const itemsPerPage = 10; // Display 10 items at a time
-  const fetchLimit = 20; // Fetch 20 items at a time from API
+  const [hasMore, setHasMore] = useState(true);
+  const [isParamChanging, setIsParamChanging] = useState(false);
+  const itemsPerPage = 10;
+  const fetchLimit = 20;
 
-  // Get the search parameters from URL
   const searchParams = useSearchParams();
   const searchSlug = searchParams.get("search_slug") || "";
-  console.log("Search Slug:", searchSlug);
 
-  // Use RTK Query to fetch search results
   const {
     data: searchData,
     isLoading,
@@ -71,39 +89,35 @@ export default function SearchPage() {
     { keyword: searchSlug, offset },
     { skip: !searchSlug.trim() },
   );
-  console.log("Search Data:", searchData);
+    console.log("🚀 ~ SearchPage ~ searchData:", searchData)
 
-  // Reset state and show loader when searchSlug changes
   useEffect(() => {
     setIsParamChanging(true);
-    setAllData([]); // Clear all existing data
+    setAllData([]);
     setDisplayCount(10);
     setOffset(0);
     setNoData(false);
     setHasMore(true);
 
-    // After a short delay, reset isParamChanging to allow data to load
     const timer = setTimeout(() => {
       setIsParamChanging(false);
       if (searchSlug.trim()) {
-        refetch(); // Only refetch if there's a search term
+        refetch();
       }
     }, 100);
 
     return () => clearTimeout(timer);
   }, [searchSlug, refetch]);
 
-  // Update allData state based on search results
   useEffect(() => {
     if (searchData && searchData.data && !isParamChanging) {
       const mappedData = searchData.data.map(mapToNewsItem);
-      setAllData(mappedData); // Replace existing data instead of appending
+      setAllData(mappedData);
       setNoData(mappedData.length === 0);
       setHasMore(mappedData.length === fetchLimit);
     }
   }, [searchData, isParamChanging]);
 
-  // Fetch more data if needed
   useEffect(() => {
     if (
       displayCount >= allData.length &&
@@ -115,13 +129,11 @@ export default function SearchPage() {
     }
   }, [displayCount, allData.length, hasMore, isFetching, isParamChanging]);
 
-  // Set current URL
   useEffect(() => {
     const currentUrl = window.location.href;
     setCurrentUrl(currentUrl);
   }, []);
 
-  // Handle error state
   if (error) {
     return (
       <div className='h-[300px] sm:h-[600px] flex items-center justify-center text-3xl text-[var(--dark)] dark:text-white'>
@@ -130,10 +142,8 @@ export default function SearchPage() {
     );
   }
 
-  // Handle loading state
   if (isLoading && offset === 0) return <SearchPageSkeleton />;
 
-  // Show loader during parameter change
   if (isParamChanging) {
     return (
       <div className='h-[300px] sm:h-[600px] flex items-center justify-center'>
@@ -141,7 +151,8 @@ export default function SearchPage() {
       </div>
     );
   }
-if (isFetching && allData.length > 0) {
+
+  if (isFetching && allData.length > 0) {
     return (
       <div className='h-[300px] sm:h-[600px] flex items-center justify-center'>
         <ThreeDotsLoader clss='w-12 h-12 text-[var(--text-primary)] dark:text-[var(--text-dark)]' />
@@ -149,7 +160,6 @@ if (isFetching && allData.length > 0) {
     );
   }
 
-  // Slice the data to display only up to displayCount
   const displayedData = allData.slice(0, displayCount);
 
   return (
@@ -159,49 +169,10 @@ if (isFetching && allData.length > 0) {
           <div className='col-span-12 lg:col-start-2 lg:col-span-10 xl:col-start-2 xl:col-span-10'>
             <div className='border-[var(--border-color)] dark:border-[var(--border-dark)] border-b-[2px] mb-3'>
               <div className='pb-1 flex flex-col md:flex-row md:justify-between gap-2 md:gap-0 items-center'>
-                <h1 className='text-xl md:text-2xl text-[var(--primary)] dark:text-[var(--primary)]'>
-                  অনুসন্ধানকৃত ফলাফল: {searchSlug}
+                <h1 className='text-xl md:text-2xl text-[var(--text-primary)] dark:text-[var(--primary)]'>
+                  অনুসন্ধানকৃত ফলাফল:{" "}
+                  <span className='font-bold'>{`"${searchSlug}"`}</span>
                 </h1>
-                <div className='hidden w-auto items-center whitespace-nowrap justify-start min-h-[40px] md:min-h-[48px] print:hidden select-none'>
-                  <div className='flex items-center'>
-                    <FacebookShareButton
-                      url={currentUrl}
-                      title={"Today's news"}
-                      quote={"Today's news"}
-                      className='flex justify-center cursor-pointer text-xs h-[32px] w-[36px] mr-2 !bg-[var(--slate)] dark:!bg-[var(--gray-1)] dark:!text-white rounded-md items-center border'
-                    >
-                      <FacebookIcon />
-                    </FacebookShareButton>
-
-                    <WhatsappShareButton
-                      url={currentUrl}
-                      title={"Today's news"}
-                      className='flex justify-center cursor-pointer text-xs h-[32px] w-[36px] mr-2 !bg-[var(--slate)] dark:!bg-[var(--gray-1)] dark:!text-white rounded-md items-center border'
-                    >
-                      <WhatsAppIcon />
-                    </WhatsappShareButton>
-
-                    <TwitterShareButton
-                      url={currentUrl}
-                      title={"Today's news"}
-                      className='flex justify-center cursor-pointer text-xs h-[32px] w-[36px] mr-2 !bg-[var(--slate)] dark:!bg-[var(--gray-1)] dark:!text-white rounded-md items-center border'
-                    >
-                      <svg
-                        className='w-4 h-4 fill-black dark:fill-white'
-                        viewBox='0 0 512 512'
-                      >
-                        <path d='M389.2 48h70.6L305.6 224.2 487 464H345L233.7 318.6 106.5 464H35.8L200.7 275.5 26.8 48H172.4L272.9 180.9 389.2 48zM364.4 421.8h39.1L151.1 88h-42L364.4 421.8z'></path>
-                      </svg>
-                    </TwitterShareButton>
-
-                    <div
-                      className='flex justify-center cursor-pointer text-xs h-[32px] w-[36px] mr-2 bg-[var(--slate)] dark:bg-[var(--gray-1)] dark:text-white rounded-md items-center'
-                      onClick={() => navigator.clipboard.writeText(currentUrl)}
-                    >
-                      <CopyIcon />
-                    </div>
-                  </div>
-                </div>
               </div>
             </div>
           </div>
@@ -227,7 +198,7 @@ if (isFetching && allData.length > 0) {
                   >
                     <Link
                       className='group'
-                      href={`/${category}/${encode_titl}`}
+                      href={`/${category}/${news_id}/${encode_titl}`}
                     >
                       <div className='ml-2 md:ml-0 lg:ml-2 mb-2 xl:mb-0 overflow-hidden float-right relative'>
                         <div>
@@ -236,17 +207,17 @@ if (isFetching && allData.length > 0) {
                             width={330}
                             height={186}
                             decoding='async'
-                            className='w-[124px] h-auto lg:w-[110px] lg:h-[75px] xl:w-[180px] xl:h-[120px] object-cover group-hover:scale-105 duration-700 ease-out'
+                            className='w-[124px] h-auto lg:w-[130px] lg:h-[95px] xl:w-[190px] xl:h-[150px]  group-hover:scale-105 duration-700 ease-out'
                             src={image_thumb}
                             loading='lazy'
                           />
                         </div>
                       </div>
                       <h2 className='text-lg mb-2 text-[var(--dark)] dark:text-white'>
-                        {post_title}
+                        {highlightSearchTerm(post_title, searchSlug)}
                       </h2>
-                      <p className='hidden lg:block text-base mb-2 text-[var(--gray-2)] dark:text-[var(--gray-3)]'>
-                        {excerpt || stitle}
+                      <p className='hidden lg:block text-base mb-2 text-[var(--gray-2)] dark:text-[var(--gray-3)] line-clamp-2'>
+                        {highlightSearchTerm(excerpt || stitle, searchSlug)}
                       </p>
                       <p className='text-base text-[var(--gray-2)] dark:text-[var(--gray-3)]'>
                         {timestampToBangleDateWithTime(time_stamp)}

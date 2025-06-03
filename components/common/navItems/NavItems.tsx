@@ -1,7 +1,8 @@
 import Link from "next/link";
 import { FaChevronDown } from "react-icons/fa";
 import { useState } from "react";
-import { MdKeyboardDoubleArrowRight } from "react-icons/md";
+import { FiChevronsRight } from "react-icons/fi";
+import { formatBanglaAndHijri } from "@/utils/bengaliTime";
 
 // Static JSON data with id, title, and slug
 const staticCategories = [
@@ -238,8 +239,8 @@ const NavItems = ({
 
   return (
     <>
-      <ul className='lg:flex items-center gap-5 hidden'>
-        {menuData.slice(0, 13).map((item) => (
+      <ul className='lg:flex items-center hidden'>
+        {menuData.slice(0, 11).map((item) => (
           <li key={item.title} className='relative group'>
             <Link
               href={`/category/${item.slug}?id=${item.id}`}
@@ -280,86 +281,51 @@ const NavItems = ({
             style={{
               width: "100vw",
               left: "80%",
-              transform: "translateX(-90%)",
+              transform: "translateX(-98%)",
               maxWidth: "1200px",
             }}
           >
-            <div className='grid grid-cols-4 gap-10 p-6 md:p-6'>
-              {/* Column 1 */}
-              <div>
-                <ul className='space-y-2'>
-                  {menuData.slice(12, 17).map((item) => (
-                    <li key={item.title}>
-                      <Link
-                        href={`/category/${item.slug}?id=${item.id}`}
-                        className='block text-gray-700 dark:text-gray-300 hover:text-red-500 dark:hover:text-red-500 transition-colors duration-300'
-                      >
-                        <div className='flex items-center gap-2 hover:translate-x-5 transition-transform duration-300'>
-                          <MdKeyboardDoubleArrowRight />
-                          {item.title}
-                        </div>
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-
-              {/* Column 2 */}
-              <div>
-                <ul className='space-y-2'>
-                  {menuData.slice(17, 21).map((item) => (
-                    <li key={item.title}>
-                      <Link
-                        href={`/category/${item.slug}?id=${item.id}`}
-                        className='block text-gray-700 dark:text-gray-300 hover:text-red-500 dark:hover:text-red-500 transition-colors duration-300'
-                      >
-                        <div className='flex items-center gap-2 hover:translate-x-5 transition-transform duration-300'>
-                          <MdKeyboardDoubleArrowRight />
-                          {item.title}
-                        </div>
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-
-              {/* Column 3 */}
-              <div>
-                <ul className='space-y-2'>
-                  {menuData.slice(21, 25).map((item) => (
-                    <li key={item.title}>
-                      <Link
-                        href={`/category/${item.slug}?id=${item.id}`}
-                        className='block text-gray-700 dark:text-gray-300 hover:text-red-500 dark:hover:text-red-500 transition-colors duration-300'
-                      >
-                        <div className='flex items-center gap-2 hover:translate-x-5 transition-transform duration-300'>
-                          <MdKeyboardDoubleArrowRight />
-                          {item.title}
-                        </div>
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-
-              {/* Column 4 */}
-              <div>
-                <ul className='space-y-2'>
-                  {menuData.slice(25, 29).map((item) => (
-                    <li key={item.title}>
-                      <Link
-                        href={`/category/${item.slug}?id=${item.id}`}
-                        className='block text-gray-700 dark:text-gray-300 hover:text-red-500 dark:hover:text-red-500 transition-colors duration-300'
-                      >
-                        <div className='flex items-center gap-2 hover:translate-x-5 transition-transform duration-300'>
-                          <MdKeyboardDoubleArrowRight />
-                          {item.title}
-                        </div>
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              </div>
+            <div className=''>
+              <p className='text-start px-6 py-2 text-sm text-[#000000] border-b border-gray-200 dark:border-gray-700'>
+                {formatBanglaAndHijri()}
+              </p>
+            </div>
+            <div className='grid grid-cols-4 gap-10 px-6 md:px-6 py-2'>
+              {[0, 1, 2, 3].map((colIndex) => (
+                <div
+                  key={colIndex}
+                  className={`border-r ${
+                    colIndex === 3
+                      ? "border-none"
+                      : "border-gray-100 dark:border-gray-700"
+                  }`}
+                >
+                  <ul className='space-y-2'>
+                    {menuData
+                      .slice(colIndex * 5 + 11, colIndex * 5 + 16)
+                      .map((item) => (
+                        <li key={item.title}>
+                          <Link
+                            href={`/category/${item.slug}?id=${item.id}`}
+                            className='block text-gray-700 dark:text-gray-300 hover:text-[var(--text-primary)] dark:hover:text-red-500 transition-colors duration-300'
+                          >
+                            <div className='flex items-center gap-2 hover:translate-x-5 transition-transform duration-300'>
+                              <span className='text-[var(--text-primary)]'>
+                                <FiChevronsRight />
+                              </span>
+                              {item.title}
+                            </div>
+                          </Link>
+                        </li>
+                      ))}
+                  </ul>
+                </div>
+              ))}
+            </div>
+            <div className=''>
+              <p className='text-center px-6 py-2 text-sm text-[#000000] border-t border-gray-200 dark:border-gray-700'>
+                {formatBanglaAndHijri()}
+              </p>
             </div>
           </div>
         </li>
