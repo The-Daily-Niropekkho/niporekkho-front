@@ -1,0 +1,54 @@
+name: Frontend
+
+on:
+  push:
+    branches: ["main"]
+
+jobs:
+  deploy:
+    runs-on: self-hosted
+
+    steps:
+      # 1) Checkout your code as usual
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # 2) Use dorny/paths-filter to detect changes to package.json or yarn.lock
+      - name: Detect dependency‐related changes
+        id: deps_changes
+        uses: dorny/paths-filter@v2
+        with:
+          filters: |
+            dependencies:
+              - 'package.json'
+              - 'yarn.lock'
+
+      # 3) Set up Node.js and enable caching for yarn
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 23.x
+          cache: "yarn"
+          # The cache key automatically uses the contents of package.json + yarn.lock,
+          # so when those haven’t changed, yarn install will restore from cache.
+
+      # 4) Install dependencies only if package.json or yarn.lock changed this push
+      - name: Install Dependencies
+        # if: steps.deps_changes.outputs.dependencies == 'true'
+        run: yarn install
+
+      # 5) Build the project (you probably want to build even if deps didn’t change—
+      #    else guard this too if, for example, only code changes should trigger a build)
+      - name: Build the Project
+        run: yarn build
+
+      # 6) Restart or start the PM2 process
+      - name: Check/Restart or Start frontend with PM2
+        run: |
+          if pm2 list | grep -q "frontend"; then
+            echo "frontend is already running, restarting it..."
+            pm2 restart frontend
+          else
+            echo "frontend is not running, starting it..."
+            pm2 start npm --name "frontend" -- start
+          fi
