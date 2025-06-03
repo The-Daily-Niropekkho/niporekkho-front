@@ -199,10 +199,9 @@ const HomeMain = () => {
               updatedAt: new Date().toISOString(),
               news: mergedResult[config.allCategories.national_id] ?? [],
             }}
-            sideData={{
-              ...dummySideData,
-              // category_id: dummySideData.category_id ?? "default-opinion-id",
-            }}
+            // sideData={{
+            //   opinion: dummySideData.post,
+            // }}
             ads={dummyAds}
             topnews={true}
           />

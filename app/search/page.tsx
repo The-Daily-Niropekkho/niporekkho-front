@@ -12,7 +12,7 @@ import timestampToBangleDateWithTime from "@/utils/timestampToBangleDateWithTime
 import Image from "next/image";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import {
   FacebookShareButton,
   TwitterShareButton,
@@ -66,7 +66,8 @@ const highlightSearchTerm = (text: string, searchTerm: string): JSX.Element => {
   );
 };
 
-export default function SearchPage() {
+// Main Search Page Component (without useSearchParams)
+function SearchPageContent() {
   const [allData, setAllData] = useState<NewsItem[]>([]);
   const [displayCount, setDisplayCount] = useState(10);
   const [offset, setOffset] = useState(0);
@@ -161,16 +162,15 @@ export default function SearchPage() {
   }
 
   const displayedData = allData.slice(0, displayCount);
-  console.log("🚀 ~ SearchPage ~ displayedData:", displayedData)
 
   return (
-    <section className='py-[calc(100vh/6)]'>
+    <section className='py-8 sm:py-12 md:py-16'>
       <div className='container px-4 mx-auto'>
-        <div className='grid grid-cols-1 md:grid-cols-12 gap-6'>
+        <div className='grid grid-cols-1 md:grid-cols-12 gap-4 sm:gap-6'>
           <div className='col-span-12 lg:col-start-2 lg:col-span-10 xl:col-start-2 xl:col-span-10'>
-            <div className='border-[var(--border-color)] dark:border-[var(--border-dark)] border-b-[2px] mb-3'>
+            <div className='border-b-[2px] border-[var(--border-color)] dark:border-[var(--border-dark)] mb-3'>
               <div className='pb-1 flex flex-col md:flex-row md:justify-between gap-2 md:gap-0 items-center'>
-                <h1 className='text-xl md:text-2xl text-[var(--text-primary)] dark:text-[var(--primary)]'>
+                <h1 className='text-lg sm:text-xl md:text-2xl text-[var(--text-primary)] dark:text-[var(--primary)]'>
                   অনুসন্ধানকৃত ফলাফল:{" "}
                   <span className='font-bold'>{`"${searchSlug}"`}</span>
                 </h1>
@@ -178,7 +178,7 @@ export default function SearchPage() {
             </div>
           </div>
         </div>
-        <div className='grid grid-cols-1 md:grid-cols-12 gap-6'>
+        <div className='grid grid-cols-1 md:grid-cols-12 gap-4 sm:gap-6'>
           <div className='col-span-12 md:col-span-7 lg:col-start-2 lg:col-span-6 xl:col-start-2 xl:col-span-7 relative after:bg-[var(--border-color)] after:absolute after:w-full after:h-[1px] after:-bottom-3 after:right-0 after:last:h-0 md:after:w-[1px] md:after:h-full md:after:-right-3 md:after:top-0 md:after:last:w-0 dark:after:bg-[var(--border-dark)]'>
             <div className='flex flex-col pb-6'>
               {displayedData.map((itm: NewsItem) => {
@@ -195,72 +195,75 @@ export default function SearchPage() {
                 return (
                   <div
                     key={news_id}
-                    className='mb-6 last:mb-0 relative after:bg-[var(--border-color)] after:absolute after:w-full after:h-[1px] after:-bottom-3 dark:after:bg-[var(--border-dark)]'
+                    className='mb-4 sm:mb-6 last:mb-0 relative after:bg-[var(--border-color)] after:absolute after:w-full after:h-[1px] after:-bottom-2 sm:after:-bottom-3 dark:after:bg-[var(--border-dark)]'
                   >
                     <Link
-                      className='group'
+                      className='group flex flex-col sm:flex-row sm:items-start gap-3 sm:gap-4'
                       href={`/${category}/${news_id}/${encode_titl}`}
                     >
-                      <div className='ml-2 md:ml-0 lg:ml-2 mb-2 xl:mb-0 overflow-hidden float-right relative'>
-                        <div>
-                          <Image
-                            alt={post_title}
-                            width={330}
-                            height={186}
-                            decoding='async'
-                            className='w-[124px] h-auto lg:w-[130px] lg:h-[95px] xl:w-[190px] xl:h-[150px]  group-hover:scale-105 duration-700 ease-out'
-                            src={image_thumb}
-                            loading='lazy'
-                          />
-                        </div>
+                      <div className='w-full sm:w-[120px] md:w-[130px] lg:w-[150px] xl:w-[190px] overflow-hidden relative'>
+                        <Image
+                          alt={post_title}
+                          width={330}
+                          height={186}
+                          decoding='async'
+                          className='w-full h-auto sm:h-[80px] md:h-[95px] xl:h-[120px] group-hover:scale-105 duration-700 ease-out object-cover'
+                          src={image_thumb}
+                          loading='lazy'
+                        />
                       </div>
-                      <h2 className='text-lg mb-2 text-[var(--dark)] dark:text-white'>
-                        {highlightSearchTerm(post_title, searchSlug)}
-                      </h2>
-                      <p className='hidden lg:block text-base mb-2 text-[var(--gray-2)] dark:text-[var(--gray-3)] line-clamp-2'>
-                        {highlightSearchTerm(excerpt || stitle, searchSlug)}
-                      </p>
-                      <p className='text-base text-[var(--gray-2)] dark:text-[var(--gray-3)]'>
-                        {date_output_bn(String(time_stamp))}
-                      </p>
+                      <div className='flex-1'>
+                        <h2 className='text-base sm:text-lg md:text-xl mb-1 sm:mb-2 text-[var(--dark)] dark:text-white leading-tight'>
+                          {highlightSearchTerm(post_title, searchSlug)}
+                        </h2>
+                        <p className='hidden sm:block text-sm md:text-base mb-1 sm:mb-2 text-[var(--gray-2)] dark:text-[var(--gray-3)] line-clamp-2'>
+                          {highlightSearchTerm(excerpt || stitle, searchSlug)}
+                        </p>
+                        <p className='text-xs sm:text-sm md:text-base text-[var(--gray-2)] dark:text-[var(--gray-3)]'>
+                          {date_output_bn(String(time_stamp))}
+                        </p>
+                      </div>
                     </Link>
                   </div>
                 );
               })}
             </div>
             {allData.length === 0 ? (
-              <p className='text-lg text-center text-[var(--dark)] dark:text-white'>
+              <p className='text-base sm:text-lg text-center text-[var(--dark)] dark:text-white'>
                 আপনার অনুসন্ধানের কোন সংবাদ নেই
               </p>
-            ) : !noData && (
-              <div className='flex justify-center'>
-                {displayedData.length < allData.length || hasMore ? (
-                  <button
-                    className='flex items-center justify-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed text-white text-lg bg-[var(--primary)] px-4 py-2 hover:bg-[var(--primary)] rounded-sm'
-                    disabled={isFetching}
-                    onClick={() =>
-                      setDisplayCount((prev) => prev + itemsPerPage)
-                    }
-                  >
-                    আরও দেখুন
-                    {isFetching && <Spin clss='w-7 h-7' />}
-                  </button>
-                ) : (
-                  <p className='text-lg text-[var(--dark)] dark:text-white'>
-                    আর কোন সংবাদ নেই
-                  </p>
-                )}
-              </div>
+            ) : (
+              !noData && (
+                <div className='flex justify-center mt-4'>
+                  {displayedData.length < allData.length || hasMore ? (
+                    <button
+                      className='flex items-center justify-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed text-white text-base sm:text-lg bg-[var(--primary)] px-4 py-2 hover:bg-[var(--primary)] rounded-sm'
+                      disabled={isFetching}
+                      onClick={() =>
+                        setDisplayCount((prev) => prev + itemsPerPage)
+                      }
+                    >
+                      আরও দেখুন
+                      {isFetching && <Spin clss='w-6 h-6 sm:w-7 sm:h-7' />}
+                    </button>
+                  ) : (
+                    <p className='text-base sm:text-lg text-[var(--dark)] dark:text-white'>
+                      আর কোন সংবাদ নেই
+                    </p>
+                  )}
+                </div>
+              )
             )}
           </div>
-          <div className='hidden col-span-12 md:col-span-5 lg:col-span-4 xl:col-span-3 relative after:bg-[var(--border-color)] after:absolute after:w-full after:h-[1px] after:-bottom-3 after:right-0 after:last:h-0 md:after:w-[1px] md:after:h-full md:after:-right-3 md:after:top-0 md:after:last:w-0 dark:after:bg-[var(--border-dark)]'>
+          <div className='col-span-12 md:col-span-5 lg:col-span-4 xl:col-span-3 relative after:bg-[var(--border-color)] after:absolute after:w-full after:h-[1px] after:-bottom-3 after:right-0 after:last:h-0 md:after:w-[1px] md:after:h-full md:after:-right-3 md:after:top-0 md:after:last:w-0 dark:after:bg-[var(--border-dark)]'>
             <div className='md:sticky md:top-[4.5rem]'>
               <div className='w-full flex items-center justify-center'>
                 <Image
                   src={add1?.src}
                   width={add1.width}
                   height={add1.height}
-                  alt=''
+                  alt='Advertisement'
+                  className='w-full h-auto max-w-[300px] md:max-w-[250px] lg:max-w-[300px]'
                 />
               </div>
             </div>
@@ -271,3 +274,10 @@ export default function SearchPage() {
   );
 }
 
+export default function SearchPage() {
+  return (
+    <Suspense fallback={<SearchPageSkeleton />}>
+      <SearchPageContent />
+    </Suspense>
+  );
+}
