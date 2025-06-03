@@ -19,6 +19,7 @@ import {
   WhatsappShareButton,
 } from "react-share";
 import add1 from "/public/images/add1.png";
+import date_output_bn from "@/utils/datetime";
 
 // Utility function to map API response to NewsItem
 const mapToNewsItem = (apiData: any): NewsItem => ({
@@ -89,7 +90,6 @@ export default function SearchPage() {
     { keyword: searchSlug, offset },
     { skip: !searchSlug.trim() },
   );
-    console.log("🚀 ~ SearchPage ~ searchData:", searchData)
 
   useEffect(() => {
     setIsParamChanging(true);
@@ -161,6 +161,7 @@ export default function SearchPage() {
   }
 
   const displayedData = allData.slice(0, displayCount);
+  console.log("🚀 ~ SearchPage ~ displayedData:", displayedData)
 
   return (
     <section className='py-[calc(100vh/6)]'>
@@ -220,14 +221,18 @@ export default function SearchPage() {
                         {highlightSearchTerm(excerpt || stitle, searchSlug)}
                       </p>
                       <p className='text-base text-[var(--gray-2)] dark:text-[var(--gray-3)]'>
-                        {timestampToBangleDateWithTime(time_stamp)}
+                        {date_output_bn(String(time_stamp))}
                       </p>
                     </Link>
                   </div>
                 );
               })}
             </div>
-            {!noData && (
+            {allData.length === 0 ? (
+              <p className='text-lg text-center text-[var(--dark)] dark:text-white'>
+                আপনার অনুসন্ধানের কোন সংবাদ নেই
+              </p>
+            ) : !noData && (
               <div className='flex justify-center'>
                 {displayedData.length < allData.length || hasMore ? (
                   <button
@@ -265,3 +270,4 @@ export default function SearchPage() {
     </section>
   );
 }
+

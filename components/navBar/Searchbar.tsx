@@ -48,7 +48,7 @@ const SearchBar = ({
         </form>
         <button
           className='search-button'
-          onClick={() => setShowSearch(!showSearch)}
+          onClick={handleSearchItem}
           aria-label='Toggle search'
         >
           <svg
