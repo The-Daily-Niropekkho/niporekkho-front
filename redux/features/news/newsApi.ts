@@ -59,6 +59,24 @@ const newsApi = baseApi.injectEndpoints({
       },
     }),
 
+    zonewiseNews: builder.query({
+      query: ({
+        limit,
+        division_id,
+        district_id,
+        upazilla_id,
+      }: {
+        limit?: number;
+        division_id?: string;
+        district_id?: string;
+        upazilla_id?: string;
+      }) => {
+        const params = new URLSearchParams();
+        if (division_id) params.append("division_id", division_id);
+        if (district_id) params.append("district_id", district_id);
+        if (upazilla_id) params.append("upazilla_id", upazilla_id);
+        if (limit) params.append("limit", limit.toString());
+
     searchNews: builder.query({
       query: ({ keyword, offset }: { keyword: string; offset: number }) => {
         const limit = 500; 
@@ -67,20 +85,15 @@ const newsApi = baseApi.injectEndpoints({
         )}&limit=${limit}&offset=${offset}`;
         console.log("Constructed URL:", url);
         return {
-          url,
+          url: `/news?${params.toString()}`,
           method: "GET",
         };
       },
       transformResponse: (response: TResponseRedux<NewsDetails[]>) => {
-        console.log("API Response:", response);
-        return { data: response.data, meta: response.meta };
-      },
-      providesTags: ["news"],
-      serializeQueryArgs: ({ endpointName, queryArgs }) => {
-        return `${endpointName}-${queryArgs.keyword}-${queryArgs.offset}`;
-      },
-      forceRefetch({ currentArg, previousArg }) {
-        return currentArg?.offset !== previousArg?.offset;
+        return {
+          data: response.data,
+          meta: response.meta,
+        };
       },
     }),
   }),
@@ -92,5 +105,5 @@ export const {
   useGetNewsBySlugQuery,
   useUpdateNewsMutation,
   useTropicwiseNewsQuery,
-  useSearchNewsQuery,
+  useZonewiseNewsQuery
 } = newsApi;
