@@ -17,5 +17,17 @@ export const baseApi = createApi({
   reducerPath: "baseApi",
   baseQuery: baseQuery,
   endpoints: () => ({}),
-  tagTypes: ["user", "Media", "category", "news", "homeData", "topHomeData", "divisions","districts","upazillas"],
+  tagTypes: [
+    "user",
+    "Media",
+    "category",
+    "news",
+    "homeData",
+    "topHomeData",
+    "divisions",
+    "districts",
+    "upazillas",
+    "allVideos",
+    "newsUtils",
+  ],
 });

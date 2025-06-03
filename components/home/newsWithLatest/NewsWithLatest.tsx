@@ -112,8 +112,7 @@ const NewsWithLatest = ({
   topnews,
 }: NewsWithLatestProps) => {
   const { title: category_name, slug, news } = data || {};
-console.log(news, "news data");
-  const { post } = sideData || {};
+// console.log(news, "news data");
 
   return (
     <section className='mt-[60px]'>
@@ -162,7 +161,7 @@ console.log(news, "news data");
                         <div className='w-full md:w-1/2 lg:w-full'>
                           <h3 className='text-2xl left-9 mx-4 md:mx-0 text-[var(--dark)] mt-2 md:mt-0 lg:mt-2 mb-0 md:mb-2 dark:text-white font-semibold group-hover:text-[var(--text-primary)]'>
                             {item.short_headline && (
-                              <span className='text-blue-800'>
+                              <span className='text-[var(--text-primary)]'>
                                 {item.short_headline} /{" "}
                               </span>
                             )}
@@ -209,7 +208,7 @@ console.log(news, "news data");
                             </div>
                             <h3 className='text-lg text-[var(--dark)] dark:text-white font-bold group-hover:text-[var(--text-primary)] line-clamp-2'>
                               {item.short_headline && (
-                                <span className='text-blue-800'>
+                                <span className='text-[var(--text-primary)]'>
                                   {item.short_headline} /{" "}
                                 </span>
                               )}
@@ -260,7 +259,7 @@ console.log(news, "news data");
                         </div>
                         <h3 className='text-lg text-[var(--dark)] dark:text-white font-bold group-hover:text-[var(--text-primary)] line-clamp-2'>
                           {item.short_headline && (
-                            <span className='text-blue-800'>
+                            <span className='text-[var(--text-primary)]'>
                               {item.short_headline} /{" "}
                             </span>
                           )}
@@ -284,7 +283,7 @@ console.log(news, "news data");
             {/* chng: Render ads */}
 
             {/* chng: Render TopNews with dummy data */}
-            {topnews && <TopNews count={8} />}
+            {topnews && <TopNews count={20} />}
           </div>
         </div>
       </div>

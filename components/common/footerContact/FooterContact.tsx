@@ -59,7 +59,7 @@ const FooterContact = ({
       label: "",
       key: "facebook",
       icon: faFacebookF,
-      href: "https://facebook.com",
+      href: "https://www.facebook.com/dailyniropekkho",
       hover: "bg-blue-600 text-white border rounded-[9999px] ",
     },
     {
@@ -73,21 +73,21 @@ const FooterContact = ({
       label: "",
       key: "linkedin",
       icon: faLinkedinIn,
-      href: "https://linkedin.com",
+      href: "https://www.linkedin.com/in/daily-niropekkho-429727347/?originalSubdomain=bd",
       hover: "bg-blue-700 text-white border rounded-[9999px] ",
     },
     {
       label: "",
       key: "youtube",
       icon: faYoutube,
-      href: "https://youtube.com",
+      href: "https://www.youtube.com/@DailyNiropekkho.official",
       hover: "bg-red-600 text-white border rounded-[9999px] ",
     },
     {
       label: "",
       key: "instagram",
       icon: faInstagram,
-      href: "https://instagram.com",
+      href: "https://www.instagram.com/dailyniropekkho/",
       hover:
         "transition-colors duration-500 bg-[radial-gradient(circle_at_30%_107%,_#fdf497_0%,_#fdf497_5%,_#fd5949_45%,_#d6249f_60%,_#285AEB_90%)] text-white border rounded-full",
     },
@@ -95,7 +95,7 @@ const FooterContact = ({
       label: "",
       key: "tiktok",
       icon: faTiktok,
-      href: "https://tiktok.com",
+      href: "https://www.tiktok.com/@daily.niropekkho",
       hover:
         "transition-colors duration-500 bg-black text-white border rounded-full",
     },

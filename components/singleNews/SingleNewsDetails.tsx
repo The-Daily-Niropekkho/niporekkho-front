@@ -1,7 +1,5 @@
-
 "use client";
 
-import VideoEmbed from "@/components/VideoEmbed";
 import PrintIcon from "@/public/icons/PrintIcon";
 import { NewsDetails } from "@/types/newsDetails";
 import Breadcrumb from "@/ui/Breadcrumb";
@@ -14,8 +12,8 @@ import Script from "next/script";
 import { useEffect, useRef, useState } from "react";
 import { FaHome } from "react-icons/fa";
 import AddCard from "../common/addCard/AddCard";
-import TopNewsForNewsDetails from "./top-news-for-news-details";
 import FacebookComments from "../facebook-comment/facebook-comment";
+import TopNewsForNewsDetails from "./top-news-for-news-details";
 
 interface SingleNewsDetailsProps {
   data: NewsDetails & { relatedPost: NewsDetails[] };
@@ -277,27 +275,28 @@ const SingleNewsDetails = ({ data, clss }: SingleNewsDetailsProps) => {
                   <div className='my-3 flex flex-col'>
                     <div
                       className='[&>p]:mt-5 news_details'
-                      dangerouslySetInnerHTML={{ __html: data.details_html }}
+                      dangerouslySetInnerHTML={{
+                        __html: data.details_html,
+                      }}
                     />
                   </div>
                 </div>
               </div>
 
+              <div className='print:hidden gap-3 py-3 flex flex-wrap'>
+                {data.allTopics?.map((topic, index) => (
+                  <Link
+                    key={index}
+                    className='bg-[var(--slate-2)] dark:bg-[var(--gray-2)] text-sm leading-none text-[var(--dark)] p-2 dark:text-white text-center flex items-center'
+                    href={`/topic/${topic.title}?topic_id=${topic.id}`}
+                  >
+                    {topic.title}
+                  </Link>
+                ))}
+              </div>
               {/* Add Facebook Comments Component */}
               <FacebookComments url={currentUrl} />
             </article>
-
-            <div className='print:hidden gap-3 py-3 flex flex-wrap'>
-              {data.allTopics?.map((topic, index) => (
-                <Link
-                  key={index}
-                  className='bg-[var(--slate-2)] dark:bg-[var(--gray-2)] text-sm leading-none text-[var(--dark)] p-2 dark:text-white text-center flex items-center'
-                  href={`/topic/${topic.title}?topic_id=${topic.id}`}
-                >
-                  {topic.title}
-                </Link>
-              ))}
-            </div>
 
             <div className='container mx-auto print:hidden'>
               <div className='relative mt-6 mb-6 before:absolute before:bg-[var(--border-color)] before:w-full before:h-[1px] before:left-0 before:-top-3 after:bg-[var(--border-color)] after:absolute after:w-full after:h-[1px] after:left-0 after:-bottom-2 print:hidden dark:before:bg-[var(--border-color)] dark:after:bg-[var(--border-dark)]'>

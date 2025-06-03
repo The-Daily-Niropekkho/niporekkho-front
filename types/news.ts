@@ -61,27 +61,46 @@ export interface Ads {
   home_14?: { id: string; url: string; link: string };
 }
 
-export interface SideData {
-  position: string;
-  category_name: string;
+export interface OpinionItem {
+  id: string;
+  banner_image: IBannerImage;
+  headline: string;
+  short_headline: string;
   slug: string;
-  category_id: string;
-  status: string;
-  post: {
-    news_id: string;
-    post_title: string;
-    stitle?: string;
-    excerpt?: string;
-    image_large: string;
-    image_thumb: string;
-    encode_titl: string;
-    category: string;
-    category_name: string;
-    post_date: string;
-    video?: string | null;
-    post_by_name?: string | null;
-    post_by_image?: string | null;
-  }[];
+  category: Category;
+  reporter: Reporter;
+  generic_reporter: any;
+  details: string;
+  createdAt: string;
+  updateContentAt: string;
+}
+export interface Category {
+  id: string;
+  title: string;
+  slug: string;
+}
+
+export interface Reporter {
+  id: string;
+  writer: Writer;
+}
+
+export interface Writer {
+  id: string;
+  first_name: string;
+  last_name: string;
+  profile_image: ProfileImage;
+}
+export interface ProfileImage {
+  id: string;
+  caption_title: any;
+  path: string;
+  filename: string;
+  originalUrl: string;
+}
+
+export interface SideData {
+  opinion: OpinionItem[];
 }
 
 export interface NewsWithLatestProps {

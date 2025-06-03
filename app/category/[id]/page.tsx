@@ -40,6 +40,8 @@ type Props = {
 //   };
 // }
 
-export default function CategoryPage() {
-  return <CategoryMain />;
+export default function CategoryPage(params: Props) {
+  const props = params as Props;
+  const { categoryName, slug } = props.params;
+  return <CategoryMain categoryId={slug} categoryName={categoryName} />;
 }

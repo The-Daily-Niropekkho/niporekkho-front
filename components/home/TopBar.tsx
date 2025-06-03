@@ -214,14 +214,15 @@ const TopBar = () => {
       key: "epaper",
       icon: faNewspaper,
       href: "https://epaper.dailyniropekkho.com/",
-      hover: "bg-[#f0f0f0] text-red-500 hover:text-black",
+      hover: "bg-[#f0f0f0] text-[#a40e0f] hover:text-black",
+      
     },
     {
       label: currentLanguage === "bn" ? "English" : "বাংলা",
       key: "language",
       icon: null,
       href: "#",
-      hover: "bg-[#f0f0f0] text-red-500 hover:text-black",
+      hover: "bg-[#f0f0f0] text-[#a40e0f] hover:text-black",
       className: "notranslate",
     },
   ];
@@ -302,7 +303,7 @@ const TopBar = () => {
                 </a>
               ))}
             </div>
-            <div className='flex gap-2'>
+            <div className='flex gap-2 '>
               {topRightSideLink2.map((link) =>
                 link.key === "language" ? (
                   <button
@@ -315,7 +316,9 @@ const TopBar = () => {
                       ${link.className || ""}`}
                   >
                     {link.label && (
-                      <span className='notranslate'>{link.label}</span>
+                      <span className='notranslate whitespace-nowrap'>
+                        {link.label}
+                      </span>
                     )}
                   </button>
                 ) : (
@@ -326,10 +329,12 @@ const TopBar = () => {
                     rel='noopener noreferrer'
                     className={`flex items-center gap-1 px-2 py-1 text-gray-700 transition-colors duration-300 rounded ${link.hover}`}
                   >
-                    {link.icon && (
-                      <FontAwesomeIcon icon={link.icon} className='text-lg' />
-                    )}
-                    {link.label && <span>{link.label}</span>}
+                    <div className='whitespace-nowrap flex gap-2 items-center'>
+                      {link.icon && (
+                        <FontAwesomeIcon icon={link.icon} className='text-lg' />
+                      )}
+                      {link.label && <span>{link.label}</span>}
+                    </div>
                   </a>
                 ),
               )}

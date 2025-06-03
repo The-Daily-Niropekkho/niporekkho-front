@@ -1,24 +1,21 @@
 "use client";
 
 import AddCard from "@/components/common/addCard/AddCard";
-import TimeBefore from "@/ui/TimeBefore";
-import NotFoundBody from "@/ui/notFoundBody/NotFoundBody";
-import Spin from "@/ui/spin/Spin";
-import Image from "next/image";
-import Link from "next/link";
-import { useSearchParams, useParams } from "next/navigation";
-import { useEffect, useMemo, useState } from "react";
-import notFoundImg from "@/public/images/not-found.png";
 import FeaturedNewsSkeleton from "@/components/skeleton/FeaturedNewsSkeleton";
 import NewsListSkeleton from "@/components/skeleton/NewsListSkeleton";
 import SidebarSkeleton from "@/components/skeleton/SidebarSkeleton";
-import TopNewsForNewsDetails2 from "../singleNews/top-news-for-news-details2";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faDotCircle } from "@fortawesome/free-solid-svg-icons";
 import { useGetAllNewsQuery } from "@/redux/features/news/newsApi";
 import { NewsDetails } from "@/types/newsDetails";
+import TimeBefore from "@/ui/TimeBefore";
+import NotFoundBody from "@/ui/notFoundBody/NotFoundBody";
+import Spin from "@/ui/spin/Spin";
 import fileObjectToLink from "@/utils/fileObjectToLink";
+import Image from "next/image";
+import Link from "next/link";
+import { useParams, useSearchParams } from "next/navigation";
+import { useEffect, useMemo, useState } from "react";
 import Skeleton from "react-loading-skeleton";
+import TopNewsForNewsDetails2 from "../singleNews/top-news-for-news-details2";
 
 interface TopicType {
   topic_name: string;
@@ -27,15 +24,17 @@ interface TopicType {
 
 interface CategoryMainProps {
   categoryId?: string;
+  categoryName?: string;
 }
 
-const CategoryMain = ({ categoryId }: CategoryMainProps) => {
+const CategoryMain = ({ categoryId, categoryName }: CategoryMainProps) => {
+
   const [currentLimit, setCurrentLimit] = useState(11); // Start with 19 posts
   const [pageData, setPageData] = useState<NewsDetails[]>([]); // Store all posts
   const initialLimit = 10; // Posts per page
   const params = useParams();
   const searchParams = useSearchParams();
-  const categoryName = params.categoryName as string;
+  // const categoryName = params.categoryName as string;
   const queryCategoryId =
     searchParams.get("id") || categoryId || "";
 
@@ -191,7 +190,7 @@ const CategoryMain = ({ categoryId }: CategoryMainProps) => {
                             <div className='py-3 dark:bg-gray-800 border-[var(--border-color)] dark:border-[var(--border-dark)]'>
                               <h1 className='text-xl md:text-2xl lg:text-3xl font-[600] text-[var(--dark)] dark:text-white mb-2 tracking-tight group-hover:text-[var(--text-primary)] cursor-pointer line-clamp-2'>
                                 {item.short_headline && (
-                                  <span className='text-blue-800'>
+                                  <span className='text-[var(--text-primary)]'>
                                     {item.short_headline} /{" "}
                                   </span>
                                 )}
@@ -241,7 +240,7 @@ const CategoryMain = ({ categoryId }: CategoryMainProps) => {
                                     >
                                       <h1 className='text-base lg:text-lg font-semibold text-[var(--dark)] dark:text-white group-hover:text-[var(--text-primary)] line-clamp-2'>
                                         {item.short_headline && (
-                                          <span className='text-blue-800'>
+                                          <span className='text-[var(--text-primary)]'>
                                             {item.short_headline} /{" "}
                                           </span>
                                         )}
@@ -337,7 +336,7 @@ const CategoryMain = ({ categoryId }: CategoryMainProps) => {
                       </div>
                       <h2 className='text-lg text-[var(--dark)] dark:text-white font-bold line-clamp-2'>
                         {item.short_headline && (
-                          <span className='text-blue-800'>
+                          <span className='text-[var(--text-primary)]'>
                             {item.short_headline} /{" "}
                           </span>
                         )}
@@ -353,7 +352,7 @@ const CategoryMain = ({ categoryId }: CategoryMainProps) => {
               </div>
             )}
 
-            {/* {totalPosts > pageData.length && (
+            {totalPosts > pageData.length && (
               <div className='flex justify-center'>
                 <button
                   className='flex items-center justify-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed text-white text-lg bg-[var(--primary)] px-4 py-2 hover:bg-[var(--primary)] rounded-sm'
@@ -363,7 +362,7 @@ const CategoryMain = ({ categoryId }: CategoryMainProps) => {
                   আরও দেখুন {isLoading && <Spin clss='w-7 h-7' />}
                 </button>
               </div>
-            )} */}
+            )}
           </div>
 
           <div className='col-span-12 lg:col-span-4 xl:col-span-3 relative after:bg-[var(--border-color)] after:absolute after:w-full after:h-[1px] after:-bottom-3 after:right-0 after:last:h-0 lg:after:w-[1px] lg:after:h-full lg:after:-right-3 lg:after:top-0 lg:after:last:w-0 dark:after:bg-[var(--border-dark)]'>

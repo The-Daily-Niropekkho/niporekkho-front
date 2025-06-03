@@ -1,11 +1,10 @@
 "use client";
 
-import AddCard from "@/components/common/addCard/AddCard";
+import { Ads, ICategory } from "@/types/news";
 import TimeBefore from "@/ui/TimeBefore";
+import fileObjectToLink from "@/utils/fileObjectToLink";
 import Image from "next/image";
 import Link from "next/link";
-import fileObjectToLink from "@/utils/fileObjectToLink";
-import { ICategory, Ads } from "@/types/news";
 
 type NewsWithAddProps = {
   dataOne: ICategory;
@@ -70,7 +69,7 @@ const NewsWithAdd = ({ dataOne, dataTwo, ads }: NewsWithAddProps) => {
                       <div className='w-full'>
                         <h3 className='text-2xl mx-4 md:mx-0 mb-0 md:mb-2 text-[var(--dark)] dark:text-white font-semibold line-clamp-2 group-hover:text-[var(--text-primary)]'>
                           {item.short_headline && (
-                            <span className='text-blue-800'>
+                            <span className='text-[var(--text-primary)]'>
                               {item.short_headline} /{" "}
                             </span>
                           )}
@@ -117,7 +116,7 @@ const NewsWithAdd = ({ dataOne, dataTwo, ads }: NewsWithAddProps) => {
                       <div className='flex-1'>
                         <h3 className='text-lg text-[var(--dark)] dark:text-white line-clamp-2 font-bold group-hover:text-[var(--text-primary)]'>
                           {item.short_headline && (
-                            <span className='text-blue-800'>
+                            <span className='text-[var(--text-primary)]'>
                               {item.short_headline} /{" "}
                             </span>
                           )}
@@ -177,7 +176,7 @@ const NewsWithAdd = ({ dataOne, dataTwo, ads }: NewsWithAddProps) => {
                       <div className='w-full'>
                         <h3 className='text-2xl mx-4 md:mx-0 mb-0 md:mb-2 text-[var(--dark)] dark:text-white font-semibold line-clamp-2 group-hover:text-[var(--text-primary)]'>
                           {item.short_headline && (
-                            <span className='text-blue-800'>
+                            <span className='text-[var(--text-primary)]'>
                               {item.short_headline} /{" "}
                             </span>
                           )}
@@ -224,7 +223,7 @@ const NewsWithAdd = ({ dataOne, dataTwo, ads }: NewsWithAddProps) => {
                       <div className='flex-1'>
                         <h3 className='text-lg text-[var(--dark)] dark:text-white line-clamp-2 font-bold group-hover:text-[var(--text-primary)]'>
                           {item.short_headline && (
-                            <span className='text-blue-800'>
+                            <span className='text-[var(--text-primary)]'>
                               {item.short_headline} /{" "}
                             </span>
                           )}

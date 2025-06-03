@@ -2,7 +2,7 @@
 
 import TopBreakingNews from "@/components/common/breaking-news/top-breaking-news";
 import HomePageSkeleton from "@/components/skeleton/HomePageSkeleton";
-import { useGetMultipleCategoryDataQuery, useGetTopHomeDataQuery } from "@/redux/features/home-data/homeApi";
+import {  useGetAllVideosQuery, useGetMultipleCategoryDataQuery, useGetTopHomeDataQuery } from "@/redux/features/home-data/homeApi";
 import { usePathname } from "next/navigation";
 import { Fragment } from "react";
 import config from "../../../config";
@@ -15,6 +15,7 @@ import NewsWithLatestTwo from "../newsWithLatestTwo/NewsWithLatestTwo";
 import PhotoGallery from "../photoGallery/PhotoGallery";
 import TopNews from "../topNews/TopNews";
 import { HomeData, HomeNews } from "@/types/homeData";
+import { Video } from "../Video";
 
 // Dummy data (unchanged)
 const dummyAds = {
@@ -86,6 +87,16 @@ const HomeMain = () => {
     categoryIds: [
     
   ]});
+  const {
+    data: videos,
+    isLoading: isVideosLoading,
+    error: videosError,
+  } = useGetAllVideosQuery({
+  });
+
+  //top read news
+  
+  
   // Define category IDs from environment variables
   const categoryIds = [
     process.env.NEXT_PUBLIC_NATIONAL_ID!,
@@ -144,30 +155,24 @@ const HomeMain = () => {
       {topHomeData && topHomeData.data.length > 0 && (
         <TopNews
           data={{
-            id: "",
-            title: "Top News",
-            slug: "top-news",
-            position: 1,
-            position_update_at: null,
-            is_home: true,
-            position_in_home: null,
-            position_in_home_update_at: null,
-            description: "",
-            meta_title: "Top News",
-            meta_description: "Latest Top News from Daily Niropekkho",
-            created_by_id: "system",
-            image_id: null,
-            status: "active",
-            is_deleted: false,
-            createdAt: new Date().toISOString(),
-            updatedAt: new Date().toISOString(),
-            news: topHomeData?.data ?? [],
+            // meta_title: "Top News",
+            // meta_description: "Latest Top News from Daily Niropekkho",
+            // created_by_id: "system",
+            // image_id: null,
+            // status: "active",
+            // is_deleted: false,
+            // createdAt: new Date().toISOString(),
+            // updatedAt: new Date().toISOString(),
+            serial_number: 0,
+            serial_update_at: "",
+            news: topHomeData?.data.flat() ?? [],
+            
           }}
           sideData={{
-            ...dummySideData,
-            category_id: dummySideData.category_id ?? "default-opinion-id",
+            opinion: mergedResult[config.allCategories.opinion_id] ?? [],
           }}
           ads={dummyAds}
+          videos={(videos?.data ?? []).map((v) => v.url )}
         />
       )}
       {/* News With Latest: National */}
@@ -194,18 +199,17 @@ const HomeMain = () => {
               updatedAt: new Date().toISOString(),
               news: mergedResult[config.allCategories.national_id] ?? [],
             }}
-            sideData={{
-              ...dummySideData,
-              category_id: dummySideData.category_id ?? "default-opinion-id",
-            }}
+            // sideData={{
+            //   opinion: dummySideData.post,
+            // }}
             ads={dummyAds}
             topnews={true}
           />
         )}
       {/* News With Add: Politics and Cities */}
       {mergedResult &&
-        mergedResult[config.allCategories.politics_id]?.length > 0 &&
-        mergedResult[config.allCategories.cities_id]?.length > 0 && (
+        mergedResult[config.allCategories.cities_id]?.length > 0 &&
+        mergedResult[config.allCategories.politics_id]?.length > 0 && (
           <NewsWithAdd
             dataOne={{
               id: "politics-category",
@@ -250,6 +254,13 @@ const HomeMain = () => {
             ads={dummyAds}
           />
         )}
+
+      {/* videos section */}
+      <Video
+        videos={(videos?.data ?? []).map((v) => v.url )}
+        slug='video'
+        category_name='ভিডিও'
+      />
       {/* News Only: Across The Country */}
       {mergedResult &&
         mergedResult[config.allCategories.across_the_country_id]?.length >

@@ -1,6 +1,6 @@
 import { TResponseRedux } from "@/types";
 import { baseApi } from "../../api/baseApi";
-import { HomeData, HomeNews } from "@/types/homeData"; // Import HomeData and HomeNews
+import { HomeData, HomeNews } from "@/types/homeData";
 
 const homeApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
@@ -37,8 +37,20 @@ const homeApi = baseApi.injectEndpoints({
       },
       providesTags: ["topHomeData"],
     }),
+    // New endpoint for 500 video posts
+    getAllVideos: builder.query({
+      query: () => ({
+        url: `/post?limit=500`,
+        method: "GET",
+      }),
+      transformResponse: (response: TResponseRedux<HomeNews[]>) => {
+        // Return the `data` field directly
+        return { data: response.data, meta: response.meta };
+      },
+      providesTags: ["allVideos"],
+    }),
   }),
 });
 
-export const { useGetMultipleCategoryDataQuery, useGetTopHomeDataQuery } =
+export const { useGetMultipleCategoryDataQuery, useGetTopHomeDataQuery, useGetAllVideosQuery } =
   homeApi;

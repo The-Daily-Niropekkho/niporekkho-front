@@ -1,168 +1,21 @@
+// src/components/singleNews/TopNews.tsx
 "use client";
 
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
-import fileObjectToLink from "@/utils/fileObjectToLink"; // chng: For banner_image
-import { INews } from "@/types/news";
+import { useGetLatestNewsQuery } from "@/redux/features/news/newsApi";
+import { useGetTopReadNewsQuery } from "@/redux/features/news-utils/newsUtilsApi";
+import { News, NewsUtils } from "@/types/newsUtils";
 
-// chng: Use dummy news data
-const dummyNews: INews[] = [
-  {
-    id: "1",
-    headline: "ঢাকায় ভারী বৃষ্টিপাত, জনজীবন বিপর্যস্ত",
-    short_headline: "ঢাকায় বৃষ্টি",
-    details: "রাজধানী ঢাকায় গতকাল রাত থেকে ভারী বৃষ্টিপাত চলছে।",
-    slug: "dhaka-heavy-rain",
-    createdAt: "2025-05-25T10:00:00.000Z",
-    updatedAt: "2025-05-25T10:00:00.000Z",
-    banner_image: {
-      id: "img-1",
-      url: "https://via.placeholder.com/560x315",
-      originalUrl: "https://via.placeholder.com/560x315",
-      mimetype: "image/jpeg",
-      filename: "rain.jpg",
-      modifyFileName: "rain-modified.jpg",
-      path: "/uploads/rain.jpg",
-      cdn: "https://via.placeholder.com",
-      fileUniqueId: "unique-1",
-      size: 100000,
-      platform: "cloud",
-      createdAt: "2025-05-25T10:00:00.000Z",
-      updatedAt: "2025-05-25T10:00:00.000Z",
-      is_deleted: false,
-      status: "active",
-      type: "image",
-      created_by_id: "user-1",
-      fileType: "jpg",
-    },
-  },
-  {
-    id: "2",
-    headline: "বাংলাদেশের অর্থনীতি: নতুন সম্ভাবনা",
-    short_headline: "অর্থনীতির উন্নতি",
-    details: "বাংলাদেশের অর্থনীতি নতুন উচ্চতায় পৌঁছেছে।",
-    slug: "economy-growth",
-    createdAt: "2025-05-25T09:30:00.000Z",
-    updatedAt: "2025-05-25T09:30:00.000Z",
-    banner_image: {
-      id: "img-2",
-      url: "https://via.placeholder.com/330x186",
-      originalUrl: "https://via.placeholder.com/330x186",
-      mimetype: "image/jpeg",
-      filename: "economy.jpg",
-      modifyFileName: "economy-modified.jpg",
-      path: "/uploads/economy.jpg",
-      cdn: "https://via.placeholder.com",
-      fileUniqueId: "unique-2",
-      size: 80000,
-      platform: "cloud",
-      createdAt: "2025-05-25T09:30:00.000Z",
-      updatedAt: "2025-05-25T09:30:00.000Z",
-      is_deleted: false,
-      status: "active",
-      type: "image",
-      created_by_id: "user-1",
-      fileType: "jpg",
-    },
-  },
-  {
-    id: "3",
-    headline: "ক্রিকেট: বাংলাদেশের জয়",
-    short_headline: "টাইগারদের জয়",
-    details: "বাংলাদেশ ক্রিকেট দল নিউজিল্যান্ডকে হারিয়েছে।",
-    slug: "cricket-victory",
-    createdAt: "2025-05-25T09:00:00.000Z",
-    updatedAt: "2025-05-25T09:00:00.000Z",
-    banner_image: {
-      id: "img-3",
-      url: "https://via.placeholder.com/330x186",
-      originalUrl: "https://via.placeholder.com/330x186",
-      mimetype: "image/jpeg",
-      filename: "cricket.jpg",
-      modifyFileName: "cricket-modified.jpg",
-      path: "/uploads/cricket.jpg",
-      cdn: "https://via.placeholder.com",
-      fileUniqueId: "unique-3",
-      size: 90000,
-      platform: "cloud",
-      createdAt: "2025-05-25T09:00:00.000Z",
-      updatedAt: "2025-05-25T09:00:00.000Z",
-      is_deleted: false,
-      status: "active",
-      type: "image",
-      created_by_id: "user-1",
-      fileType: "jpg",
-    },
-  },
-  {
-    id: "4",
-    headline: "শিক্ষা সংস্কারে নতুন উদ্যোগ",
-    short_headline: "শিক্ষা সংস্কার",
-    details: "সরকার শিক্ষা খাতে নতুন সংস্কার চালু করেছে।",
-    slug: "education-reform",
-    createdAt: "2025-05-25T08:30:00.000Z",
-    updatedAt: "2025-05-25T08:30:00.000Z",
-    banner_image: {
-      id: "img-4",
-      url: "https://via.placeholder.com/330x186",
-      originalUrl: "https://via.placeholder.com/330x186",
-      mimetype: "image/jpeg",
-      filename: "education.jpg",
-      modifyFileName: "education-modified.jpg",
-      path: "/uploads/education.jpg",
-      cdn: "https://via.placeholder.com",
-      fileUniqueId: "unique-4",
-      size: 85000,
-      platform: "cloud",
-      createdAt: "2025-05-25T08:30:00.000Z",
-      updatedAt: "2025-05-25T08:30:00.000Z",
-      is_deleted: false,
-      status: "active",
-      type: "image",
-      created_by_id: "user-1",
-      fileType: "jpg",
-    },
-  },
-  {
-    id: "5",
-    headline: "পরিবেশ দূষণে উদ্বেগ",
-    short_headline: "পরিবেশ দূষণ",
-    details: "ঢাকার বায়ু দূষণ নিয়ন্ত্রণে জরুরি পদক্ষেপ প্রয়োজন।",
-    slug: "pollution-concern",
-    createdAt: "2025-05-25T08:00:00.000Z",
-    updatedAt: "2025-05-25T08:00:00.000Z",
-    banner_image: {
-      id: "img-5",
-      url: "https://via.placeholder.com/330x186",
-      originalUrl: "https://via.placeholder.com/330x186",
-      mimetype: "image/jpeg",
-      filename: "pollution.jpg",
-      modifyFileName: "pollution-modified.jpg",
-      path: "/uploads/pollution.jpg",
-      cdn: "https://via.placeholder.com",
-      fileUniqueId: "unique-5",
-      size: 87000,
-      platform: "cloud",
-      createdAt: "2025-05-25T08:00:00.000Z",
-      updatedAt: "2025-05-25T08:00:00.000Z",
-      is_deleted: false,
-      status: "active",
-      type: "image",
-      created_by_id: "user-1",
-      fileType: "jpg",
-    },
-  },
- 
-];
-
+// Update NewsProps to align with the data structure
 type NewsProps = {
-  news_id: string; // chng: Changed to string to match banner_image.id
+  news_id: string;
   post_title: string;
   image_thumb: string;
   image_alt: string;
-  category: string;
-  encode_titl: string;
+  category: string; // This will be the category slug
+  slug: string | null;
 };
 
 function NewsList({ posts }: { posts: NewsProps[] }) {
@@ -180,13 +33,17 @@ function NewsList({ posts }: { posts: NewsProps[] }) {
             >
               <Link
                 className='group flex items-start gap-3'
-                href={`/${post.category.toLowerCase()}/${post.encode_titl}`}
+                href={`/${post.category}/${post.news_id}/${post.slug}`}
               >
-                <span className='number-circle inline-flex items-center justify-center w-6 h-6 rounded-full bg-[#A90303] text-white font-bold text-sm'>
-                  {`${index + 1}`.replace(
-                    /\d/g,
-                    (d: string) => "০১২৩৪৫৬৭৮৯"[parseInt(d, 10)],
-                  )}
+                <span className='number-circle inline-flex items-center justify-center size-6 lg:size-6 rounded-full bg-[#fff] text-white font-bold text-sm lg:text-2xl'>
+                  <Image
+                    alt={`News ${index + 1}`}
+                    src={`/images/ni_logo1.png`}
+                    width={25}
+                    height={25}
+                    className='rounded-full'
+                    loading='lazy'
+                  />
                 </span>
                 <div className='flex-1'>
                   <div className='md:hidden ml-2 md:ml-0 lg:ml-2 mb-2 overflow-hidden float-right relative'>
@@ -218,15 +75,55 @@ function NewsList({ posts }: { posts: NewsProps[] }) {
 function TopNews({ count }: { count: number }) {
   const [tab1Active, setTab1Active] = useState(true);
 
-  // chng: Map dummyNews to NewsProps
-  const mappedNews: NewsProps[] = dummyNews.slice(0, count).map((item, i) => ({
-    news_id: item.banner_image?.id || `news-${i}`,
-    post_title: item.headline,
-    image_thumb: fileObjectToLink(item.banner_image),
-    image_alt: item.headline || "News Image",
-    category: "news", // chng: Default category
-    encode_titl: item.slug ?? "",
-  }));
+  // Fetch the latest news for "সর্বশেষ" tab
+  const {
+    data: latestNewsResponse,
+    isLoading: isLatestLoading,
+    error: latestError,
+  } = useGetLatestNewsQuery({ limit: count });
+
+  // Fetch the most-read news for "সর্বাধিক পঠিত" tab
+  const {
+    data: topReadNewsResponse,
+    isLoading: isTopReadLoading,
+    error: topReadError,
+  } = useGetTopReadNewsQuery({ limit: count });
+
+  // Map the latest news to NewsProps
+  const latestNews: NewsProps[] =
+    latestNewsResponse?.data?.slice(0, count).map((item: News) => ({
+      news_id: item.id,
+      post_title: item.headline,
+      image_thumb: "https://i.ibb.co/LdP2NKkp/Placeholder-Begrippenlijst.webp", // Placeholder since banner_image is missing
+      image_alt: item.headline || "News Image",
+      category: item.category?.slug || "news", // Use category slug, fallback to "news"
+      slug: item.slug || null,
+    })) || [];
+
+  // Map the most-read news to NewsProps
+  const topReadNews: NewsProps[] =
+    topReadNewsResponse?.data?.slice(0, count).map((item: NewsUtils) => ({
+      news_id: item.news_id,
+      post_title: item.news.headline,
+      image_thumb: "https://i.ibb.co/LdP2NKkp/Placeholder-Begrippenlijst.webp", // Placeholder since banner_image is missing
+      image_alt: item.news.headline || "News Image",
+      category: item.news.category?.slug || "news", // Use category slug, fallback to "news"
+      slug: item.news.slug || null,
+    })) || [];
+
+  // Handle loading and error states
+  if (isLatestLoading || isTopReadLoading) {
+    return <div className='text-center py-4'>Loading...</div>;
+  }
+
+  if (latestError || topReadError) {
+    return (
+      <div className='text-center py-4 text-red-500'>
+        Error loading news:{" "}
+        {latestError?.toString() || topReadError?.toString()}
+      </div>
+    );
+  }
 
   return (
     <div className='widget-tab-container md:block hidden w-full shadow-md rounded-lg overflow-hidden'>
@@ -292,7 +189,7 @@ function TopNews({ count }: { count: number }) {
           backgroundColor: "#F0F0F0",
         }}
       >
-        <NewsList posts={mappedNews} />
+        <NewsList posts={latestNews} />
       </div>
       <div
         className='tab-panel2 px-4 py-2 h-[535px] overflow-y-auto'
@@ -301,7 +198,7 @@ function TopNews({ count }: { count: number }) {
           backgroundColor: "#F0F0F0",
         }}
       >
-        <NewsList posts={mappedNews} />
+        <NewsList posts={topReadNews} />
       </div>
     </div>
   );

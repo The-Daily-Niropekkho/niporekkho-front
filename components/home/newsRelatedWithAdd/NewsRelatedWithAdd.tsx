@@ -1,13 +1,13 @@
 "use client";
 
 import AddCard from "@/components/common/addCard/AddCard";
-import TimeBefore from "@/ui/TimeBefore";
-import Image from "next/image";
-import Link from "next/link";
 import VideoEmbed from "@/components/VideoEmbed";
 import VideoIcon from "@/public/icons/VideoIcon";
-import { ICategory, Ads, } from "@/types/news";
+import { Ads, ICategory, } from "@/types/news";
+import TimeBefore from "@/ui/TimeBefore";
 import fileObjectToLink from "@/utils/fileObjectToLink";
+import Image from "next/image";
+import Link from "next/link";
 
 interface NewsRelatedWithAddProps {
   data: ICategory;
@@ -75,7 +75,7 @@ const NewsRelatedWithAdd = ({ data, ads, videos }: NewsRelatedWithAddProps) => {
                     <div className='w-full md:w-1/2 lg:w-full'>
                       <h3 className='text-2xl left-9 mx-4 md:mx-0 mt-2 md:mt-0 lg:mt-2 mb-0 md:mb-2 text-[var(--dark)] group-hover:text-[var(--text-primary)] dark:text-white line-clamp-2 font-semibold'>
                         {item.short_headline && (
-                          <span className='text-blue-800'>
+                          <span className='text-[var(--text-primary)]'>
                             {item.short_headline} /{" "}
                           </span>
                         )}
@@ -123,7 +123,7 @@ const NewsRelatedWithAdd = ({ data, ads, videos }: NewsRelatedWithAddProps) => {
                       </div>
                       <h3 className='text-lg text-[var(--dark)] group-hover:text-[var(--text-primary)] dark:text-white line-clamp-2 font-bold'>
                         {item.short_headline && (
-                          <span className='text-blue-800'>
+                          <span className='text-[var(--text-primary)]'>
                             {item.short_headline} /{" "}
                           </span>
                         )}
@@ -170,7 +170,7 @@ const NewsRelatedWithAdd = ({ data, ads, videos }: NewsRelatedWithAddProps) => {
                     </div>
                     <h3 className='text-lg text-[var(--dark)] line-clamp-3 dark:text-white font-bold'>
                       {item.short_headline && (
-                        <span className='text-blue-800'>
+                        <span className='text-[var(--text-primary)]'>
                           {item.short_headline} /{" "}
                         </span>
                       )}
