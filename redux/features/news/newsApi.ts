@@ -42,7 +42,38 @@ const newsApi = baseApi.injectEndpoints({
       transformResponse: (response: TResponseRedux<NewsDetails[]>) => {
         return { data: response.data, meta: response.meta };
       },
-    })
+    }),
+
+    zonewiseNews: builder.query({
+      query: ({
+        limit,
+        division_id,
+        district_id,
+        upazilla_id,
+      }: {
+        limit?: number;
+        division_id?: string;
+        district_id?: string;
+        upazilla_id?: string;
+      }) => {
+        const params = new URLSearchParams();
+        if (division_id) params.append("division_id", division_id);
+        if (district_id) params.append("district_id", district_id);
+        if (upazilla_id) params.append("upazilla_id", upazilla_id);
+        if (limit) params.append("limit", limit.toString());
+
+        return {
+          url: `/news?${params.toString()}`,
+          method: "GET",
+        };
+      },
+      transformResponse: (response: TResponseRedux<NewsDetails[]>) => {
+        return {
+          data: response.data,
+          meta: response.meta,
+        };
+      },
+    }),
   }),
 });
 
@@ -50,5 +81,6 @@ export const {
   useGetAllNewsQuery,
   useGetNewsBySlugQuery,
   useUpdateNewsMutation,
-  useTropicwiseNewsQuery
+  useTropicwiseNewsQuery,
+  useZonewiseNewsQuery
 } = newsApi;
