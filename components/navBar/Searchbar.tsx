@@ -128,11 +128,8 @@ const SearchBar = ({
           height: 20px;
         }
 
-        @media (max-width: 1024px) {
-          .search-container {
-            display: none;
-          }
-        }
+       
+        
       `}</style>
     </div>
   );

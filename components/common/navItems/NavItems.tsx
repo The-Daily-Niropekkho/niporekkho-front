@@ -272,7 +272,7 @@ const NavItems = ({
           </li>
         ))}
         <li className='group relative text-black dark:text-white'>
-          <div className='flex items-center gap-1 py-[11px] px-5 text-md text-[var(--dark)] dark:text-white hover:text-red-500 capitalize border-r-2'>
+          <div className='flex items-center gap-1 py-2 px-3 text-sm lg:text-md text-[var(--dark)] dark:text-white hover:text-red-500 capitalize border-r border-gray-300 dark:border-gray-600'>
             <p
               className={`flex items-center gap-1 text-[#b74646] ${className}`}
             >
@@ -285,21 +285,13 @@ const NavItems = ({
           </div>
 
           {/* Mega Menu */}
-          <div
-            className='absolute left-0 z-50 w-screen bg-white dark:bg-gray-900 shadow-lg border border-gray-200 dark:border-gray-700 rounded-b-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 transform -translate-y-2 group-hover:translate-y-0'
-            style={{
-              width: "100vw",
-              left: "80%",
-              transform: "translateX(-98%)",
-              maxWidth: "1200px",
-            }}
-          >
-            <div className=''>
-              <p className='text-start px-6 py-2 text-sm text-[#000000] border-b border-gray-200 dark:border-gray-700'>
+          <div className='absolute z-50 bg-white dark:bg-gray-900 shadow-lg border border-gray-200 dark:border-gray-700 rounded-b-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 transform -translate-y-2 group-hover:translate-y-0 w-[90vw] sm:w-[80vw] md:w-[70vw] lg:w-[100vw] xl:left-[-430%] lg:left-[-250%] -translate-x-1/2 xl:max-w-[1080px] lg:max-w-[964px] md:max-w-[600px] sm:max-w-[600px]'>
+            <div className='px-4 py-2 border-b border-gray-200 dark:border-gray-700'>
+              <p className='text-start text-xs sm:text-sm text-[#000000] dark:text-gray-300'>
                 {formatBanglaAndHijri()}
               </p>
             </div>
-            <div className='grid grid-cols-4 gap-10 px-6 md:px-6 py-2'>
+            <div className='grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 px-4 py-4'>
               {[0, 1, 2, 3].map((colIndex) => (
                 <div
                   key={colIndex}
@@ -318,11 +310,13 @@ const NavItems = ({
                             href={`/category/${item.slug}?id=${item.id}`}
                             className='block text-gray-700 dark:text-gray-300 hover:text-[var(--text-primary)] dark:hover:text-red-500 transition-colors duration-300'
                           >
-                            <div className='flex items-center gap-2 hover:translate-x-5 transition-transform duration-300'>
+                            <div className='flex items-center gap-2 hover:translate-x-2 transition-transform duration-300'>
                               <span className='text-[var(--text-primary)]'>
-                                <FiChevronsRight />
+                                <FiChevronsRight size={16} />
                               </span>
-                              {item.title}
+                              <span className='text-xs sm:text-sm md:text-base'>
+                                {item.title}
+                              </span>
                             </div>
                           </Link>
                         </li>
@@ -331,8 +325,8 @@ const NavItems = ({
                 </div>
               ))}
             </div>
-            <div className=''>
-              <p className='text-center px-6 py-2 text-sm text-[#000000] border-t border-gray-200 dark:border-gray-700'>
+            <div className='px-4 py-2 border-t border-gray-200 dark:border-gray-700'>
+              <p className='text-center text-xs sm:text-sm text-[#000000] dark:text-gray-300'>
                 {formatBanglaAndHijri()}
               </p>
             </div>

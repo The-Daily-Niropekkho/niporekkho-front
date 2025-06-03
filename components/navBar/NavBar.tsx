@@ -194,13 +194,13 @@ const NavBar = () => {
                   aria-label='logo'
                   onClick={() => setActiveMenu("")}
                 >
-                  <Image
+                  {/* <Image
                     src={logo}
                     alt='Daily Niropekkho'
                     width={180}
                     height={100}
                     loading='lazy'
-                  />
+                  /> */}
                 </Link>
                 <NavItems
                   data={data?.data?.map((cat: any) => ({
