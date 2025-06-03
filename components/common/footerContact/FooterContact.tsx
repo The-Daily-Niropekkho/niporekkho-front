@@ -16,40 +16,50 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 type ContactInformation = {
   content: string;
-  editor: string;
+  editor_name: string;
   address: string;
   phone: string;
-  phone_two: string;
+  phoneTwo: string;
   email: string;
   website: string;
   latitude: string;
   longitude: string;
+  map: any;
+  rights: string;
+  is_deleted: boolean;
+  status: string;
 };
 
 const FooterContact = ({
-  data,
+  // data,
   socialMediaLinks,
 }: {
-  data: ContactInformation;
+  // data: ContactInformation;
   socialMediaLinks?: any;
 }) => {
-  const {
-    address,
-    content,
-    email,
-    latitude,
-    longitude,
-    phone,
-    phone_two,
-    website,
-    editor,
-  } = data;
+  // const {
+  //   address,
+  //   content,
+  //   email,
+  //   latitude,
+  //   longitude,
+  //   phone,
+  //   phoneTwo,
+  //   website,
+  //   editor_name,
+  //   rights,
+  //   is_deleted,
+  //   status,
+  //   map,
+
+    
+  // } = data;
   const topRightSideLink = [
     {
       label: "",
       key: "facebook",
       icon: faFacebookF,
-      href: "https://facebook.com",
+      href: "https://www.facebook.com/dailyniropekkho",
       hover: "bg-blue-600 text-white border rounded-[9999px] ",
     },
     {
@@ -63,21 +73,21 @@ const FooterContact = ({
       label: "",
       key: "linkedin",
       icon: faLinkedinIn,
-      href: "https://linkedin.com",
+      href: "https://www.linkedin.com/in/daily-niropekkho-429727347/?originalSubdomain=bd",
       hover: "bg-blue-700 text-white border rounded-[9999px] ",
     },
     {
       label: "",
       key: "youtube",
       icon: faYoutube,
-      href: "https://youtube.com",
+      href: "https://www.youtube.com/@DailyNiropekkho.official",
       hover: "bg-red-600 text-white border rounded-[9999px] ",
     },
     {
       label: "",
       key: "instagram",
       icon: faInstagram,
-      href: "https://instagram.com",
+      href: "https://www.instagram.com/dailyniropekkho/",
       hover:
         "transition-colors duration-500 bg-[radial-gradient(circle_at_30%_107%,_#fdf497_0%,_#fdf497_5%,_#fd5949_45%,_#d6249f_60%,_#285AEB_90%)] text-white border rounded-full",
     },
@@ -85,7 +95,7 @@ const FooterContact = ({
       label: "",
       key: "tiktok",
       icon: faTiktok,
-      href: "https://tiktok.com",
+      href: "https://www.tiktok.com/@daily.niropekkho",
       hover:
         "transition-colors duration-500 bg-black text-white border rounded-full",
     },
@@ -164,9 +174,9 @@ const FooterContact = ({
                         ইমেইল: {email}
                     </Link>
                 </p> */}
-        <p className='hidden print:inline-block'>
-          স্বত্ব &copy; {editor} <span>{new Date().getFullYear()}</span>
-        </p>
+        {/* <p className='hidden print:inline-block'>
+          স্বত্ব &copy; {editor_name} <span>{new Date().getFullYear()}</span>
+        </p> */}
         <div className='print:hidden'>
           {/* <div className="mb-3 flex gap-3 justify-left">
                         <Socials socialMediaLinks={socialMediaLinks} />
