@@ -4,7 +4,9 @@
 import { useGetLatestNewsQuery } from "@/redux/features/news/newsApi";
 import Image from "next/image";
 import Link from "next/link";
-import fileObjectToLink from '../../utils/fileObjectToLink';
+import fileObjectToLink from "../../utils/fileObjectToLink";
+import { FiChevronsRight } from "react-icons/fi";
+import { TfiLayoutLineSolid } from "react-icons/tfi";
 
 // Define interfaces (aligned with previous code)
 interface News {
@@ -86,7 +88,7 @@ function NewsList({ posts }: { posts: NewsProps[] }) {
   );
 }
 
-function TopNewsForNewsDetails({ count = 6 }: { count: number }) {
+function TopNewsForNewsDetails({ count = 10 }: { count: number }) {
   // Fetch the latest news using RTK Query
   const {
     data: latestNewsResponse,
@@ -121,11 +123,11 @@ function TopNewsForNewsDetails({ count = 6 }: { count: number }) {
       {/* Tab Header with Orange Dots */}
       <div className='relative flex w-full items-center justify-center py-4'>
         <div className='flex items-center gap-2'>
-          <span className='w-3 h-3 rounded-full bg-orange-500'></span>
+          <span className='w-3 h-3 rounded-full bg-red-500 animate-pulse'></span>
           <h2 className='text-xl font-bold text-[#A90303] tracking-wide'>
             সর্বশেষ
           </h2>
-          <span className='w-3 h-3 rounded-full bg-orange-500'></span>
+          <span className='w-3 h-3 rounded-full bg-red-500 animate-pulse'></span>
         </div>
         {/* Underline */}
         <div className='absolute bottom-0 h-1 bg-[#A90303] w-full'></div>
@@ -133,13 +135,31 @@ function TopNewsForNewsDetails({ count = 6 }: { count: number }) {
 
       {/* Tab Panel for Latest News */}
       <div
-        className='tab-panel2 px-4 py-2 overflow-y-auto'
+        className='tab-panel2 px-4 py-2 h-[535px] overflow-y-auto'
         style={{
           backgroundColor: "#f9fafb",
         }}
       >
         <NewsList posts={latestNews} />
       </div>
+      <Link href={`/category/latest?id=cmb4ox5r3000vmhrct1r6u001`}>
+        <div className='text-start px-3 py-3 flex items-center gap-1 text-[var(--dark)] dark:text-white border-t'>
+          <span className="hover:text-[var(--text-primary)] duration-300">আরও পড়ুন </span>
+          <span className='flex items-center gap-0 text-[var(--text-primary)] cursor-auto'>
+            {" "}
+            <FiChevronsRight />
+            <div className='-ml-1 flex items-center gap-0 text-[var(--text-primary)]  '>
+              {" "}
+              <TfiLayoutLineSolid /> <TfiLayoutLineSolid />{" "}
+              <TfiLayoutLineSolid /> <TfiLayoutLineSolid />{" "}
+              <TfiLayoutLineSolid /> <TfiLayoutLineSolid />{" "}
+              <TfiLayoutLineSolid /> <TfiLayoutLineSolid />{" "}
+              <TfiLayoutLineSolid /> <TfiLayoutLineSolid />
+              <TfiLayoutLineSolid />
+            </div>
+          </span>
+        </div>
+      </Link>
     </div>
   );
 }

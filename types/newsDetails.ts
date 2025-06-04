@@ -41,6 +41,7 @@ export interface NewsDetails {
   updatedAt: string;
   updateContentAt: string;
   reporter: Reporter;
+  newsUtils: NewsUtils;
   country: Country;
   district: District;
   division: Division;
@@ -50,7 +51,17 @@ export interface NewsDetails {
   category: Category;
   allTopics: AllTopic[];
 }
-
+export interface NewsUtils {
+  id: string;
+  news_id: string;
+  total_view: number;
+  total_share: number;
+  total_like: number;
+  total_comment: number;
+  createdAt: string;
+  updatedAt: string;
+  is_deleted: boolean;
+}
 export interface Reporter {
   admin: any;
   writer: Writer;
