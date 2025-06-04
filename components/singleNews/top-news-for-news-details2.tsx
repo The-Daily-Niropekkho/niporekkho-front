@@ -100,7 +100,7 @@ function NewsList({ posts }: { posts: NewsProps[] }) {
   );
 }
 
-function TopNewsForNewsDetails2({ count = 6 }: { count: number }) {
+function TopNewsForNewsDetails2({ count = 10 }: { count: number }) {
   // Fetch the most-read news using RTK Query
   const {
     data: topReadNewsResponse,

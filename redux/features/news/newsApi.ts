@@ -19,6 +19,15 @@ const newsApi = baseApi.injectEndpoints({
         return { data: response.data, meta: response.meta };
       },
     }),
+    getSingleNews: builder.query({
+      query: ({ news_id, }: { news_id: string;  }) => ({
+        url: `/news/${news_id}?is_news_utils=true`,
+        method: "GET",
+      }),
+      transformResponse: (response: TResponseRedux<NewsDetails>) => {
+        return { data: response.data, meta: response.meta };
+      },
+    }),
 
     getLatestNews: builder.query({
       query: ({ limit = 20 }: { limit?: number }) => ({
@@ -91,7 +100,7 @@ const newsApi = baseApi.injectEndpoints({
     }),
     searchNews: builder.query({
       query: ({ keyword, offset }: { keyword: string; offset: number }) => {
-        const limit = 500; 
+        const limit = 500;
         const url = `/news?searchTerm=${encodeURIComponent(
           keyword.replace(/%20/g, " "),
         )}&limit=${limit}&offset=${offset}`;
@@ -113,15 +122,34 @@ const newsApi = baseApi.injectEndpoints({
         return currentArg?.offset !== previousArg?.offset;
       },
     }),
+    shareNews: builder.mutation({
+      query: ({
+        news_id,
+        platform,
+      }: {
+        news_id: string;
+        platform: string;
+      }) => ({
+        url: `/news-utils/share`,
+        method: "POST",
+        body: { news_id, platform },
+      }),
+      invalidatesTags: (result, error, { news_id }) => [
+        { type: "news", id: news_id },
+        "news",
+      ],
+    }),
   }),
 });
 
 export const {
   useGetAllNewsQuery,
+  useGetSingleNewsQuery,
   useGetLatestNewsQuery,
   useGetNewsBySlugQuery,
   useUpdateNewsMutation,
   useTropicwiseNewsQuery,
   useZonewiseNewsQuery,
-  useSearchNewsQuery
+  useSearchNewsQuery,
+  useShareNewsMutation,
 } = newsApi;
