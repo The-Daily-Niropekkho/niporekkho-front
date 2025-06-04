@@ -84,6 +84,8 @@ export default function ZoneNewsPage({ params }: { params: ZoneNewsParams }) {
       news.short_headline.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
+  console.log("filteredData", filteredData);
+
   // Handle upazilla click
   const handleUpazillaClick = (upazilla: { id: string; bn_name: string }) => {
     router.push(
@@ -225,7 +227,7 @@ export default function ZoneNewsPage({ params }: { params: ZoneNewsParams }) {
               <div
                 key={news.id}
                 className="flex flex-col md:flex-row gap-5 pb-4 border-b border-gray-200 cursor-pointer  transition-shadow duration-200"
-                onClick={() => router.push(`/${news.category}/${news.id}/${news.slug}`)}
+                onClick={() => router.push(`/${news.category.slug}/${news.id}/${news.slug}`)}
               >
                 <div className="flex-shrink-0 w-full md:w-80">
                   <Image
