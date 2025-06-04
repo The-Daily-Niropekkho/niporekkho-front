@@ -1,10 +1,11 @@
 // components/common/Breadcrumb.tsx
 
+import React from "react";
 import Link from "next/link";
 import { FaHome } from "react-icons/fa";
 
 interface BreadcrumbItem {
-  label: string | JSX.Element; // Label can be a string or an icon (like FaHome)
+  label: string | React.ReactNode; // Label can be a string or an icon (like FaHome)
   href: string;
 }
 
