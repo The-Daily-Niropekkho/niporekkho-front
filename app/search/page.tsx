@@ -255,7 +255,7 @@ function SearchPageContent() {
               )
             )}
           </div>
-          <div className='col-span-12 md:col-span-5 lg:col-span-4 xl:col-span-3 relative after:bg-[var(--border-color)] after:absolute after:w-full after:h-[1px] after:-bottom-3 after:right-0 after:last:h-0 md:after:w-[1px] md:after:h-full md:after:-right-3 md:after:top-0 md:after:last:w-0 dark:after:bg-[var(--border-dark)]'>
+          <div className='col-span-12 md:col-span-5 lg:col-span-4 xl:col-span-3 relative after:bg-[var(--border-color)] after:absolute after:w-full after:h-[1px] after:-bottom-3 after:right-0 after:last:h-0 md:after:w-[1px] md:after:h-full md:after:-right-3 md:after:top-0 md:after:last:w-0 dark:after:bg-[var(--border-dark)] '>
             <div className='md:sticky md:top-[4.5rem]'>
               <div className='w-full flex items-center justify-center'>
                 <Image

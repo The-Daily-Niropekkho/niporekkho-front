@@ -105,7 +105,7 @@ const BreakingNewsMarquee: React.FC = () => {
         .marquee {
           display: inline-flex;
           will-change: transform;
-          animation: marquee 160s linear infinite;
+          animation: marquee 280s linear infinite;
         }
         @keyframes marquee {
           from {

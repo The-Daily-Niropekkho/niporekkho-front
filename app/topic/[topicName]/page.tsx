@@ -11,27 +11,29 @@ import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css"; // Import Skeleton CSS
 //import TopNews from "@/components/singleNews/TopNews";
 import TopNewsForNewsDetails from "@/components/singleNews/top-news-for-news-details";
+import {useGetAllNewsQuery} from "@/redux/features/news/newsApi";
 
 function Page() {
   const [showScroll, setShowScroll] = useState(false);
-  const [searchQuery, setSearchQuery] = useState(""); // State for search input
-  const router = useRouter(); // For navigation
+  const [searchQuery, setSearchQuery] = useState("");
+  const router = useRouter();
 
-  // URL থেকে query parameter এবং path পড়া
+ 
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const topicId = searchParams.get("topic_id");
 
-  // Extract topicName from the URL path (e.g., /topic/পরিবেশ)
-  const topicName = decodeURIComponent(pathname.split("/")[2] || ""); // Gets "পরিবেশ" from the path
-
-  // API থেকে ডেটা ফেচ করা
+ 
+  const topicName = decodeURIComponent(pathname.split("/")[2] || "");
+  
+  const { data: allNews, isLoading: isLoadingAllNews } = useGetAllNewsQuery({ limit: 1000 });
+ 
   const { data, isLoading, error } = useTropicwiseNewsQuery({
     topic_id: topicId ?? undefined,
     limit: 1000,
   });
 
-  // Scroll-to-top button visibility
+  
   useEffect(() => {
     const checkScrollTop = () => {
       if (!showScroll && window.pageYOffset > 400) {

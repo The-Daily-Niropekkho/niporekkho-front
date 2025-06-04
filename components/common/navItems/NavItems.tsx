@@ -242,9 +242,9 @@ const NavItems = ({
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  if (!isClient) {
-    return null; // Prevent rendering on server-side to avoid hydration mismatch
-  }
+  // if (!isClient) {
+  //   return null; // Prevent rendering on server-side to avoid hydration mismatch
+  // }
 
   return (
     <>
@@ -274,7 +274,7 @@ const NavItems = ({
         <li className='group relative text-black dark:text-white'>
           <div className='flex items-center gap-1 py-2 px-3 text-sm lg:text-md text-[var(--dark)] dark:text-white hover:text-red-500 capitalize border-r border-gray-300 dark:border-gray-600'>
             <p
-              className={`flex items-center gap-1 text-[#b74646] ${className}`}
+              className={`flex items-center gap-1 text-[#b74646] text-base ${className}`}
             >
               অন্যান্য
               <span className='scroll-arrow'>

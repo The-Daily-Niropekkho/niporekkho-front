@@ -242,13 +242,10 @@ const DropdownForm = () => {
             </div>
           </div>
 {/* Search Button */}
-            <button
-            onClick={handleSearch}
-            disabled={!selectedDivision && !selectedDistrict && !selectedUpazilla}
-            className={`flex items-center justify-center w-full p-3 rounded-lg text-white transition-colors ${(!selectedDivision && !selectedDistrict && !selectedUpazilla) ? 'bg-gray-400 cursor-not-allowed' : 'bg-blue-600 hover:bg-blue-700'}`}
-          >
-            <IoIosSearch className="mr-2 text-lg" />
-            খুঁজুন
+          <button className="p-4 w-[250px] bg-blue-700 text-white rounded hover:bg-blue-800 transition-colors">
+            <IoIosSearch className="mr-2" />
+            <a href="/news?division_id=&district_id=&upazilla_id=">খুঁজুন</a>
+          
           </button>
         </div>
       
