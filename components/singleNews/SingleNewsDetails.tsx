@@ -338,16 +338,20 @@ console.log(newsData)
               </div>
 
               <div className='print:hidden gap-3 py-3 flex flex-wrap items-center'>
-                বিষয়:
-                {data.tags?.map((tag, index) => (
-                  <Link
-                    key={index}
-                    className='bg-[var(--slate-2)] dark:bg-[var(--gray-2)] text-sm leading-none text-[var(--dark)] p-2 dark:text-white text-center flex items-center'
-                    href={`/topic/${tag}`}
-                  >
-                    {tag}
-                  </Link>
-                ))}
+                {data.tags && (
+                  <>
+                    বিষয়:
+                    {data.tags?.map((tag, index) => (
+                      <Link
+                        key={index}
+                        className='bg-[var(--slate-2)] dark:bg-[var(--gray-2)] text-sm leading-none text-[var(--dark)] p-2 dark:text-white text-center flex items-center'
+                        href={`/topic/${tag}`}
+                      >
+                        {tag}
+                      </Link>
+                    ))}
+                  </>
+                )}
               </div>
               <FacebookComments url={currentUrl} />
             </article>
@@ -392,7 +396,7 @@ console.log(newsData)
               </div>
 
               <div className='grid grid-cols-1 md:grid-cols-12 gap-6 md:after:[&>*:nth-last-child(-n+3)]:h-0 lg:after:[&>*:nth-last-child(-n+3)]:h-full lg:after:[&>*:nth-child(4)]:w-0 lg:after:[&>*]:w-[1px] after:[&>*:last-child]:w-0 after:[&>*]:h-[1px] lg:after:[&>*]:h-full print:hidden dark:after:[&>*]:bg-[var(--border-color)]'>
-                {data.relatedPost?.slice(0,4)?.map((post) => (
+                {data.relatedPost?.slice(0, 4)?.map((post) => (
                   <div
                     key={post.id}
                     className='col-span-12 md:col-span-3 relative after:bg-[var(--border-color)] after:absolute after:w-full after:right-0 after:-bottom-3 lg:after:top-0 lg:after:-right-3'
