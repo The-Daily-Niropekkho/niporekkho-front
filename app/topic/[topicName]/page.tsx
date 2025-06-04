@@ -21,15 +21,15 @@ function Page() {
  
   const searchParams = useSearchParams();
   const pathname = usePathname();
-  const topicId = searchParams.get("topic_id");
-
+  const topicId = searchParams.get("tags");
+console.log(topicId)
  
   const topicName = decodeURIComponent(pathname.split("/")[2] || "");
   
   const { data: allNews, isLoading: isLoadingAllNews } = useGetAllNewsQuery({ limit: 1000 });
  
   const { data, isLoading, error } = useTropicwiseNewsQuery({
-    topic_id: topicId ?? undefined,
+    tags: topicId ?? undefined,
     limit: 1000,
   });
 
@@ -196,7 +196,7 @@ function Page() {
               <div
                 key={news.id}
                 className="flex flex-col md:flex-row gap-5 pb-4 border-b border-gray-200 dark:border-gray-700 cursor-pointer"
-                onClick={() => router.push(`/${news.category}/${news.id}/${news.slug}`)} // Navigate to news details
+                onClick={() => router.push(`/${news.category.slug}/${news.id}/${news.slug}`)} // Navigate to news details
               >
                 {/* Image */}
                 <div className="flex-shrink-0 w-full md:w-80">

@@ -59,8 +59,8 @@ const newsApi = baseApi.injectEndpoints({
     }),
 
     tropicwiseNews: builder.query({
-      query: ({ limit, topic_id }: { limit?: number; topic_id?: string }) => ({
-        url: `/news?&topic_id=${topic_id}`,
+      query: ({ limit, tags }: { limit?: number; tags?: string }) => ({
+        url: `/news?tags${tags}`,
         method: "GET",
       }),
       transformResponse: (response: TResponseRedux<NewsDetails[]>) => {
