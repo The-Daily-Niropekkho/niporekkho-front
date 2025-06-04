@@ -21,7 +21,7 @@ const Breadcrumb = ({ items }: BreadcrumbProps) => {
           <li key={index} className='breadcrumb-item flex items-center'>
             {index > 0 && (
               <svg
-                className='w-3 h-3 text-gray-500 mx-1'
+                className='w-3 h-3 text-[var(--text-primary)]'
                 aria-hidden='true'
                 xmlns='http://www.w3.org/2000/svg'
                 fill='none'
@@ -44,7 +44,7 @@ const Breadcrumb = ({ items }: BreadcrumbProps) => {
               </svg>
             )}
             <Link
-              className='flex items-center gap-2 px-2 py-1 text-gray-600 dark:text-gray-300 hover:text-red-600 transition-colors duration-200 text-lg'
+              className='flex items-center gap-2 px-2 py-1 text-gray-6000 dark:text-gray-300 text-[var(--text-primary)] transition-colors duration-200 text-lg'
               href={item.href}
             >
               {item.label}
