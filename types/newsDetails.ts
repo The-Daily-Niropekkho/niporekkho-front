@@ -16,7 +16,6 @@ export interface NewsDetails {
   excerpt: string;
   banner_image_id: string;
   reference: string;
-  tags: any;
   meta_title: string;
   meta_description: string;
   canonical_url: string;
@@ -50,6 +49,7 @@ export interface NewsDetails {
   banner_image: BannerImage;
   category: Category;
   allTopics: AllTopic[];
+  tags: string[];
 }
 export interface NewsUtils {
   id: string;

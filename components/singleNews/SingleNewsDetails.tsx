@@ -34,7 +34,7 @@ const SingleNewsDetails = ({ data, clss, news_id }: SingleNewsDetailsProps) => {
 
   const [shareNews] = useShareNewsMutation();
   const { data: newsData, refetch } = useGetSingleNewsQuery({ news_id });
-
+console.log(newsData)
   const increaseFontSize = () => {
     setFontSize((prev) => Math.min(prev + 2, MAX_FONT_SIZE));
   };
@@ -337,14 +337,15 @@ const SingleNewsDetails = ({ data, clss, news_id }: SingleNewsDetailsProps) => {
                 </div>
               </div>
 
-              <div className='print:hidden gap-3 py-3 flex flex-wrap'>
-                {data.allTopics?.map((topic, index) => (
+              <div className='print:hidden gap-3 py-3 flex flex-wrap items-center'>
+                বিষয়:
+                {data.tags?.map((tag, index) => (
                   <Link
                     key={index}
                     className='bg-[var(--slate-2)] dark:bg-[var(--gray-2)] text-sm leading-none text-[var(--dark)] p-2 dark:text-white text-center flex items-center'
-                    href={`/topic/${topic.title}?topic_id=${topic.id}`}
+                    href={`/topic/${tag}`}
                   >
-                    {topic.title}
+                    {tag}
                   </Link>
                 ))}
               </div>
