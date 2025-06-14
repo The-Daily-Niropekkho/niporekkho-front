@@ -17,6 +17,7 @@ import {
   useGetSingleNewsQuery,
   useShareNewsMutation,
 } from "@/redux/features/news/newsApi";
+import { ca } from "date-fns/locale";
 
 interface SingleNewsDetailsProps {
   data: NewsDetails & { relatedPost: NewsDetails[] };
@@ -341,13 +342,13 @@ console.log(newsData)
                 {data.tags && (
                   <>
                     বিষয়:
-                    {data.tags?.map((tag, index) => (
+                    {data.tags?.map((tags, index) => (
                       <Link
                         key={index}
                         className='bg-[var(--slate-2)] dark:bg-[var(--gray-2)] text-sm leading-none text-[var(--dark)] p-2 dark:text-white text-center flex items-center'
-                        href={`/topic/${tag}`}
+                        href={`/topic/${tags}`}
                       >
-                        {tag}
+                        {tags}
                       </Link>
                     ))}
                   </>
