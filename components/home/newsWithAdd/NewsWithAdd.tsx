@@ -17,11 +17,13 @@ const NewsWithAdd = ({ dataOne, dataTwo, ads }: NewsWithAddProps) => {
     title: category_name_one,
     slug: slug_one,
     news: news_one,
+    id: id,
   } = dataOne || {};
   const {
     title: category_name_two,
     slug: slug_two,
     news: news_two,
+    id: id_two,
   } = dataTwo || {};
 
   return (
@@ -30,7 +32,7 @@ const NewsWithAdd = ({ dataOne, dataTwo, ads }: NewsWithAddProps) => {
       <div className='container px-4 mx-auto col-span-12 md:col-span-6 relative after:bg-[var(--border-color)] after:absolute after:w-[1px] after:h-full after:top-0 after:-right-2 dark:after:bg-[var(--border-dark)]'>
         <div className='border-[var(--border-color)] dark:border-[var(--border-dark)] border-b-[2px] mb-3 pb-1'>
           <div className='flex items-center justify-between'>
-            <Link href={`/${slug_one}`}>
+            <Link href={`/category/${slug_one}?id=${id}`}>
               <h2 className='category-text text-anchor'>{category_name_one}</h2>
             </Link>
           </div>
@@ -137,7 +139,7 @@ const NewsWithAdd = ({ dataOne, dataTwo, ads }: NewsWithAddProps) => {
       <div className='container px-4 mx-auto col-span-12 md:col-span-6 relative after:bg-[var(--border-color)] after:absolute after:w-full after:h-[1px] after:right-0 after:left-0 after:-bottom-3 dark:after:bg-[var(--border-dark)]'>
         <div className='border-[var(--border-color)] dark:border-[var(--border-dark)] border-b-[2px] mb-3 pb-1'>
           <div className='flex items-center justify-between'>
-            <Link href={`/${slug_two}`}>
+            <Link href={`/category/${slug_two}?id=${id_two}`}>
               <h2 className='category-text text-anchor'>{category_name_two}</h2>
             </Link>
           </div>

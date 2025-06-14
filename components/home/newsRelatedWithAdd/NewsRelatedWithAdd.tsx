@@ -16,14 +16,14 @@ interface NewsRelatedWithAddProps {
 }
 
 const NewsRelatedWithAdd = ({ data, ads, videos }: NewsRelatedWithAddProps) => {
-  const { title: category_name, slug, news } = data;
+  const { title: category_name, slug, news,id } = data;
 
   return (
     <section className='mt-[60px]'>
       <div className='container px-4 mx-auto'>
         <div className='border-[var(--border-color)] dark:border-[var(--border-dark)] border-b-[2px] mb-3 pb-1'>
           <div className='flex items-center justify-between'>
-            <Link href={`/${slug}`}>
+            <Link href={`/category/${slug}?id=${id}`}>
               <h2 className='category-text text-anchor'>{category_name}</h2>
             </Link>
           </div>

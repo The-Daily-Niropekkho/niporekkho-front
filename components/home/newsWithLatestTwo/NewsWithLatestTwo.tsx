@@ -14,7 +14,7 @@ interface NewsWithLatestTwoProps {
 }
 
 const NewsWithLatestTwo = ({ dataOne, dataTwo }: NewsWithLatestTwoProps) => {
-  const { title: category_name, slug, news } = dataOne;
+  const { title: category_name, slug, news,id } = dataOne;
 
   return (
     <section className='mt-[60px] NewsWithLatestTwo'>
@@ -23,7 +23,7 @@ const NewsWithLatestTwo = ({ dataOne, dataTwo }: NewsWithLatestTwoProps) => {
           <div className='col-span-12 lg:col-span-8 relative after:bg-[var(--border-color)] after:absolute after:w-full after:h-[1px] after:-bottom-3 after:right-0 after:last:h-0 md:after:w-[1px] md:after:h-full md:after:top-0 md:after:-right-3 md:after:last:w-0 dark:after:bg-[var(--border-dark)] mb-4 md:mb-0'>
             <div className='border-[var(--border-color)] dark:border-[var(--border-dark)] border-b-[2px] mb-3 pb-1'>
               <div className='flex items-center justify-between'>
-                <Link href={`/${slug}`}>
+                <Link href={`/category/${slug}?id=${id}`}>
                   <h2 className='category-text text-anchor'>{category_name}</h2>
                 </Link>
               </div>
