@@ -1,10 +1,10 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import { useGetAllDivisionsQuery, useGetAllDistrictsQuery, useGetAllUpazillasQuery } from "@/redux/features/zone/districtsApi";
 import { IoIosSearch } from "react-icons/io";
 import { useRouter } from "next/navigation";
-import { Annotation, ComposableMap, Geographies, Geography } from "react-simple-maps";
+import { ComposableMap, Geographies, Geography, Annotation } from "react-simple-maps";
 
 const geoUrl = "/bangladesh_geojson_adm2_64_districts_zillas.json";
 
@@ -32,130 +32,168 @@ const divisions = [
 
 // Manual coordinates for all districts
 const districtCoordinates: Record<string, [number, number]> = {
-  Dhaka: [90.4125, 23.8103], // ঢাকা
-  Faridpur: [89.8333, 23.6000], // ফরিদপুর
-  Gazipur: [90.4000, 24.0000], // গাজীপুর
-  Gopalganj: [89.9167, 23.0000], // গোপালগঞ্জ
-  Kishoreganj: [90.7667, 24.4333], // কিশোরগঞ্জ
-  Madaripur: [90.2000, 23.1667], // মাদারীপুর
-  Manikganj: [90.0000, 23.8667], // মানিকগঞ্জ
-  Munshiganj: [90.5500, 23.5500], // মুন্সীগঞ্জ
-  Narayanganj: [90.5000, 23.6167], // নারায়ণগঞ্জ
-  Narsingdi: [90.6833, 23.9167], // নরসিংদী
-  Rajbari: [89.6500, 23.7500], // রাজবাড়ী
-  Shariatpur: [90.3667, 23.2000], // শরীয়তপুর
-  Tangail: [89.9167, 24.2500], // টাঙ্গাইল
-  Chittagong: [91.8123, 22.3569], // চট্টগ্রাম
-  Bandarban: [92.2000, 22.2000], // বান্দরবান
-  Brahmanbaria: [91.1119286, 23.9570904], // ব্রাহ্মণবাড়িয়া
-  Chandpur: [90.7000, 23.2333], // চাঁদপুর
-  Comilla: [91.1850, 23.4683], // কুমিল্লা
-  CoxsBazar: [92.0058, 21.4272], // কক্সবাজার
-  Feni: [91.3966, 22.9393], // ফেনী
-  Khagrachhari: [91.9667, 23.1000], // খাগড়াছড়ি
-  Lakshmipur: [90.8333, 22.9500], // লক্ষ্মীপুর
-  Noakhali: [91.0995, 22.8696], // নোয়াখালী
-  Rangamati: [92.1833, 22.6333], // রাঙ্গামাটি
-  Sylhet: [91.8716, 24.8949], // সিলেট
-  Habiganj: [91.4167, 24.3833], // হবিগঞ্জ
-  Maulvibazar: [91.777417, 24.482934], // মৌলভীবাজার
-  Sunamganj: [91.4167, 25.0667], // সুনামগঞ্জ
-  Rajshahi: [88.6042, 24.3642], // রাজশাহী
-  Bogra: [89.3714, 24.8515], // বগুড়া
-  ChapaiNawabganj: [88.2667, 24.6000], // চাঁপাইনবাবগঞ্জ
-  Joypurhat: [89.0167, 25.1000], // জয়পুরহাট
-  Naogaon: [88.7500, 24.8000], // নওগাঁ
-  Natore: [89.0000, 24.4167], // নাটোর
-  Pabna: [89.2500, 24.0000], // পাবনা
-  Sirajganj: [89.7167, 24.4500], // সিরাজগঞ্জ
-  Khulna: [89.5642, 22.8456], // খুলনা
-  Bagerhat: [89.8000, 22.6500], // বাগেরহাট
-  Chuadanga: [88.8500, 23.6500], // চুয়াডাঙ্গা
-  Jessore: [89.2137, 23.1668], // যশোর
-  Jhenaidah: [89.1000, 23.5500], // ঝিনাইদহ
-  Kushtia: [89.0352, 23.9013], // কুষ্টিয়া
-  Magura: [89.4333, 23.4833], // মাগুরা
-  Meherpur: [88.7000, 23.7667], // মেহেরপুর
-  Narail: [89.5000, 23.1667], // নড়াইল
-  Satkhira: [89.0705, 22.7185], // সাতক্ষীরা
-  Barisal: [90.3686, 22.7026], // বরিশাল
-  Barguna: [90.1167, 22.1333], // বরগুনা
-  Bhola: [90.6500, 22.6833], // ভোলা
-  Jhalokati: [90.2000, 22.6333], // ঝালকাঠি
-  Patuakhali: [90.3167, 22.3500], // পটুয়াখালী
-  Pirojpur: [90.0000, 22.5833], // পিরোজপুর
-  Rangpur: [89.2517, 25.7557], // রংপুর
-  Dinajpur: [88.6333, 25.6333], // দিনাজপুর
-  Gaibandha: [89.5333, 25.3333], // গাইবান্ধা
-  Kurigram: [89.6667, 25.8000], // কুড়িগ্রাম
-  Lalmonirhat: [89.4333, 25.9167], // লালমনিরহাট
-  Nilphamari: [88.9500, 25.9333], // নীলফামারী
-  Panchagarh: [88.5500, 26.3333], // পঞ্চগড়
-  Thakurgaon: [88.4667, 26.0333], // ঠাকুরগাঁও
-  Mymensingh: [90.4071, 24.7571], // ময়মনসিংহ
-  Jamalpur: [89.9333, 24.9000], // জামালপুর
-  Netrokona: [90.7167, 24.8833], // নেত্রকোণা
-  Sherpur: [90.0167, 25.0167], // শেরপুর
+  Dhaka: [90.4125, 23.8103],
+  Faridpur: [89.8333, 23.6000],
+  Gazipur: [90.4000, 24.0000],
+  Gopalganj: [89.9167, 23.0000],
+  Kishoreganj: [90.7667, 24.4333],
+  Madaripur: [90.2000, 23.1667],
+  Manikganj: [90.0000, 23.8667],
+  Munshiganj: [90.5500, 23.5500],
+  Narayanganj: [90.5000, 23.6167],
+  Narsingdi: [90.6833, 23.9167],
+  Rajbari: [89.6500, 23.7500],
+  Shariatpur: [90.3667, 23.2000],
+  Tangail: [89.9167, 24.2500],
+  Chittagong: [91.8123, 22.3569],
+  Bandarban: [92.2000, 22.2000],
+  Brahmanbaria: [91.1119286, 23.9570904],
+  Chandpur: [90.7000, 23.2333],
+  Comilla: [91.1850, 23.4683],
+  "Cox's Bazar": [92.0058, 21.4272],
+  Feni: [91.3966, 22.9393],
+  Khagrachhari: [91.9667, 23.1000],
+  Lakshmipur: [90.8333, 22.9500],
+  Noakhali: [91.0995, 22.8696],
+  Rangamati: [92.1833, 22.6333],
+  Sylhet: [91.8716, 24.8949],
+  Habiganj: [91.4167, 24.3833],
+  Maulvibazar: [91.777417, 24.482934],
+  Sunamganj: [91.4167, 25.0667],
+  Rajshahi: [88.6042, 24.3642],
+  Bogra: [89.3714, 24.8515],
+  "Chapai Nawabganj": [88.2667, 24.6000],
+  Joypurhat: [89.0167, 25.1000],
+  Naogaon: [88.7500, 24.8000],
+  Natore: [89.0000, 24.4167],
+  Pabna: [89.2500, 24.0000],
+  Sirajganj: [89.7167, 24.4500],
+  Khulna: [89.5642, 22.8456],
+  Bagerhat: [89.8000, 22.6500],
+  Chuadanga: [88.8500, 23.6500],
+  Jessore: [89.2137, 23.1668],
+  Jhenaidah: [89.1000, 23.5500],
+  Kushtia: [89.0352, 23.9013],
+  Magura: [89.4333, 23.4833],
+  Meherpur: [88.7000, 23.7667],
+  Narail: [89.5000, 23.1667],
+  Satkhira: [89.0705, 22.7185],
+  Barisal: [90.3686, 22.7026],
+  Barguna: [90.1167, 22.1333],
+  Bhola: [90.6500, 22.6833],
+  Jhalokati: [90.2000, 22.6333],
+  Patuakhali: [90.3167, 22.3500],
+  Pirojpur: [90.0000, 22.5833],
+  Rangpur: [89.2517, 25.7557],
+  Dinajpur: [88.6333, 25.6333],
+  Gaibandha: [89.5333, 25.3333],
+  Kurigram: [89.6667, 25.8000],
+  Lalmonirhat: [89.4333, 25.9167],
+  Nilphamari: [88.9500, 25.9333],
+  Panchagarh: [88.5500, 26.3333],
+  Thakurgaon: [88.4667, 26.0333],
+  Mymensingh: [90.4071, 24.7571],
+  Jamalpur: [89.9333, 24.9000],
+  Netrokona: [90.7167, 24.8833],
+  Sherpur: [90.0167, 25.0167],
 };
+
+interface HoveredDistrict {
+  district: string;
+  division: string;
+  districtId: string | number;
+  divisionId: string | number;
+}
 
 export default function DropdownForm() {
   const router = useRouter();
-  const [selectedDivision, setSelectedDivision] = useState("");
+  const [selectedDivision, setSelectedDivision] = useState<string>("");
   const [selectedDistrict, setSelectedDistrict] = useState<number | undefined>();
-  const [selectedUpazilla, setSelectedUpazilla] = useState("");
-  type HoveredDistrictType = {
-    district: string;
-    division: string;
-    districtId: string | number;
-    divisionId: string | number;
-  } | null;
+  const [selectedUpazilla, setSelectedUpazilla] = useState<string>("");
+  const [hoveredDistrict, setHoveredDistrict] = useState<HoveredDistrict | null>(null);
 
-  const [hoveredDistrict, setHoveredDistrict] = useState<HoveredDistrictType>(null);
-
-  const { data: divisionData } = useGetAllDivisionsQuery({});
-  const { data: districtData } = useGetAllDistrictsQuery(
+  const { data: divisionData, isLoading: isDivisionLoading } = useGetAllDivisionsQuery({});
+  const { data: districtData, isLoading: isDistrictLoading } = useGetAllDistrictsQuery(
     { division_id: selectedDivision },
     { skip: !selectedDivision }
   );
-  const { data: alldistrictData } = useGetAllDistrictsQuery({});
-  const { data: upazillaData } = useGetAllUpazillasQuery(
+  const { data: allDistrictData, isLoading: isAllDistrictLoading } = useGetAllDistrictsQuery({});
+  const { data: upazillaData, isLoading: isUpazillaLoading } = useGetAllUpazillasQuery(
     { district_id: selectedDistrict ? String(selectedDistrict) : undefined },
     { skip: !selectedDistrict }
   );
 
   const handleDistrictClick = (geo: any) => {
-    const districtName = geo?.properties?.NAME_2;
-    if (!districtName) return;
+    const districtName = geo?.properties?.ADM2_EN;
+    if (!districtName || !allDistrictData?.data) return;
 
-    // Find matching district in Bengali
-    const matchedDistrict = alldistrictData?.data?.find(
+    const matchedDistrict = allDistrictData.data.find(
       (d: any) => d.name.toLowerCase() === districtName.toLowerCase()
     );
 
     if (matchedDistrict) {
-      // Find the division by id from divisionData
       const division = divisionData?.data?.find((div: any) => div.id === matchedDistrict.division_id);
       if (division) {
-        router.push(
-          `/zonenews/${encodeURIComponent(division.bn_name)}/${encodeURIComponent(matchedDistrict.bn_name)}?division_id=${matchedDistrict.division_id}&district_id=${matchedDistrict.id}`
-        );
+        setSelectedDivision(String(matchedDistrict.division_id));
+        setSelectedDistrict(matchedDistrict.id);
+        setSelectedUpazilla("");
+
+        const path = `/zonenews/${encodeURIComponent(division.bn_name)}/${encodeURIComponent(matchedDistrict.bn_name)}`;
+        const queryParams = new URLSearchParams({
+          division_id: String(matchedDistrict.division_id),
+          district_id: String(matchedDistrict.id),
+        });
+        router.push(`${path}?${queryParams.toString()}`);
       }
     }
   };
 
   const handleDivisionChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setSelectedDivision(e.target.value);
+    const value = e.target.value;
+    setSelectedDivision(value);
     setSelectedDistrict(undefined);
     setSelectedUpazilla("");
+    if (value) {
+      const division = divisionData?.data?.find((d: any) => d.id === value);
+      if (division) {
+        router.push(`/zonenews/${encodeURIComponent(division.bn_name)}?division_id=${value}`);
+      }
+    }
   };
 
   const handleDistrictChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setSelectedDistrict(Number(e.target.value) || undefined);
+    const value = Number(e.target.value) || undefined;
+    setSelectedDistrict(value);
     setSelectedUpazilla("");
+    if (value && selectedDivision) {
+      const division = divisionData?.data?.find((d: any) => d.id === selectedDivision);
+      const district = districtData?.data?.find((d: any) => d.id === value);
+      if (division && district) {
+        const path = `/zonenews/${encodeURIComponent(district.bn_name)}`;
+        const queryParams = new URLSearchParams({
+          division_id: selectedDivision,
+          district_id: String(value),
+        });
+        router.push(`${path}?${queryParams.toString()}`);
+      }
+    }
   };
 
   const handleUpazillaChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setSelectedUpazilla(e.target.value);
+    const value = e.target.value;
+    setSelectedUpazilla(value);
+    if (value && selectedDivision && selectedDistrict) {
+      const division = divisionData?.data?.find((d: any) => d.id === selectedDivision);
+      const district = districtData?.data?.find((d: any) => d.id === selectedDistrict);
+      const upazilla = upazillaData?.data?.find((u: any) => u.id === value);
+      if (division && district && upazilla) {
+        const path = `/zonenews/${encodeURIComponent(district.bn_name)}/${encodeURIComponent(upazilla.bn_name)}`;
+        const queryParams = new URLSearchParams({
+          district_id: String(selectedDistrict)
+        });
+        router.push(`${path}?${queryParams.toString()}`);
+      }
+    }
   };
 
   const handleSearch = () => {
@@ -184,19 +222,30 @@ export default function DropdownForm() {
     router.push(`${path}?${queryParams.toString()}`);
   };
 
+  // Memoize the district map to improve performance
+  const districtMap = useMemo(() => {
+    const map: Record<string, any> = {};
+    allDistrictData?.data?.forEach((d: any) => {
+      map[d.name.toLowerCase()] = d;
+    });
+    return map;
+  }, [allDistrictData]);
+
   return (
     <div className="max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6">
-      <div className=" mb-3">
-        <h1 className="text-[23px] font-medium ml-[200px] mr-[160px] text-gray-800 border-b-[1.5px] border-gray-300 pb-2">জেলার খবর</h1>
+      <div className="mb-3">
+        <h1 className="text-[23px] font-medium text-center text-gray-800 border-b-[1.5px] border-gray-300 pb-2">
+          জেলার খবর
+        </h1>
       </div>
-      <div className="grid justify-center ml-[200px] items-center w-[850px] grid-cols-1 md:grid-cols-4 gap-4 mb-6">
-        {/* Division Dropdown */}
+      <div className="grid justify-center items-center w-full max-w-[850px] mx-auto grid-cols-1 md:grid-cols-4 gap-4 mb-6">
         <div className="relative">
           <select
             id="division"
             className="w-full p-3 pr-10 border border-gray-300 rounded-lg bg-white text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 appearance-none"
             value={selectedDivision}
             onChange={handleDivisionChange}
+            disabled={isDivisionLoading}
           >
             <option value="">বিভাগ</option>
             {divisionData?.data?.map((division: any) => (
@@ -218,14 +267,13 @@ export default function DropdownForm() {
           </div>
         </div>
 
-        {/* District Dropdown */}
         <div className="relative">
           <select
             id="district"
             className="w-full p-3 pr-10 border border-gray-300 rounded-lg bg-white text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 appearance-none disabled:opacity-50"
             value={selectedDistrict || ""}
             onChange={handleDistrictChange}
-            disabled={!selectedDivision}
+            disabled={!selectedDivision || isDistrictLoading}
           >
             <option value="">জেলা</option>
             {districtData?.data?.map((district: any) => (
@@ -247,14 +295,13 @@ export default function DropdownForm() {
           </div>
         </div>
 
-        {/* Upazilla Dropdown */}
         <div className="relative">
           <select
             id="upazilla"
             className="w-full p-3 pr-10 border border-gray-300 rounded-lg bg-white text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 appearance-none disabled:opacity-50"
             value={selectedUpazilla}
             onChange={handleUpazillaChange}
-            disabled={!selectedDistrict}
+            disabled={!selectedDistrict || isUpazillaLoading}
           >
             <option value="">উপজেলা</option>
             {upazillaData?.data?.map((upazilla: any) => (
@@ -276,7 +323,6 @@ export default function DropdownForm() {
           </div>
         </div>
 
-        {/* Search Button */}
         <div className="flex items-end">
           <button
             onClick={handleSearch}
@@ -294,11 +340,11 @@ export default function DropdownForm() {
 
       <div className="flex flex-col lg:flex-row gap-8">
         <div className="w-full rounded-lg">
-          <div className="relative" style={{ height: "800px" }}>
+          <div className="relative" style={{ height: "1000px" }}>
             <ComposableMap
               projection="geoMercator"
               projectionConfig={{
-                scale: 6000,
+                scale: 7000,
                 center: [90.3, 23.7],
               }}
               style={{
@@ -313,13 +359,8 @@ export default function DropdownForm() {
                     const divisionName = geo.properties.ADM1_EN;
                     const fillColor = divisionColors[divisionName] || "#3ac993";
 
-                    // Ensure Bengali name from alldistrictData
-                    const matchedDistrict = alldistrictData?.data?.find(
-                      (d: any) => d.name.toLowerCase() === districtName.toLowerCase()
-                    );
+                    const matchedDistrict = districtMap[districtName.toLowerCase()];
                     const displayName = matchedDistrict?.bn_name || districtName;
-
-                    // Use manual coordinates
                     const centroid = districtCoordinates[districtName] || [0, 0];
 
                     return (
@@ -328,9 +369,12 @@ export default function DropdownForm() {
                           geography={geo}
                           onClick={() => handleDistrictClick(geo)}
                           onMouseEnter={() => {
+                            const division = divisionData?.data?.find(
+                              (div: any) => div.id === matchedDistrict?.division_id
+                            );
                             setHoveredDistrict({
                               district: displayName,
-                              division: divisionName,
+                              division: division?.bn_name || divisionName,
                               districtId: matchedDistrict?.id || "",
                               divisionId: matchedDistrict?.division_id || "",
                             });
@@ -340,14 +384,12 @@ export default function DropdownForm() {
                             default: {
                               fill: fillColor,
                               stroke: "#fff",
-                              strokeWidth: 0.5,
+                              strokeWidth: 0.75,
                               outline: "none",
-                              opacity: 0.8,
                             },
                             hover: {
-                              fill: "#555",
+                              fill: "#e1ffff",
                               stroke: "#fff",
-                              strokeWidth: 1,
                               outline: "none",
                             },
                             pressed: {
@@ -356,32 +398,25 @@ export default function DropdownForm() {
                             },
                           }}
                         />
-                        {centroid[0] !== 0 && centroid[1] !== 0 && (
-                          <Annotation
-                            subject={centroid}
-                            dx={0}
-                            dy={0} // Move label above the district
-                            connectorProps={{}}
+                        <Annotation
+                          subject={centroid}
+                          dx={0}
+                          dy={0}
+                          connectorProps={{}}
+                        >
+                          <text
+                            fontSize="10px"
+                            alignmentBaseline="middle"
+                            textAnchor="middle"
+                            style={{
+                              fontFamily: "SolaimanLipi",
+
+                              pointerEvents: "none",
+                            }}
                           >
-                            <text
-                              x="0"
-                              y="0"
-                              fontSize="9"
-                              textAnchor="middle"
-                              fill="#333"
-                              fontWeight="bold"
-                              style={{
-                                fontFamily: "SolaimanLipi",
-                                backgroundColor: "rgba(255, 255, 255, 0.85)",
-                                padding: "3px 6px",
-                                borderRadius: "3px",
-                                boxShadow: "0 1px 3px rgba(0,0,0,0.2)",
-                              }}
-                            >
-                              {displayName}
-                            </text>
-                          </Annotation>
-                        )}
+                            {displayName}
+                          </text>
+                        </Annotation>
                       </React.Fragment>
                     );
                   })
@@ -408,6 +443,8 @@ export default function DropdownForm() {
                   const div = divisionData?.data?.find((d: any) => d.bn_name === division.bengali);
                   if (div) {
                     setSelectedDivision(String(div.id));
+                    setSelectedDistrict(undefined);
+                    setSelectedUpazilla("");
                     router.push(
                       `/zonenews/${encodeURIComponent(div.bn_name)}?division_id=${div.id}`
                     );
