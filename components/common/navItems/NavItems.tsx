@@ -178,6 +178,16 @@ const staticCategories = [
     title: "অপরাধ",
     slug: "crime",
   },
+  {
+    id: "cmb4u3i2l0005mhnk3gdk1uhl",
+    title: "টেক লাইফ",
+    slug: "tech-life",
+  },
+  {
+    id: "cmb4u3i2l0005mhnk3gdk1uhl",
+    title: "অপরাধ",
+    slug: "crime",
+  },
 ];
 
 interface Category {
@@ -303,7 +313,7 @@ const NavItems = ({
                 >
                   <ul className='space-y-2'>
                     {menuData
-                      .slice(colIndex * 5 + 11, colIndex * 5 + 16)
+                      .slice(colIndex * 6 + 11, colIndex * 6 + 17)
                       .map((item) => (
                         <li key={item.title}>
                           <Link
@@ -314,6 +324,7 @@ const NavItems = ({
                               <span className='text-[var(--text-primary)]'>
                                 <FiChevronsRight size={16} />
                               </span>
+
                               <span className='text-xs sm:text-sm md:text-base'>
                                 {item.title}
                               </span>

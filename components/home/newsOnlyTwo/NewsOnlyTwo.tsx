@@ -13,14 +13,14 @@ interface NewsOnlyTwoProps {
 }
 
 const NewsOnlyTwo = ({ data, style }: NewsOnlyTwoProps) => {
-  const { title: category_name, slug, news } = data;
+  const { title: category_name, slug, news,id } = data;
 
   return (
     <section className='mt-[60px] newsonlytwo'>
       <div className='container px-4 mx-auto' style={style}>
         <div className='border-[var(--border-color)] dark:border-[var(--border-dark)] border-b-[2px] mb-3 pb-1'>
           <div className='flex items-center justify-between'>
-            <Link href={`/${slug}`}>
+            <Link href={`/category/${slug}?id=${id}`}>
               <h2 className='category-text text-anchor'>{category_name}</h2>
             </Link>
           </div>
@@ -66,7 +66,7 @@ const NewsOnlyTwo = ({ data, style }: NewsOnlyTwoProps) => {
                       {item.headline}
                     </h3>
                     <p className='hidden xl:block text-base text-[var(--gray-2)] dark:text-[var(--gray-3)]'>
-                      {item.details}
+                      <p className='line-clamp-4'> {item.details}</p>
                     </p>
                     <TimeBefore title={item.createdAt} clss='ml-4 md:ml-0' />
                   </div>

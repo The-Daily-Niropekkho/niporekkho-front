@@ -4,7 +4,7 @@ import UpArrow from "@/public/icons/UpArrow";
 import { useEffect, useRef } from "react";
 
 const ScrollToTop = () => {
-  const scrollTop = useRef<any>();
+  const scrollTop = useRef<any>(null);
 
   const goToTopHandler = () => {
     window.scroll({

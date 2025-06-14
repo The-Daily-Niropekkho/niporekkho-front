@@ -12,7 +12,7 @@ import timestampToBangleDateWithTime from "@/utils/timestampToBangleDateWithTime
 import Image from "next/image";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import { Suspense, useEffect, useState } from "react";
+import React, { Suspense, useEffect, useState } from "react";
 import {
   FacebookShareButton,
   TwitterShareButton,
@@ -46,7 +46,7 @@ const mapToNewsItem = (apiData: any): NewsItem => ({
 });
 
 // Utility function to highlight search term in text
-const highlightSearchTerm = (text: string, searchTerm: string): JSX.Element => {
+const highlightSearchTerm = (text: string, searchTerm: string): React.ReactElement => {
   if (!searchTerm.trim()) return <>{text}</>;
 
   const regex = new RegExp(`(${searchTerm})`, "gi");

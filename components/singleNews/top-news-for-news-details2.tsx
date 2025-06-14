@@ -100,14 +100,13 @@ function NewsList({ posts }: { posts: NewsProps[] }) {
   );
 }
 
-function TopNewsForNewsDetails2({ count = 6 }: { count: number }) {
+function TopNewsForNewsDetails2({ count = 10 }: { count: number }) {
   // Fetch the most-read news using RTK Query
   const {
     data: topReadNewsResponse,
     isLoading: isTopReadLoading,
     error: topReadError,
   } = useGetTopReadNewsQuery({ limit: count });
-    console.log("🚀 ~ TopNewsForNewsDetails2 ~ topReadNewsResponse:", topReadNewsResponse)
 
   // Map the API response to NewsProps
   const topReadNews: NewsProps[] =

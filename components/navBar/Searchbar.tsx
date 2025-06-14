@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import { FaSearch } from "react-icons/fa";
 
 interface SearchBarProps {
   showSearch: boolean;
@@ -47,24 +48,11 @@ const SearchBar = ({
           />
         </form>
         <button
-          className='search-button'
+          className='search-button '
           onClick={handleSearchItem}
           aria-label='Toggle search'
         >
-          <svg
-            className='search-icon'
-            width='20'
-            height='20'
-            viewBox='0 0 24 24'
-            fill='none'
-            stroke='currentColor'
-            strokeWidth='2'
-            strokeLinecap='round'
-            strokeLinejoin='round'
-          >
-            <circle cx='11' cy='11' r='8' />
-            <line x1='21' y1='21' x2='16.65' y2='16.65' />
-          </svg>
+          <FaSearch className='text-gray-400' />
         </button>
       </div>
 
@@ -127,9 +115,6 @@ const SearchBar = ({
           width: 20px;
           height: 20px;
         }
-
-       
-        
       `}</style>
     </div>
   );

@@ -11,6 +11,8 @@ const nextConfig = {
         hostname: "**",
       },
     ],
+    formats: ['image/webp'], // Prefer WebP for better compression
+    minimumCacheTTL: 604800, // Cache images for 7 days
     domains: ["news.doptor.net", "dailyniropekkho.com"],
   },
   env: {

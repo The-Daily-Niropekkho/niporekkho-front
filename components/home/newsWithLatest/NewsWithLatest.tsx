@@ -111,8 +111,9 @@ const NewsWithLatest = ({
   ads,
   topnews,
 }: NewsWithLatestProps) => {
-  const { title: category_name, slug, news } = data || {};
+  const { title: category_name, slug, news ,id } = data || {};
 // console.log(news, "news data");
+console.log(id, "news data");
 
   return (
     <section className='mt-[60px]'>
@@ -121,7 +122,7 @@ const NewsWithLatest = ({
           <div className='col-span-12 lg:col-span-8 xl:col-span-8 relative after:bg-[var(--border-color)] after:absolute after:w-full after:h-[1px] after:-bottom-3 after:right-0 after:last:h-0 lg:after:w-[1px] lg:after:h-full lg:after:-right-3 lg:after:top-0 lg:after:last:w-0 dark:after:bg-[var(--border-dark)] mb-7 md:mb-0'>
             <div className='border-[var(--border-color)] dark:border-[var(--border-dark)] border-b-[2px] mb-3 pb-1'>
               <div className='flex items-center justify-between'>
-                <Link href={`/${slug}`}>
+                <Link href={`/category/${slug}?id=${id}`}>
                   <h2 className='category-text text-anchor'>{category_name}</h2>
                 </Link>
               </div>

@@ -12,10 +12,8 @@ import date_output_bn from "@/utils/datetime";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import TopNewsForNewsDetails from "@/components/singleNews/top-news-for-news-details";
-import { MdKeyboardArrowRight } from "react-icons/md";
-import { FiChevronRight } from "react-icons/fi";
 import { GoDotFill } from "react-icons/go";
-import { useGetAllNewsQuery } from "@/redux/features/news/newsApi";
+
 interface ZoneNewsParams {
   divisionName?: string;
   districtName?: string;
@@ -41,24 +39,29 @@ export default function ZoneNewsPage({ params }: { params: ZoneNewsParams }) {
   // Get names from route params
   const { divisionName, districtName, upazillaName } = params;
 
-  // Fetch news data
-  const { data: newsData, isLoading: newsLoading, error: newsError } = useZonewiseNewsQuery({
-    division_id: divisionId ?? undefined,
-    district_id: districtId ?? undefined,
-    upazilla_id: upazillaId ?? undefined,
-    limit: 10,
-  });
+  // Fetch news data with upazilla_id filter
+  const {
+    data: newsData,
+    isLoading: newsLoading,
+    error: newsError,
+  } = useZonewiseNewsQuery(
+    {
+      upazilla_id: upazillaId || undefined,
+      limit: 10,
+    },
+    { skip: !divisionId && !districtId && !upazillaId } // Skip if no IDs provided
+  );
 
   // Fetch upazillas for the selected district
   const { data: upazillaData, isLoading: upazillaLoading } = useGetAllUpazillasQuery(
-    { district_id: districtId ?? undefined },
+    { district_id: districtId || undefined },
     { skip: !districtId }
   );
 
-  const { data: allNewsData, isLoading: allNewsLoading } = useGetAllNewsQuery({ limit: 500 });
-
   // Determine location name to display
   const getLocationName = () => {
+    if (upazillaName) return decodeURIComponent(upazillaName);
+    if (districtName) return decodeURIComponent(districtName);
     if (divisionName) return decodeURIComponent(divisionName);
     return "দেশজুড়ে";
   };
@@ -77,22 +80,27 @@ export default function ZoneNewsPage({ params }: { params: ZoneNewsParams }) {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
-  // Filter news based on search query
-  const filteredData = newsData?.data?.filter(
-    (news) =>
-      news.headline.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      news.short_headline.toLowerCase().includes(searchQuery.toLowerCase())
-  );
-
-  console.log("filteredData", filteredData);
-
-  // Handle upazilla click
-  const handleUpazillaClick = (upazilla: { id: string; bn_name: string }) => {
+  // Handle Upazila click to filter news
+  const handleUpazilaClick = (upazilla: Upazilla) => {
+    if (!divisionName || !districtName) {
+      router.push("/"); // Redirect to home if params are missing
+      return;
+    }
+    const newParams = new URLSearchParams(searchParams.toString());
+    newParams.set("upazilla_id", upazilla.id.toString());
     router.push(
-      `/upazillanews/${encodeURIComponent(upazilla.bn_name)}/${encodeURIComponent(upazilla.id)}`
+      `/zone-news/${encodeURIComponent(divisionName)}/${encodeURIComponent(districtName)}/${encodeURIComponent(upazilla.bn_name)}?${newParams.toString()}`
     );
   };
 
+  // Filter news based on search query with better Bengali support
+  const filteredData = newsData?.data?.filter((news) =>
+    searchQuery
+      ? news.headline.includes(searchQuery) || news.short_headline.includes(searchQuery)
+      : true
+  ) || [];
+
+  // Loading state
   if (newsLoading) {
     return (
       <div className="container mx-auto p-6 font-solaimanlipi">
@@ -117,6 +125,7 @@ export default function ZoneNewsPage({ params }: { params: ZoneNewsParams }) {
     );
   }
 
+  // Error state
   if (newsError) {
     return (
       <div className="p-4 text-center font-solaimanlipi min-h-screen flex flex-col items-center justify-center">
@@ -134,10 +143,11 @@ export default function ZoneNewsPage({ params }: { params: ZoneNewsParams }) {
     );
   }
 
-  if (!filteredData || filteredData.length === 0) {
+  // No news state
+  if (!newsData?.data || newsData.data.length === 0) {
     return (
       <div className="p-4 text-center font-solaimanlipi min-h-screen flex flex-col items-center justify-center">
-        <h1 className="text-4xl font-bold text-gray-700 mb-4">৪০৪</h1>
+        <h1 className="text-4xl font-bold text-gray-700 mb-4">কোনো নিউজ নেই</h1>
         <p className="text-lg text-gray-500 font-medium mb-6">
           {getLocationName()} এর জন্য কোনো নিউজ পাওয়া যায়নি
         </p>
@@ -151,14 +161,32 @@ export default function ZoneNewsPage({ params }: { params: ZoneNewsParams }) {
     );
   }
 
+  // No matching news after search
+  if (filteredData.length === 0 && searchQuery) {
+    return (
+      <div className="p-4 text-center font-solaimanlipi min-h-screen flex flex-col items-center justify-center">
+        <h1 className="text-4xl font-bold text-gray-700 mb-4">কোনো ফলাফল নেই</h1>
+        <p className="text-lg text-gray-500 font-medium mb-6">
+          &quot;{searchQuery}&quot; এর জন্য {getLocationName()} এ কোনো নিউজ পাওয়া যায়নি
+        </p>
+        <button
+          onClick={() => setSearchQuery("")}
+          className="px-6 py-2 bg-orange-600 text-white rounded-lg hover:bg-orange-700 transition-colors"
+        >
+          সব নিউজ দেখুন
+        </button>
+      </div>
+    );
+  }
+
   return (
     <div className="container mx-auto p-6 font-solaimanlipi">
       {/* Header and Search */}
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
         <div>
-          <h3 className="text-2xl md:text-2xl text-bold  text-[var(--text-primary)] tracking-tight flex items-center gap-2">
+          <h3 className="text-2xl md:text-2xl text-bold text-[var(--text-primary)] tracking-tight flex items-center gap-2">
             {getLocationName()}
-            {districtName && (
+            {districtName && !upazillaName && (
               <>
                 <MdKeyboardDoubleArrowRight className="text-[var(--text-primary)] text-2xl" />
                 <span className="text-[var(--text-primary)] text-2xl">{decodeURIComponent(districtName)}</span>
@@ -170,17 +198,12 @@ export default function ZoneNewsPage({ params }: { params: ZoneNewsParams }) {
               {upazillaLoading ? (
                 <Skeleton height={20} width={300} />
               ) : upazillaData?.data?.length && upazillaData.data.length > 0 ? (
-                  <div className="flex flex-wrap justify-center  items-center gap-2 text-gray-600">
-                    <GoDotFill className=" text-[var(--text-primary)] flex justify-center items-center text-[12px]" />
+                <div className="flex flex-wrap justify-center items-center gap-2 text-gray-600">
+                  <GoDotFill className="text-[var(--text-primary)] flex justify-center items-center text-[12px]" />
                   {upazillaData.data.map((upazilla: Upazilla, index: number) => (
                     <React.Fragment key={upazilla.id.toString()}>
                       <button
-                        onClick={() =>
-                          handleUpazillaClick({
-                            id: upazilla.id.toString(),
-                            bn_name: upazilla.bn_name,
-                          })
-                        }
+                        onClick={() => handleUpazilaClick(upazilla)}
                         className={`text-[16px] font-medium transition-colors ${
                           upazillaId === upazilla.id.toString()
                             ? "text-[var(--text-primary)] font-bold"
@@ -189,9 +212,8 @@ export default function ZoneNewsPage({ params }: { params: ZoneNewsParams }) {
                       >
                         {upazilla.bn_name}
                       </button>
-                      
                       {index < (upazillaData.data?.length ?? 0) - 1 && (
-                        <span className="text-gray-400  flex justify-center items-center"> <GoDotFill className=" text-[var(--text-primary)] flex justify-center items-center text-[12px]" /></span>
+                        <GoDotFill className="text-[var(--text-primary)] flex justify-center items-center text-[12px]" />
                       )}
                     </React.Fragment>
                   ))}
@@ -221,17 +243,16 @@ export default function ZoneNewsPage({ params }: { params: ZoneNewsParams }) {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
         {/* News Cards */}
         <div className="col-span-1 md:col-span-2">
-      
-        <div className="space-y-8">
+          <div className="space-y-8">
             {filteredData.map((news) => (
               <div
                 key={news.id}
-                className="flex flex-col md:flex-row gap-5 pb-4 border-b border-gray-200 cursor-pointer  transition-shadow duration-200"
-                onClick={() => router.push(`/${news.category.slug}/${news.id}/${news.slug}`)}
+                className="flex flex-col md:flex-row gap-5 pb-4 border-b border-gray-200 cursor-pointer transition-shadow duration-200"
+                onClick={() => router.push(`/${news.category?.slug || 'news'}/${news.id}/${news.slug || ''}`)}
               >
                 <div className="flex-shrink-0 w-full md:w-80">
                   <Image
-                    src={fileObjectToLink(news.banner_image)}
+                    src={fileObjectToLink(news.banner_image) || '/placeholder-image.jpg'}
                     alt={news.headline || "News banner"}
                     width={320}
                     height={200}
@@ -240,19 +261,18 @@ export default function ZoneNewsPage({ params }: { params: ZoneNewsParams }) {
                 </div>
                 <div className="flex-1">
                   <h2 className="text-xl font-bold text-gray-900 mb-2 hover:text-[var(--text-primary)] transition-colors">
-                    {news.headline}
+                    {news.headline || "শিরোনাম পাওয়া যায়নি"}
                   </h2>
                   <p className="text-gray-600 text-sm mb-3 font-medium">
-                    {news.short_headline}
+                    {news.short_headline || "সংক্ষিপ্ত শিরোনাম নেই"}
                   </p>
                   <p className="text-gray-500 text-sm font-medium">
-                    {date_output_bn(news.publish_date)}
+                    {date_output_bn(news.publish_date) || "তারিখ পাওয়া যায়নি"}
                   </p>
                 </div>
               </div>
             ))}
           </div>
-          
         </div>
 
         {/* Right Sidebar */}

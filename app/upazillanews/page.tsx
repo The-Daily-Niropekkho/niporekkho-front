@@ -12,10 +12,9 @@ import date_output_bn from "@/utils/datetime";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import TopNewsForNewsDetails from "@/components/singleNews/top-news-for-news-details";
-import { MdKeyboardArrowRight } from "react-icons/md";
-import { FiChevronRight } from "react-icons/fi";
 import { GoDotFill } from "react-icons/go";
 import { useGetAllNewsQuery } from "@/redux/features/news/newsApi";
+
 interface ZoneNewsParams {
   divisionName?: string;
   districtName?: string;
@@ -41,7 +40,7 @@ export default function ZoneNewsPage({ params }: { params: ZoneNewsParams }) {
   // Get names from route params
   const { divisionName, districtName, upazillaName } = params;
 
-  // Fetch news data
+  // Fetch news data with upazilla_id filter
   const { data: newsData, isLoading: newsLoading, error: newsError } = useZonewiseNewsQuery({
     division_id: divisionId ?? undefined,
     district_id: districtId ?? undefined,
@@ -59,6 +58,8 @@ export default function ZoneNewsPage({ params }: { params: ZoneNewsParams }) {
 
   // Determine location name to display
   const getLocationName = () => {
+    if (upazillaName) return decodeURIComponent(upazillaName);
+    if (districtName) return decodeURIComponent(districtName);
     if (divisionName) return decodeURIComponent(divisionName);
     return "দেশজুড়ে";
   };
@@ -77,21 +78,22 @@ export default function ZoneNewsPage({ params }: { params: ZoneNewsParams }) {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
-  // Filter news based on search query
-  const filteredData = newsData?.data?.filter(
-    (news) =>
-      news.headline.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      news.short_headline.toLowerCase().includes(searchQuery.toLowerCase())
-  );
-
-  console.log("filteredData", filteredData);
-
-  // Handle upazilla click
-  const handleUpazillaClick = (upazilla: { id: string; bn_name: string }) => {
+  // Handle Upazila click to filter news
+  const handleUpazilaClick = (upazilla: Upazilla) => {
+    const newParams = new URLSearchParams(searchParams.toString());
+    newParams.set("upazilla_id", upazilla.id.toString());
     router.push(
-      `/upazillanews/${encodeURIComponent(upazilla.bn_name)}/${encodeURIComponent(upazilla.id)}`
+      `/zone-news/${divisionName}/${districtName}/${encodeURIComponent(upazilla.bn_name)}?${newParams.toString()}`
     );
   };
+
+  // Filter news based on search query
+  const filteredData = newsData?.data?.filter((news) =>
+    searchQuery
+      ? news.headline.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        news.short_headline.toLowerCase().includes(searchQuery.toLowerCase())
+      : true
+  );
 
   if (newsLoading) {
     return (
@@ -156,9 +158,9 @@ export default function ZoneNewsPage({ params }: { params: ZoneNewsParams }) {
       {/* Header and Search */}
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
         <div>
-          <h3 className="text-2xl md:text-2xl text-bold  text-[var(--text-primary)] tracking-tight flex items-center gap-2">
+          <h3 className="text-2xl md:text-2xl text-bold text-[var(--text-primary)] tracking-tight flex items-center gap-2">
             {getLocationName()}
-            {districtName && (
+            {districtName && !upazillaName && (
               <>
                 <MdKeyboardDoubleArrowRight className="text-[var(--text-primary)] text-2xl" />
                 <span className="text-[var(--text-primary)] text-2xl">{decodeURIComponent(districtName)}</span>
@@ -170,17 +172,12 @@ export default function ZoneNewsPage({ params }: { params: ZoneNewsParams }) {
               {upazillaLoading ? (
                 <Skeleton height={20} width={300} />
               ) : upazillaData?.data?.length && upazillaData.data.length > 0 ? (
-                  <div className="flex flex-wrap justify-center  items-center gap-2 text-gray-600">
-                    <GoDotFill className=" text-[var(--text-primary)] flex justify-center items-center text-[12px]" />
+                <div className="flex flex-wrap justify-center items-center gap-2 text-gray-600">
+                  <GoDotFill className="text-[var(--text-primary)] flex justify-center items-center text-[12px]" />
                   {upazillaData.data.map((upazilla: Upazilla, index: number) => (
                     <React.Fragment key={upazilla.id.toString()}>
                       <button
-                        onClick={() =>
-                          handleUpazillaClick({
-                            id: upazilla.id.toString(),
-                            bn_name: upazilla.bn_name,
-                          })
-                        }
+                        onClick={() => handleUpazilaClick(upazilla)}
                         className={`text-[16px] font-medium transition-colors ${
                           upazillaId === upazilla.id.toString()
                             ? "text-[var(--text-primary)] font-bold"
@@ -189,9 +186,8 @@ export default function ZoneNewsPage({ params }: { params: ZoneNewsParams }) {
                       >
                         {upazilla.bn_name}
                       </button>
-                      
                       {index < (upazillaData.data?.length ?? 0) - 1 && (
-                        <span className="text-gray-400  flex justify-center items-center"> <GoDotFill className=" text-[var(--text-primary)] flex justify-center items-center text-[12px]" /></span>
+                        <GoDotFill className="text-[var(--text-primary)] flex justify-center items-center text-[12px]" />
                       )}
                     </React.Fragment>
                   ))}
@@ -210,7 +206,7 @@ export default function ZoneNewsPage({ params }: { params: ZoneNewsParams }) {
             placeholder="নিউজ খুঁজুন..."
             className="w-full md:w-64 p-2 pl-10 pr-4 rounded-lg border border-gray-300 bg-white text-gray-900 focus:outline-none focus:ring-2 focus:ring-orange-500"
           />
-          <FaSearch
+          <FaSearchka 
             size={16}
             className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
           />
@@ -221,12 +217,11 @@ export default function ZoneNewsPage({ params }: { params: ZoneNewsParams }) {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
         {/* News Cards */}
         <div className="col-span-1 md:col-span-2">
-      
-        <div className="space-y-8">
+          <div className="space-y-8">
             {filteredData.map((news) => (
               <div
                 key={news.id}
-                className="flex flex-col md:flex-row gap-5 pb-4 border-b border-gray-200 cursor-pointer  transition-shadow duration-200"
+                className="flex flex-col md:flex-row gap-5 pb-4 border-b border-gray-200 cursor-pointer transition-shadow duration-200"
                 onClick={() => router.push(`/${news.category.slug}/${news.id}/${news.slug}`)}
               >
                 <div className="flex-shrink-0 w-full md:w-80">
@@ -252,7 +247,6 @@ export default function ZoneNewsPage({ params }: { params: ZoneNewsParams }) {
               </div>
             ))}
           </div>
-          
         </div>
 
         {/* Right Sidebar */}

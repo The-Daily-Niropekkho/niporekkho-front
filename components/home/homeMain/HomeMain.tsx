@@ -5,7 +5,7 @@ import HomePageSkeleton from "@/components/skeleton/HomePageSkeleton";
 import {  useGetAllVideosQuery, useGetMultipleCategoryDataQuery, useGetTopHomeDataQuery } from "@/redux/features/home-data/homeApi";
 import { usePathname } from "next/navigation";
 import { Fragment } from "react";
-import config from "../../../config";
+import config, { EnumCategoryIds } from "../../../config";
 import NewsOnly from "../newsOnly/NewsOnly";
 import NewsOnlyTwo from "../newsOnlyTwo/NewsOnlyTwo";
 import NewsRelatedWithAdd from "../newsRelatedWithAdd/NewsRelatedWithAdd";
@@ -166,53 +166,52 @@ const HomeMain = () => {
             serial_number: 0,
             serial_update_at: "",
             news: topHomeData?.data.flat() ?? [],
-            
           }}
           sideData={{
-            opinion: mergedResult[config.allCategories.opinion_id] ?? [],
+            // opinion: mergedResult[config.allCategories.opinion_id] ?? [],
+            opinion: mergedResult[EnumCategoryIds.opinion] ?? [],
           }}
           ads={dummyAds}
-          videos={(videos?.data ?? []).map((v) => v.url )}
+          videos={(videos?.data ?? []).map((v) => v.url)}
         />
       )}
       {/* News With Latest: National */}
-      {mergedResult &&
-        mergedResult[config.allCategories.national_id]?.length > 0 && (
-          <NewsWithLatest
-            data={{
-              id: "national",
-              title: "জাতীয়",
-              slug: "national",
-              position: 1,
-              position_update_at: null,
-              is_home: true,
-              position_in_home: null,
-              position_in_home_update_at: null,
-              description: "",
-              meta_title: "জাতীয় সংবাদ",
-              meta_description: "বাংলাদেশের জাতীয় সংবাদ",
-              created_by_id: "system",
-              image_id: null,
-              status: "active",
-              is_deleted: false,
-              createdAt: new Date().toISOString(),
-              updatedAt: new Date().toISOString(),
-              news: mergedResult[config.allCategories.national_id] ?? [],
-            }}
-            // sideData={{
-            //   opinion: dummySideData.post,
-            // }}
-            ads={dummyAds}
-            topnews={true}
-          />
-        )}
+      {mergedResult && mergedResult[EnumCategoryIds.national]?.length > 0 && (
+        <NewsWithLatest
+          data={{
+            id: "cmb21n1870003mh98mvl9k85o",
+            title: "জাতীয়",
+            slug: "national",
+            position: 1,
+            position_update_at: null,
+            is_home: true,
+            position_in_home: null,
+            position_in_home_update_at: null,
+            description: "",
+            meta_title: "জাতীয় সংবাদ",
+            meta_description: "বাংলাদেশের জাতীয় সংবাদ",
+            created_by_id: "system",
+            image_id: null,
+            status: "active",
+            is_deleted: false,
+            createdAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString(),
+            news: mergedResult[EnumCategoryIds.national] ?? [],
+          }}
+          // sideData={{
+          //   opinion: dummySideData.post,
+          // }}
+          ads={dummyAds}
+          topnews={true}
+        />
+      )}
       {/* News With Add: Politics and Cities */}
       {mergedResult &&
-        mergedResult[config.allCategories.cities_id]?.length > 0 &&
-        mergedResult[config.allCategories.politics_id]?.length > 0 && (
+        mergedResult[EnumCategoryIds.politics]?.length > 0 &&
+        mergedResult[EnumCategoryIds.capital]?.length > 0 && (
           <NewsWithAdd
             dataOne={{
-              id: "politics-category",
+              id: "cmaxqech2000bmhaodnsm3yl8",
               title: "রাজনীতি",
               slug: "politics",
               position: 2,
@@ -232,7 +231,7 @@ const HomeMain = () => {
               news: mergedResult[config.allCategories.politics_id] ?? [],
             }}
             dataTwo={{
-              id: "capital-category",
+              id: "cmb4oyrc1000xmhrcr502d8gb",
               title: "রাজধানী",
               slug: "capital",
               position: 3,
@@ -249,7 +248,7 @@ const HomeMain = () => {
               is_deleted: false,
               createdAt: new Date().toISOString(),
               updatedAt: new Date().toISOString(),
-              news: mergedResult[config.allCategories.cities_id] ?? [],
+              news: mergedResult[EnumCategoryIds.capital] ?? [],
             }}
             ads={dummyAds}
           />
@@ -257,17 +256,16 @@ const HomeMain = () => {
 
       {/* videos section */}
       <Video
-        videos={(videos?.data ?? []).map((v) => v.url )}
+        videos={(videos?.data ?? []).map((v) => v.url)}
         slug='video'
         category_name='ভিডিও'
       />
       {/* News Only: Across The Country */}
       {mergedResult &&
-        mergedResult[config.allCategories.across_the_country_id]?.length >
-          0 && (
+        mergedResult[EnumCategoryIds.across_the_country]?.length > 0 && (
           <NewsOnly
             data={{
-              id: "",
+              id: "cmb21jjgj0005mhfc2lqjtaf0",
               title: "দেশজুড়ে",
               slug: "across-the-country",
               position: 4,
@@ -284,46 +282,71 @@ const HomeMain = () => {
               is_deleted: false,
               createdAt: new Date().toISOString(),
               updatedAt: new Date().toISOString(),
-              news:
-                mergedResult[config.allCategories.across_the_country_id] ?? [],
+              news: mergedResult[EnumCategoryIds.across_the_country] ?? [],
             }}
             ads={dummyAds}
           />
         )}
-      {/* News Related With Add: Economy */}
+      {/* News Only Two: international */}
       {mergedResult &&
-        mergedResult[config.allCategories.economy_id]?.length > 0 && (
-          <NewsRelatedWithAdd
+        mergedResult[EnumCategoryIds.international]?.length > 0 && (
+          <NewsOnlyTwo
             data={{
-              id: "economy",
-              title: "অর্থনীতি",
-              slug: "economy",
-              position: 5,
+              id: "cmb21idgv0003mh2cmm51tw6j",
+              title: "আন্তর্জাতিক",
+              slug: "international",
+              position: 13,
               position_update_at: null,
               is_home: true,
               position_in_home: null,
               position_in_home_update_at: null,
               description: "",
-              meta_title: "অর্থনীতি সংবাদ",
-              meta_description: "বাংলাদেশের অর্থনীতি সংবাদ",
+              meta_title: "আন্তর্জাতিক সংবাদ",
+              meta_description: "বাংলাদেশের আন্তর্জাতিক সংবাদ",
               created_by_id: "system",
               image_id: null,
               status: "active",
               is_deleted: false,
               createdAt: new Date().toISOString(),
               updatedAt: new Date().toISOString(),
-              news: mergedResult[config.allCategories.economy_id] ?? [],
+              news: mergedResult[EnumCategoryIds.international] ?? [],
             }}
-            ads={dummyAds}
-            videos={dummyYouTubeData.map((v) => v.url)}
+            style={specialStyle}
           />
         )}
+      {/* News Related With Add: Economy */}
+      {mergedResult && mergedResult[EnumCategoryIds.economy]?.length > 0 && (
+        <NewsRelatedWithAdd
+          data={{
+            id: "cmb1zrh9r0003mhz4ykuthdrt",
+            title: "অর্থনীতি",
+            slug: "economy",
+            position: 5,
+            position_update_at: null,
+            is_home: true,
+            position_in_home: null,
+            position_in_home_update_at: null,
+            description: "",
+            meta_title: "অর্থনীতি সংবাদ",
+            meta_description: "বাংলাদেশের অর্থনীতি সংবাদ",
+            created_by_id: "system",
+            image_id: null,
+            status: "active",
+            is_deleted: false,
+            createdAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString(),
+            news: mergedResult[EnumCategoryIds.economy] ?? [],
+          }}
+          ads={dummyAds}
+          videos={dummyYouTubeData.map((v) => v.url)}
+        />
+      )}
       {/* News Only Two: Entertainment */}
       {mergedResult &&
-        mergedResult[config.allCategories.entertainment_id]?.length > 0 && (
+        mergedResult[EnumCategoryIds.entertainment]?.length > 0 && (
           <NewsOnlyTwo
             data={{
-              id: "entertainment",
+              id: "cmb6j5ymk0003mhqgko5f8ol7",
               title: "বিনোদন",
               slug: "entertainment",
               position: 7,
@@ -340,44 +363,43 @@ const HomeMain = () => {
               is_deleted: false,
               createdAt: new Date().toISOString(),
               updatedAt: new Date().toISOString(),
-              news: mergedResult[config.allCategories.entertainment_id] ?? [],
+              news: mergedResult[EnumCategoryIds.entertainment] ?? [],
             }}
             style={specialStyle}
           />
         )}
       {/* News Only: Lifestyle */}
-      {mergedResult &&
-        mergedResult[config.allCategories.lifestyle_id]?.length > 0 && (
-          <NewsOnly
-            data={{
-              id: "lifestyle",
-              title: "লাইফস্টাইল",
-              slug: "lifestyle",
-              position: 8,
-              position_update_at: null,
-              is_home: true,
-              position_in_home: null,
-              position_in_home_update_at: null,
-              description: "",
-              meta_title: "লাইফস্টাইল সংবাদ",
-              meta_description: "বাংলাদেশের লাইফস্টাইল সংবাদ",
-              created_by_id: "system",
-              image_id: null,
-              status: "active",
-              is_deleted: false,
-              createdAt: new Date().toISOString(),
-              updatedAt: new Date().toISOString(),
-              news: mergedResult[config.allCategories.lifestyle_id] ?? [],
-            }}
-            ads={dummyAds}
-          />
-        )}
+      {mergedResult && mergedResult[EnumCategoryIds.lifestyle]?.length > 0 && (
+        <NewsOnly
+          data={{
+            id: "cmb21d1wg0007mhu0bi2jacsa",
+            title: "লাইফস্টাইল",
+            slug: "lifestyle",
+            position: 8,
+            position_update_at: null,
+            is_home: true,
+            position_in_home: null,
+            position_in_home_update_at: null,
+            description: "",
+            meta_title: "লাইফস্টাইল সংবাদ",
+            meta_description: "বাংলাদেশের লাইফস্টাইল সংবাদ",
+            created_by_id: "system",
+            image_id: null,
+            status: "active",
+            is_deleted: false,
+            createdAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString(),
+            news: mergedResult[EnumCategoryIds.lifestyle] ?? [],
+          }}
+          ads={dummyAds}
+        />
+      )}
       {/* News Only Two: Law and Justice */}
       {mergedResult &&
-        mergedResult[config.allCategories.law_and_justice_id]?.length > 0 && (
+        mergedResult[EnumCategoryIds.law_and_justice]?.length > 0 && (
           <NewsOnlyTwo
             data={{
-              id: "law-court",
+              id: "cmb219x46000bmhdkuu8z59cw",
               title: "আইন-আদালত",
               slug: "law-and-justice",
               position: 9,
@@ -394,18 +416,18 @@ const HomeMain = () => {
               is_deleted: false,
               createdAt: new Date().toISOString(),
               updatedAt: new Date().toISOString(),
-              news: mergedResult[config.allCategories.law_and_justice_id] ?? [],
+              news: mergedResult[EnumCategoryIds.law_and_justice] ?? [],
             }}
             style={specialStyle}
           />
         )}
       {/* News With Latest Two: Expatriate Bangla and Technology */}
       {mergedResult &&
-        mergedResult[config.allCategories.expatriate_bangla_id]?.length > 0 &&
-        mergedResult[config.allCategories.technology_id]?.length > 0 && (
+        mergedResult[EnumCategoryIds.expatriate_bangla]?.length > 0 &&
+        mergedResult[EnumCategoryIds.technology]?.length > 0 && (
           <NewsWithLatestTwo
             dataOne={{
-              id: "expatriate-bangla",
+              id: "cmb218pdu0007mhdkoer7a3qx",
               title: "প্রবাস বাংলা",
               slug: "expatriate-bangla",
               position: 11,
@@ -422,8 +444,7 @@ const HomeMain = () => {
               is_deleted: false,
               createdAt: new Date().toISOString(),
               updatedAt: new Date().toISOString(),
-              news:
-                mergedResult[config.allCategories.expatriate_bangla_id] ?? [],
+              news: mergedResult[EnumCategoryIds.expatriate_bangla] ?? [],
             }}
             dataTwo={{
               id: "technology",
@@ -443,39 +464,38 @@ const HomeMain = () => {
               is_deleted: false,
               createdAt: new Date().toISOString(),
               updatedAt: new Date().toISOString(),
-              news: mergedResult[config.allCategories.technology_id] ?? [],
+              news: mergedResult[EnumCategoryIds.technology] ?? [],
             }}
           />
         )}
       {/* PhotoGallery (static, no category data) */}
       <PhotoGallery />
       {/* News Only Two: Sports */}
-      {mergedResult &&
-        mergedResult[config.allCategories.sports_id]?.length > 0 && (
-          <NewsOnlyTwo
-            data={{
-              id: "sports",
-              title: "খেলা",
-              slug: "sports",
-              position: 13,
-              position_update_at: null,
-              is_home: true,
-              position_in_home: null,
-              position_in_home_update_at: null,
-              description: "",
-              meta_title: "খেলা সংবাদ",
-              meta_description: "বাংলাদেশের খেলা সংবাদ",
-              created_by_id: "system",
-              image_id: null,
-              status: "active",
-              is_deleted: false,
-              createdAt: new Date().toISOString(),
-              updatedAt: new Date().toISOString(),
-              news: mergedResult[config.allCategories.sports_id] ?? [],
-            }}
-            style={specialStyle}
-          />
-        )}
+      {mergedResult && mergedResult[EnumCategoryIds.sports]?.length > 0 && (
+        <NewsOnlyTwo
+          data={{
+            id: "cmb21g29o0003mhv06mg8p0eo",
+            title: "খেলা",
+            slug: "sports",
+            position: 13,
+            position_update_at: null,
+            is_home: true,
+            position_in_home: null,
+            position_in_home_update_at: null,
+            description: "",
+            meta_title: "খেলা সংবাদ",
+            meta_description: "বাংলাদেশের খেলা সংবাদ",
+            created_by_id: "system",
+            image_id: null,
+            status: "active",
+            is_deleted: false,
+            createdAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString(),
+            news: mergedResult[EnumCategoryIds.sports] ?? [],
+          }}
+          style={specialStyle}
+        />
+      )}
     </Fragment>
   );
 };

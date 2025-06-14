@@ -16,7 +16,6 @@ export interface NewsDetails {
   excerpt: string;
   banner_image_id: string;
   reference: string;
-  tags: any;
   meta_title: string;
   meta_description: string;
   canonical_url: string;
@@ -41,6 +40,7 @@ export interface NewsDetails {
   updatedAt: string;
   updateContentAt: string;
   reporter: Reporter;
+  newsUtils: NewsUtils;
   country: Country;
   district: District;
   division: Division;
@@ -49,8 +49,19 @@ export interface NewsDetails {
   banner_image: BannerImage;
   category: Category;
   allTopics: AllTopic[];
+  tags: string[];
 }
-
+export interface NewsUtils {
+  id: string;
+  news_id: string;
+  total_view: number;
+  total_share: number;
+  total_like: number;
+  total_comment: number;
+  createdAt: string;
+  updatedAt: string;
+  is_deleted: boolean;
+}
 export interface Reporter {
   admin: any;
   writer: Writer;
