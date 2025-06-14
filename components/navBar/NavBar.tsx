@@ -22,6 +22,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useGetAllCategoriesQuery } from "@/redux/features/category/categoryApi";
 import { useSearchNewsQuery } from "@/redux/features/news/newsApi"; // Updated import
 import SearchBar from "./Searchbar";
+import Skeleton from "react-loading-skeleton";
 
 const NavBar = () => {
   const { data, error, isLoading } = useGetAllCategoriesQuery(
@@ -136,14 +137,23 @@ const NavBar = () => {
             />
 
             <div className='flex items-center justify-between print:hidden'>
-              <p className='py-[11px] px-5 text-md'>
-                <SearchBar
-                  showSearch={showSearch}
-                  setShowSearch={setShowSearch}
-                  searchText={searchText}
-                  setSearchText={setSearchText}
-                  handleSearchItem={handleSearchItem}
-                />
+              <p className='py-[8px] px-5 text-md'>
+                {isLoading ? (
+                  <Skeleton
+                    width={220}
+                    height={40}
+                    borderRadius='9999px'
+                    className='-mt-2'
+                  />
+                ) : (
+                  <SearchBar
+                    showSearch={showSearch}
+                    setShowSearch={setShowSearch}
+                    searchText={searchText}
+                    setSearchText={setSearchText}
+                    handleSearchItem={handleSearchItem}
+                  />
+                )}
               </p>
             </div>
           </div>
@@ -214,14 +224,23 @@ const NavBar = () => {
                   className='text-base'
                 />
                 <div className='flex items-center justify-between print:hidden'>
-                  <p className='py-[11px] text-md'>
-                    <SearchBar
-                      showSearch={showSearch}
-                      setShowSearch={setShowSearch}
-                      searchText={searchText}
-                      setSearchText={setSearchText}
-                      handleSearchItem={handleSearchItem}
-                    />
+                  <p className='py-[8px] px-5 text-md'>
+                    {isLoading ? (
+                      <Skeleton
+                        width={220}
+                        height={40}
+                        borderRadius='9999px'
+                        className='-mt-2'
+                      />
+                    ) : (
+                      <SearchBar
+                        showSearch={showSearch}
+                        setShowSearch={setShowSearch}
+                        searchText={searchText}
+                        setSearchText={setSearchText}
+                        handleSearchItem={handleSearchItem}
+                      />
+                    )}
                   </p>
                 </div>
               </div>

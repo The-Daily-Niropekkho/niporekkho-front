@@ -61,7 +61,7 @@ const NewsWithLatestTwo = ({ dataOne, dataTwo }: NewsWithLatestTwoProps) => {
                       </div>
                     </div>
                     <div className='w-full md:w-1/2'>
-                      <h3 className='text-2xl left-9 mx-4 md:mx-0 text-[var(--dark)] mt-2 md:mt-0 lg:mt-2 mb-0 md:mb-2 dark:text-white group-hover:text-[var(--text-primary)] font-semibold'>
+                      <h3 className='text-2xl left-9 mx-4 md:mx-0 text-[var(--dark)] mt-2 md:mt-0 lg:mt-2 mb-0 md:mb-2 dark:text-white group-hover:text-[var(--text-primary)] font-semibold line-clamp-2'>
                         {item.short_headline && (
                           <span className='text-[var(--text-primary)]'>
                             {item.short_headline} /{" "}

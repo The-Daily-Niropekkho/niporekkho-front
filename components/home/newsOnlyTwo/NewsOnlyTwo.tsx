@@ -66,7 +66,7 @@ const NewsOnlyTwo = ({ data, style }: NewsOnlyTwoProps) => {
                       {item.headline}
                     </h3>
                     <p className='hidden xl:block text-base text-[var(--gray-2)] dark:text-[var(--gray-3)]'>
-                      {item.details}
+                      <p className="line-clamp-4"> {item.details}</p>
                     </p>
                     <TimeBefore title={item.createdAt} clss='ml-4 md:ml-0' />
                   </div>

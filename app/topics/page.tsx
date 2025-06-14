@@ -165,7 +165,7 @@ function Page() {
     <div className='container mx-auto p-6 font-solaimanlipi'>
       {/* Header and Search */}
       <div className='flex justify-between items-center mb-6'>
-        <h1 className='text-3xl font-extrabold text-orange-600 tracking-tight'>
+        <h1 className='text-3xl font-extrabold text-[var(--text-primary)] tracking-tight'>
           {topicName}
         </h1>
         <div className='relative'>
@@ -215,7 +215,7 @@ function Page() {
               ) => (
                 <>
                   <Link
-                    href={`/${news.category_id}/${news.id}/${news.slug}`}
+                    href={`/${news.category.title}/${news.id}/${news.slug}`}
                     key={news.id}
                   >
                     <div
@@ -270,7 +270,7 @@ function Page() {
           ].map((ad, index) => (
             <div
               key={index}
-              className='bg-white dark:bg-gray-900 p-4 rounded-lg border border-gray-200 dark:border-gray-700 hover:border-orange-500 transition-colors'
+              className='bg-white dark:bg-gray-900  rounded-lg '
             >
               <div className='mb-4 flex justify-center'>
                 <Image

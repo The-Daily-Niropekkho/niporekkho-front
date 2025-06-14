@@ -4,9 +4,12 @@ import AddCard from "@/components/common/addCard/AddCard";
 import FeaturedNewsSkeleton from "@/components/skeleton/FeaturedNewsSkeleton";
 import NewsListSkeleton from "@/components/skeleton/NewsListSkeleton";
 import SidebarSkeleton from "@/components/skeleton/SidebarSkeleton";
-import { useGetAllNewsQuery, useGetAllTopicsQuery } from "@/redux/features/news/newsApi";
+import {
+  useGetAllNewsQuery,
+  useGetAllTopicsQuery,
+} from "@/redux/features/news/newsApi";
 import { NewsDetails } from "@/types/newsDetails";
-import { Topic } from "@/types/topic"; // Import Topic type
+import { Topic } from "@/types/topic";
 import TimeBefore from "@/ui/TimeBefore";
 import NotFoundBody from "@/ui/notFoundBody/NotFoundBody";
 import Spin from "@/ui/spin/Spin";
@@ -18,6 +21,8 @@ import { useEffect, useMemo, useState } from "react";
 import Skeleton from "react-loading-skeleton";
 import TopNewsForNewsDetails2 from "../singleNews/top-news-for-news-details2";
 import { GoDotFill } from "react-icons/go";
+import "react-loading-skeleton/dist/skeleton.css"; 
+
 interface CategoryMainProps {
   categoryId?: string;
   categoryName?: string;
@@ -30,7 +35,7 @@ const CategoryMain = ({ categoryId, categoryName }: CategoryMainProps) => {
   const params = useParams();
   const searchParams = useSearchParams();
   const queryCategoryId = searchParams.get("id") || categoryId || "";
-console.log(queryCategoryId);
+
   // Fetch news
   const {
     data: newsData,
@@ -50,7 +55,6 @@ console.log(queryCategoryId);
     limit: 500,
     category_id: queryCategoryId,
   });
-    console.log("🚀 ~ CategoryMain ~ topicData:", topicData)
 
   const posts = useMemo(() => newsData?.data || [], [newsData]);
   const totalPosts = newsData?.meta?.total || 0;
@@ -96,10 +100,7 @@ console.log(queryCategoryId);
       slug: topic.slug,
       id: topic.id,
     })),
-    add: {
-      // category_21: posts[0]?.ads?.category_21 || "",
-      // category_22: posts[0]?.ads?.category_22 || "",
-    },
+    add: {},
   };
 
   const handleLoadMore = () => {
@@ -109,12 +110,17 @@ console.log(queryCategoryId);
   return (
     <section className='py-[60px]'>
       <div className='container px-4 mx-auto'>
+        {/* Category Title and Topics */}
         <div className='border-[var(--border-color)] dark:border-[var(--border-dark)] border-b-[2px] mb-3'>
           <div className='mb-0'>
             {isNewsLoading ? (
-              <h1 className='text-[var(--text-primary)] text-xl md:text-2xl dark:text-white font-bold'>
-                <Skeleton width={200} height={30} />
-              </h1>
+              <Skeleton
+                width={200}
+                height={30}
+                baseColor='#f0f0f0'
+                highlightColor='#f3f4f6'
+                
+              />
             ) : (
               <Link
                 className='block w-fit'
@@ -131,12 +137,22 @@ console.log(queryCategoryId);
               <GoDotFill className='inline-block mr-1 text-[var(--text-primary)] text-sm' />
             )}
             {isTopicsLoading ? (
-              <Skeleton
-                count={5}
-                width={100}
-                inline={true}
-                style={{ marginRight: "1rem" }}
-              />
+              <div className='flex flex-wrap gap-2'>
+                {Array(5)
+                  .fill(0)
+                  .map((_, i) => (
+                    <span key={i} className='inline-flex items-center'>
+                      <Skeleton
+                        width={100}
+                        height={20}
+                        baseColor='#f0f0f0'
+                        highlightColor='#f3f4f6'
+                      
+                      />
+                    
+                    </span>
+                  ))}
+              </div>
             ) : (
               categoryData.topics.map((topic: any, i: number) => (
                 <Link
@@ -154,10 +170,103 @@ console.log(queryCategoryId);
           </div>
         </div>
 
+        {/* Featured News Section */}
         <div className='grid grid-cols-1 md:grid-cols-12 gap-6 mb-6 relative after:bg-[var(--border-color)] after:absolute after:w-full after:h-[1px] after:-bottom-3 after:right-0 dark:after:bg-[var(--border-dark)]'>
           <div className='col-span-12 md:col-span-6 lg:col-span-8 xl:col-span-9 relative after:bg-[var(--border-color)] dark:after:bg-[var(--border-dark)] after:absolute after:w-full after:h-0 md:after:w-[1px] md:after:h-full after:right-0 after:-bottom-3 md:after:top-0 md:after:-right-3'>
             {isNewsLoading ? (
-              <FeaturedNewsSkeleton />
+              <div className='grid grid-cols-1 md:grid-cols-12 gap-6'>
+                <div className='col-span-12 flex flex-col lg:flex-row gap-3 relative after:bg-[var(--border-color)] after:absolute after:w-full after:h-[1px] last:after:h-0 after:-bottom-3 dark:after:bg-[var(--border-dark)]'>
+                  {/* Main Featured News */}
+                  <div className='w-full lg:w-3/5 lg:border-r border-[var(--border-color)] dark:border-[var(--border-dark)]'>
+                    <div className='mx-0 h-full lg:px-2'>
+                      <div className='flex flex-col gap-3 h-full'>
+                        <Skeleton
+                          width='100%'
+                          height={273}
+                          baseColor='#f0f0f0'
+                          highlightColor='#f3f4f6'
+                          
+                        />
+                        <div className='py-3'>
+                          <Skeleton
+                            width='80%'
+                            height={30}
+                            baseColor='#f0f0f0'
+                            highlightColor='#f3f4f6'
+                            
+                          />
+                          <Skeleton
+                            width='60%'
+                            height={20}
+                            baseColor='#f0f0f0'
+                            highlightColor='#f3f4f6'
+                            style={{
+                              borderRadius: "9999px",
+                              marginTop: "0.5rem",
+                            }}
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  {/* Secondary News List */}
+                  <div className='w-full lg:w-2/5'>
+                    <ul className='mt-4 lg:mt-0 grid grid-cols-1 gap-6'>
+                      {Array(4)
+                        .fill(0)
+                        .map((_, i) => (
+                          <li
+                            key={i}
+                            className={`relative flex items-start gap-4 ${
+                              i < 3
+                                ? "after:content-[''] after:absolute after:left-0 after:-bottom-3 after:h-[1px] after:w-full after:bg-[#eff2f0] after:border-[#eff2f0]"
+                                : ""
+                            }`}
+                          >
+                            <div className='w-full lg:w-2/3'>
+                              <Skeleton
+                                width='90%'
+                                height={20}
+                                baseColor='#f0f0f0'
+                                highlightColor='#f3f4f6'
+                                
+                              />
+                              <Skeleton
+                                width='70%'
+                                height={16}
+                                baseColor='#f0f0f0'
+                                highlightColor='#f3f4f6'
+                                style={{
+                                  borderRadius: "9999px",
+                                  marginTop: "0.5rem",
+                                }}
+                              />
+                            </div>
+                            <div className='w-full lg:w-1/3'>
+                              <Skeleton
+                                width={120}
+                                height={80}
+                                baseColor='#f0f0f0'
+                                highlightColor='#f3f4f6'
+                                
+                              />
+                            </div>
+                          </li>
+                        ))}
+                      {/* Ad Placeholder */}
+                      <li>
+                        <Skeleton
+                          width='100%'
+                          height={100}
+                          baseColor='#f0f0f0'
+                          highlightColor='#f3f4f6'
+                          
+                        />
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
             ) : (
               <div className='grid grid-cols-1 md:grid-cols-12 gap-6'>
                 <div className='col-span-12 flex flex-col lg:flex-row gap-3 relative after:bg-[var(--border-color)] after:absolute after:w-full after:h-[1px] last:after:h-0 after:-bottom-3 dark:after:bg-[var(--border-dark)]'>
@@ -300,7 +409,15 @@ console.log(queryCategoryId);
           </div>
           <div className='col-span-12 lg:col-span-4 xl:col-span-3 relative after:bg-[var(--border-color)] after:absolute after:w-full after:h-[1px] after:-bottom-3 after:right-0 after:last:h-0 lg:after:w-[1px] lg:after:h-full lg:after:-right-3 lg:after:top-0 lg:after:last:w-0 dark:after:bg-[var(--border-dark)]'>
             {isNewsLoading ? (
-              <SidebarSkeleton />
+              <div className='w-full flex flex-col items-center justify-center gap-4'>
+                <Skeleton
+                  width='100%'
+                  height={250}
+                  baseColor='#f0f0f0'
+                  highlightColor='#f3f4f6'
+                  
+                />
+              </div>
             ) : (
               <div className='w-full flex items-center justify-center'>
                 <div className='h-[250px]'>
@@ -311,10 +428,56 @@ console.log(queryCategoryId);
           </div>
         </div>
 
+        {/* News List and Sidebar */}
         <div className='grid grid-cols-1 md:grid-cols-12 gap-6'>
           <div className='col-span-12 lg:col-span-8 xl:col-span-9 relative after:bg-[var(--border-color)] after:absolute after:w-full after:h-[1px] after:-bottom-3 after:right-0 after:last:h-0 lg:after:w-[1px] lg:after:h-full lg:after:-right-3 lg:after:top-0 lg:after:last:w-0 dark:after:bg-[var(--border-dark)]'>
             {isNewsLoading ? (
-              <NewsListSkeleton />
+              <div className='grid grid-cols-1 md:grid-cols-12 gap-6 mb-6'>
+                {Array(6)
+                  .fill(0)
+                  .map((_, i) => (
+                    <div key={i} className='col-span-12 md:col-span-6 relative'>
+                      <div className='flex items-start gap-3'>
+                        <Skeleton
+                          width={124}
+                          height={75}
+                          baseColor='#f0f0f0'
+                          highlightColor='#f3f4f6'
+                          
+                        />
+                        <div className='flex-1'>
+                          <Skeleton
+                            width='80%'
+                            height={20}
+                            baseColor='#f0f0f0'
+                            highlightColor='#f3f4f6'
+                            
+                          />
+                          <Skeleton
+                            width='60%'
+                            height={16}
+                            baseColor='#f0f0f0'
+                            highlightColor='#f3f4f6'
+                            style={{
+                              borderRadius: "9999px",
+                              marginTop: "0.5rem",
+                            }}
+                          />
+                          <Skeleton
+                            width={100}
+                            height={14}
+                            baseColor='#f0f0f0'
+                            highlightColor='#f3f4f6'
+                            style={{
+                              borderRadius: "9999px",
+                              marginTop: "0.5rem",
+                            }}
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+              </div>
             ) : (
               <div className='grid grid-cols-1 md:grid-cols-12 gap-6 mb-6 after:[&>*]:absolute after:[&>*]:bg-[var(--border-color)] after:[&>*]:w-full after:[&>*]:h-[1px] after:[&>*]:-bottom-3 after:[&>*]:right-0 md:after:[&>*]:w-[1px] md:after:[&>*]:h-full md:after:[&>*]:top-0 md:after:[&>*]:-right-3 md:after:[&>*:nth-child(even)]:w-0 md:before:[&>*]:absolute md:before:[&>*]:bg-[var(--border-color)] md:before:[&>*]:w-full md:before:[&>*]:h-[1px] md:before:[&>*]:-bottom-3 md:before:[&>*]:right-0 dark:after:[&>*]:bg-[var(--border-dark)] dark:before:[&>*]:bg-[var(--border-dark)]'>
                 {pageData.slice(5).map((item: NewsDetails) => (
@@ -373,17 +536,59 @@ console.log(queryCategoryId);
 
           <div className='col-span-12 lg:col-span-4 xl:col-span-3 relative after:bg-[var(--border-color)] after:absolute after:w-full after:h-[1px] after:-bottom-3 after:right-0 after:last:h-0 lg:after:w-[1px] lg:after:h-full lg:after:-right-3 lg:after:top-0 lg:after:last:w-0 dark:after:bg-[var(--border-dark)]'>
             {isNewsLoading ? (
-              <SidebarSkeleton />
-            ) : (
-              <TopNewsForNewsDetails2 count={10} />
-            )}
-            <div className='mt-3 lg:sticky lg:top-[4rem]'>
-              <div className='w-full flex items-center justify-center'>
-                <div className='h-[250px]'>
-                  {/* <AddCard imgPath={categoryData.add.category_22} /> */}
-                </div>
+              <div className='flex flex-col gap-4'>
+                {Array(10)
+                  .fill(0)
+                  .map((_, i) => (
+                    <div key={i} className='flex items-center gap-3'>
+                      <Skeleton
+                        width={100}
+                        height={60}
+                        baseColor='#f0f0f0'
+                        highlightColor='#f3f4f6'
+                        
+                      />
+                      <div className='flex-1'>
+                        <Skeleton
+                          width='80%'
+                          height={18}
+                          baseColor='#f0f0f0'
+                          highlightColor='#f3f4f6'
+                          
+                        />
+                        <Skeleton
+                          width='60%'
+                          height={14}
+                          baseColor='#f0f0f0'
+                          highlightColor='#f3f4f6'
+                          style={{
+                            borderRadius: "9999px",
+                            marginTop: "0.5rem",
+                          }}
+                        />
+                      </div>
+                    </div>
+                  ))}
+                <Skeleton
+                  width='100%'
+                  height={250}
+                  baseColor='#f0f0f0'
+                  highlightColor='#f3f4f6'
+                  
+                />
               </div>
-            </div>
+            ) : (
+              <>
+                <TopNewsForNewsDetails2 count={10} />
+                <div className='mt-3 lg:sticky lg:top-[4rem]'>
+                  <div className='w-full flex items-center justify-center'>
+                    <div className='h-[250px]'>
+                      {/* <AddCard imgPath={categoryData.add.category_22} /> */}
+                    </div>
+                  </div>
+                </div>
+              </>
+            )}
           </div>
         </div>
       </div>
