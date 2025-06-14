@@ -107,7 +107,6 @@ function TopNewsForNewsDetails2({ count = 10 }: { count: number }) {
     isLoading: isTopReadLoading,
     error: topReadError,
   } = useGetTopReadNewsQuery({ limit: count });
-    console.log("🚀 ~ TopNewsForNewsDetails2 ~ topReadNewsResponse:", topReadNewsResponse)
 
   // Map the API response to NewsProps
   const topReadNews: NewsProps[] =

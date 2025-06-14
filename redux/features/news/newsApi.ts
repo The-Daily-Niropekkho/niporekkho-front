@@ -1,6 +1,7 @@
 import { TResponseRedux } from "@/types";
 import { baseApi } from "../../api/baseApi";
 import { NewsDetails } from "@/types/newsDetails";
+import { Topic } from "@/types/topic";
 
 const newsApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
@@ -20,7 +21,7 @@ const newsApi = baseApi.injectEndpoints({
       },
     }),
     getSingleNews: builder.query({
-      query: ({ news_id, }: { news_id: string;  }) => ({
+      query: ({ news_id }: { news_id: string }) => ({
         url: `/news/${news_id}?is_news_utils=true`,
         method: "GET",
       }),
@@ -56,6 +57,24 @@ const newsApi = baseApi.injectEndpoints({
         body: data,
       }),
       invalidatesTags: ["news"],
+    }),
+    getAllTopics: builder.query({
+      query: ({
+        limit,
+        category_id,
+      }: {
+        limit?: number;
+        category_id?: string;
+      }) => ({
+        url: `/topic?limit=${limit}&category_id=${category_id}`,
+        method: "GET",
+      }),
+      transformResponse: (response: TResponseRedux<Topic[]>) => {
+        return {
+          data: response.data,
+          meta: response.meta,
+        };
+      },
     }),
 
     tropicwiseNews: builder.query({
@@ -139,6 +158,26 @@ const newsApi = baseApi.injectEndpoints({
         "news",
       ],
     }),
+    topicwiseNews: builder.query({
+      query: ({
+        limit = 10,
+        topic_id,
+      }: {
+        limit?: number;
+        topic_id?: string;
+      }) => ({
+        url: `/news?topic_id=${topic_id}&limit=${limit}`,
+        method: "GET",
+      }),
+      transformResponse: (response: TResponseRedux<NewsDetails[]>) => ({
+        data: response.data,
+        meta: response.meta,
+      }),
+      providesTags: (result, error, { topic_id }) => [
+        { type: "news", id: topic_id },
+        "news",
+      ],
+    }),
   }),
 });
 
@@ -152,4 +191,6 @@ export const {
   useZonewiseNewsQuery,
   useSearchNewsQuery,
   useShareNewsMutation,
+  useGetAllTopicsQuery,
+  useTopicwiseNewsQuery,
 } = newsApi;
