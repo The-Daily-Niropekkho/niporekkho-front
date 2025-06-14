@@ -346,7 +346,7 @@ console.log(newsData)
                       <Link
                         key={index}
                         className='bg-[var(--slate-2)] dark:bg-[var(--gray-2)] text-sm leading-none text-[var(--dark)] p-2 dark:text-white text-center flex items-center'
-                        href={`/topics/${tags}`}
+                        href={`/tags/${tags}`}
                       >
                         {tags}
                       </Link>

@@ -93,6 +93,13 @@ const districtApi = baseApi.injectEndpoints({
       },
       providesTags: [upazillaTag],
     }),
+
+    getAllUpazillanewsByDistrict: builder.query({
+      query: (id) => ({
+        url: `/upazillas/${id}`,
+        method: "GET",
+      }),
+    })
   }),
 });
 
